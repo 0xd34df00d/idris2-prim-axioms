@@ -11,10 +11,6 @@ import Data.Bits.Axioms.MetaMath
 %default total
 
 namespace AsFin
-  public export %inline
-  bound : (1 w : Nat) -> Nat
-  bound w = 2 ^^ w
-
   public export
   data UnsignedF : (w : Nat) -> Type where
     MkU : (val : Fin (bound w)) -> UnsignedF w

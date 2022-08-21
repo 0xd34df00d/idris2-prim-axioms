@@ -1,6 +1,7 @@
 module Data.Bits.Axioms.MetaMath
 
 import Data.Fin
+import Data.Fin.Extra
 
 %default total
 
@@ -25,10 +26,13 @@ ltePlusLeft {a} a≤b = rewrite sym $ plusZeroRightNeutral a in plusLteMonotone 
 export
 powNonNeg : (n, k : Nat) -> 0 `LT` S n ^^ k
 powNonNeg n Z = LTESucc LTEZero
-powNonNeg n (S k) = let r = powNonNeg n k
-                     in ltePlusLeft r
+powNonNeg n (S k) = ltePlusLeft $ powNonNeg n k
 
 export
 eqZeroNotPositive : n = 0 -> 0 `LT` n -> Void
 eqZeroNotPositive Refl LTEZero impossible
 eqZeroNotPositive Refl (LTESucc x) impossible
+
+public export %inline
+bound : (1 w : Nat) -> Nat
+bound w = 2 ^^ w
