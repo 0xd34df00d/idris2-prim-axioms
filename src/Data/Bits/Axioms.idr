@@ -1,69 +1,56 @@
 module Data.Bits.Axioms
 
-import Data.Vect
+import Data.Fin
+import Data.Nat
 import Decidable.Equality
 
 %default total
 
-public export
-data Bit = I | O
+infixl 10 ^^
 
 public export
-DecEq Bit where
-  decEq I I = Yes Refl
-  decEq I O = No \case Refl impossible
-  decEq O I = No \case Refl impossible
-  decEq O O = Yes Refl
+(^^) : Num a => a -> Nat -> a
+_ ^^ Z = 1
+x ^^ (S y) = x * x ^^ y
 
-public export
-zipRAccum : (f : accTy -> a -> b -> (c, accTy)) -> (acc : accTy) -> (xs : Vect w a) -> (ys : Vect w b) -> (Vect w c, accTy)
-zipRAccum f acc [] [] = ([], acc)
-zipRAccum f acc (x :: xs) (y :: ys)
-  = let (zs, acc') = zipRAccum f acc xs ys
-        (z, acc'') = f acc' x y
-     in (z :: zs, acc'')
+export
+powOneLeft : (k : _) -> (the Nat 1) ^^ k = 1
+powOneLeft Z = Refl
+powOneLeft (S k) = plusZeroRightNeutral (1 ^^ k) `trans` powOneLeft k
 
-add : Bit -> Bit -> (Bit, Bit)
-add O O = (O, O)
-add I O = (O, I)
-add O I = (O, I)
-add I I = (I, O)
+export
+powNonNeg : (n, k : Nat) -> 0 `LT` S n ^^ k
+powNonNeg n Z = LTESucc LTEZero
+powNonNeg n (S k) = let r = powNonNeg n k
+                     in ?powNonNeg_rhs_1
 
-addWithCarry : Bit -> Bit -> Bit -> (Bit, Bit)
-addWithCarry carry b1 b2 = ?w
+eqZeroNotPositive : n = 0 -> 0 `LT` n -> Void
+eqZeroNotPositive Refl LTEZero impossible
+eqZeroNotPositive Refl (LTESucc x) impossible
 
 namespace Unsigned
+  public export %inline
+  bound : (w : Nat) -> Nat
+  bound w = 2 ^^ w
+
   public export
   data Unsigned : (w : Nat) -> Type where
-    MkU : (bits : Vect w Bit) -> Unsigned w
+    MkU : (val : Fin (bound w)) -> Unsigned w
 
-  -- Example:
-  public export
-  Unsigned64 : Type
-  Unsigned64 = Unsigned 64
-
-  powNat : Num a => a -> Nat -> a
-  powNat _ Z = 1
-  powNat x (S y) = x * powNat x y
-
-  zero : {w : _} -> Unsigned w
-  zero = MkU $ replicate _ O
-
-  public export
   DecEq (Unsigned w) where
-    decEq (MkU b1) (MkU b2) = case decEq b1 b2 of
-                                   Yes Refl => Yes Refl
-                                   No contra => No \case Refl => contra Refl
+    decEq (MkU val1) (MkU val2) = case decEq val1 val2 of
+                                       Yes Refl => Yes Refl
+                                       No contra => No $ \case Refl => contra Refl
 
-  public export
-  add : (n1, n2 : Unsigned w) -> Unsigned w
-  add (MkU b1) (MkU b2) = MkU $ fst $ zipRAccum addWithCarry O b1 b2
+  {w : _} -> Num (Unsigned w) where
+    MkU val1 + MkU val2 with (bound w) proof p
+      _ | Z = absurd val1
+      _ | (S n) = MkU $ rewrite p in val1 + val2
 
-  public export
-  mul : (n1, n2 : Unsigned w) -> Unsigned w
+    MkU val1 * MkU val2 with (bound w) proof p
+      _ | Z = absurd val1
+      _ | (S n) = MkU $ rewrite p in val1 * val2
 
-  public export
-  Num (Unsigned w) where
-    fromInteger n = ?fi
-    (+) = add
-    (*) = mul
+    fromInteger z with (bound w) proof p
+      _ | Z = absurd $ eqZeroNotPositive p (powNonNeg 1 w)
+      _ | (S n) = MkU $ rewrite p in Num.fromInteger z
