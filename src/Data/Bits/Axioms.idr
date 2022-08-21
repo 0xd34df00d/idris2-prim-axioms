@@ -4,33 +4,13 @@ import Data.Fin
 import Data.Nat
 import Decidable.Equality
 
+import Data.Bits.Axioms.MetaMath
+
 %default total
-
-infixl 10 ^^
-
-public export
-(^^) : Num a => a -> Nat -> a
-_ ^^ Z = 1
-x ^^ (S y) = x * x ^^ y
-
-export
-powOneLeft : (k : _) -> (the Nat 1) ^^ k = 1
-powOneLeft Z = Refl
-powOneLeft (S k) = plusZeroRightNeutral (1 ^^ k) `trans` powOneLeft k
-
-export
-powNonNeg : (n, k : Nat) -> 0 `LT` S n ^^ k
-powNonNeg n Z = LTESucc LTEZero
-powNonNeg n (S k) = let r = powNonNeg n k
-                     in ?powNonNeg_rhs_1
-
-eqZeroNotPositive : n = 0 -> 0 `LT` n -> Void
-eqZeroNotPositive Refl LTEZero impossible
-eqZeroNotPositive Refl (LTESucc x) impossible
 
 namespace Unsigned
   public export %inline
-  bound : (w : Nat) -> Nat
+  bound : (1 w : Nat) -> Nat
   bound w = 2 ^^ w
 
   public export
