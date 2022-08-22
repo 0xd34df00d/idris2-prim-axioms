@@ -36,3 +36,35 @@ eqZeroNotPositive Refl (LTESucc x) impossible
 public export %inline
 bound : (1 w : Nat) -> Nat
 bound w = 2 ^^ w
+
+public export
+(++) : {n, m : _} -> Fin n -> Fin (S m) -> Fin (n + m)
+(++) = (+)
+
+public export
+finAddBounded : {w : _} -> Fin (bound w) -> Fin (bound w) -> Fin (bound (S w))
+finAddBounded {w = w} f1 f2 with (bound w) proof p
+  _ | Z = absurd f1
+  _ | S n = rewrite plusZeroRightNeutral (S n) in
+            rewrite sym $ plusSuccRightSucc n n in
+            weaken $ f1 ++ f2
+
+public export
+finAddBoundedSucc : {w : _} -> Fin (bound w) -> Fin (bound w) -> Fin (bound (S w))
+finAddBoundedSucc {w = w} f1 f2 with (bound w) proof p
+  _ | Z = absurd f1
+  _ | S n = rewrite plusZeroRightNeutral (S n) in
+            rewrite sym $ plusSuccRightSucc n n in
+            FS $ f1 ++ f2
+
+public export
+data FHalf : (w : Nat) -> Fin (bound w) -> Type where
+  FHOdd  : (f : Fin (bound w)) -> FHalf (S w) (finAddBoundedSucc {w = w} f f)
+  FHEven : (f : Fin (bound w)) -> FHalf (S w) (finAddBounded {w = w} f f)
+
+public export
+fhalf : {w : Nat} -> (f : Fin (bound w)) -> FHalf w f
+fhalf FZ = ?w
+fhalf (FS f) with (fhalf f)
+  fhalf (FS (FS (f ++ f))) | FHOdd f = let r = FHEven (FS f) in ?w2
+  fhalf (FS (f ++ f)) | FHEven f = FHOdd f
