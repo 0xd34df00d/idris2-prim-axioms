@@ -10,3 +10,4 @@ depends = base
 
 modules = Data.Bits.Axioms
         , Data.Bits.Axioms.MetaMath
+        , Data.Fin.Order
