@@ -84,6 +84,7 @@ fltInvNot : {fm : Fin m}
          -> fn `FLTE` fm
 fltInvNot contra = case flteInvNot contra of FLTESucc x => x
 
+public export %inline
 last' : (n : _) -> Fin (S n)
 last' _ = last
 
