@@ -87,3 +87,38 @@ fltInvNot : {fm : Fin m}
          -> Not (fm `FLT` fn)
          -> fn `FLTE` fm
 fltInvNot contra = case flteInvNot contra of FLTESucc x => x
+
+last' : (n : _) -> Fin (S n)
+last' _ = last
+
+-- The result of subtracting `last : Fin (S m)` from `fn : Fin n`.
+--
+-- The reason for passing `n : Nat` and subtracting `last` is that
+-- this way it's much easier to put the proper bound on the value
+-- of the resulting `Fin` if the subtraction is successful.
+public export
+data Minus : (fn : Fin n) -> (m : Nat) -> Type where
+  MinuendSmaller : fn `FLT` last' m
+                -> fn `Minus` m
+  MDifference : {n : Nat}
+             -> (diff : Fin (n `minus` m))
+             -> diff + last' m ~~~ fn
+             -> fn `Minus` m
+
+export
+minusFLTE : {m, n : Nat}
+         -> (fn : Fin n)
+         -> last' m `FLTE` fn
+         -> fn `Minus` m
+minusFLTE {m = Z} {n = Z} fn FLTEZero = MDifference {n = Z} fn (plusZeroRightNeutral _)
+minusFLTE {m = Z} {n = S n} fn FLTEZero = MDifference {n = S n} fn (plusZeroRightNeutral _)
+minusFLTE {m = S m} {n = S n} (FS fn) (FLTESucc flte) with (minusFLTE fn flte)
+  _ | MinuendSmaller flt = absurd $ flteInv flte flt
+  _ | MDifference {m = m} {n = n'} diff eq = let eq' = symmetric (plusSuccRightSucc _ _) `transitive` FS eq
+                                              in MDifference {n = S n'} diff eq'
+
+export
+minusF : {n : _} -> (fn : Fin n) -> (m : Nat) -> fn `Minus` m
+minusF fn m = case fn `isFLT` last' m of
+                   Yes prf => MinuendSmaller prf
+                   No contra => minusFLTE _ $ fltInvNot contra
