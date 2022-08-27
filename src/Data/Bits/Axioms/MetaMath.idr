@@ -94,11 +94,11 @@ last' _ = last
 -- of the resulting `Fin` if the subtraction is successful.
 public export
 data Minus : (fn : Fin n) -> (m : Nat) -> Type where
-  MinuendSmaller : fn `FLT` last' m
+  MinuendSmaller : (smaller : fn `FLT` last' m)
                 -> fn `Minus` m
   MDifference : {n : Nat}
-             -> (diff : Fin (n `minus` m))
-             -> diff + last' m ~~~ fn
+             -> (difference : Fin (n `minus` m))
+             -> (diffCorrect : difference + last' m ~~~ fn)
              -> fn `Minus` m
 
 export
