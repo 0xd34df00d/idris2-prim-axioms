@@ -66,7 +66,7 @@ namespace FisoBV
 
   export
   finToFactors : {w : _} -> Fin (bound w) -> Vect w Bit
-  finToFactors {w = Z} _ = []
+  finToFactors {w = Z} FZ = []
   finToFactors {w = S w} fin = ?w
 
   export
@@ -84,3 +84,21 @@ namespace FisoBV
   export
   bvToFin : {w : _} -> UnsignedBV w -> UnsignedF w
   bvToFin (MkU bv) = MkU $ accBV bv
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
