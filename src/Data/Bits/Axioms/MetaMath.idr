@@ -111,11 +111,11 @@ minusFLTE : {m, n : Nat}
          -> last' m `FLTE` fn
          -> fn `Minus` m
 minusFLTE {m = Z} {n = Z} fn FLTEZero = MDifference {n = Z} fn (plusZeroRightNeutral _)
-minusFLTE {m = Z} {n = S n} fn FLTEZero = MDifference {n = S n} fn (plusZeroRightNeutral _)
-minusFLTE {m = S m} {n = S n} (FS fn) (FLTESucc flte) with (minusFLTE fn flte)
+minusFLTE {m = Z} {n = S _} fn FLTEZero = MDifference {n = S _} fn (plusZeroRightNeutral _)
+minusFLTE {m = S _} {n = S _} (FS fn) (FLTESucc flte) with (minusFLTE fn flte)
   _ | MinuendSmaller flt = absurd $ flteInv flte flt
-  _ | MDifference {m = m} {n = n'} diff eq = let eq' = symmetric (plusSuccRightSucc _ _) `transitive` FS eq
-                                              in MDifference {n = S n'} diff eq'
+  _ | MDifference {n = n} diff eq = let eq' = symmetric (plusSuccRightSucc _ _) `transitive` FS eq
+                                     in MDifference {n = S n} diff eq'
 
 export
 minusF : {n : _} -> (fn : Fin n) -> (m : Nat) -> fn `Minus` m
