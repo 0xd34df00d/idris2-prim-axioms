@@ -98,6 +98,7 @@ data Minus : (fn : Fin n) -> (m : Nat) -> Type where
   MinuendSmaller : (smaller : fn `FLT` last' m)
                 -> fn `Minus` m
   MDifference : {n : Nat}
+             -> {fn : Fin n}
              -> (difference : Fin (n `minus` m))
              -> (diffCorrect : difference + last' m ~~~ fn)
              -> fn `Minus` m
