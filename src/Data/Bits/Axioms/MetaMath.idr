@@ -42,12 +42,12 @@ data FLTE : (fm : Fin m) -> (fn : Fin n) -> Type where
   FLTEZero : FZ `FLTE` fn
   FLTESucc : fm `FLTE` fn -> FS fm `FLTE` FS fn
 
-public export
+export
 Uninhabited (FS fm `FLTE` FZ) where
   uninhabited FLTEZero impossible
   uninhabited (FLTESucc x) impossible
 
-public export
+export
 isFLTE : (fm : Fin m) -> (fn : Fin n) -> Dec (fm `FLTE` fn)
 isFLTE FZ fn = Yes FLTEZero
 isFLTE (FS fm) FZ = No uninhabited
