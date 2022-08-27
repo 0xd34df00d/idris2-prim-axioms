@@ -42,6 +42,10 @@ data FLTE : (fm : Fin m) -> (fn : Fin n) -> Type where
   FLTEZero : FZ `FLTE` fn
   FLTESucc : fm `FLTE` fn -> FS fm `FLTE` FS fn
 
+public export
+FLT : (fm : Fin m) -> (fn : Fin n) -> Type
+FLT fm fn = FS fm `FLTE` fn
+
 export
 Uninhabited (FS fm `FLTE` FZ) where
   uninhabited FLTEZero impossible
@@ -54,3 +58,7 @@ isFLTE (FS fm) FZ = No uninhabited
 isFLTE (FS fm) (FS fn) = case fm `isFLTE` fn of
                               Yes prf => Yes (FLTESucc prf)
                               No contra => No $ \case FLTESucc prf => contra prf
+
+export
+isFLT : (fm : Fin m) -> (fn : Fin n) -> Dec (fm `FLT` fn)
+isFLT fm fn = FS fm `isFLTE` fn
