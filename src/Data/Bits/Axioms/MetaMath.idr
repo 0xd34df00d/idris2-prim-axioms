@@ -68,10 +68,6 @@ flteInv : fm `FLTE` fn -> Not (fn `FLT` fm)
 flteInv FLTEZero flt = uninhabited flt
 flteInv (FLTESucc flte) (FLTESucc flt) = flteInv flte flt
 
-decidableDN : Dec prop -> Not (Not prop) -> prop
-decidableDN (Yes prf) notNot = prf
-decidableDN (No contra) notNot = absurd (notNot contra)
-
 export
 flteInvNot : {fm : Fin m}
           -> {fn : Fin n}
