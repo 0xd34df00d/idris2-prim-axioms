@@ -62,3 +62,28 @@ isFLTE (FS fm) (FS fn) = case fm `isFLTE` fn of
 export
 isFLT : (fm : Fin m) -> (fn : Fin n) -> Dec (fm `FLT` fn)
 isFLT fm fn = FS fm `isFLTE` fn
+
+export
+flteInv : fm `FLTE` fn -> Not (fn `FLT` fm)
+flteInv FLTEZero flt = uninhabited flt
+flteInv (FLTESucc flte) (FLTESucc flt) = flteInv flte flt
+
+decidableDN : Dec prop -> Not (Not prop) -> prop
+decidableDN (Yes prf) notNot = prf
+decidableDN (No contra) notNot = absurd (notNot contra)
+
+export
+flteInvNot : {fm : Fin m}
+          -> {fn : Fin n}
+          -> Not (fm `FLTE` fn)
+          -> fn `FLT` fm
+flteInvNot {fm = FZ} {fn} contra = absurd $ contra FLTEZero
+flteInvNot {fm = FS fm} {fn = FZ} contra = FLTESucc FLTEZero
+flteInvNot {fm = FS fm} {fn = FS fn} contra = FLTESucc (flteInvNot (\x => contra (FLTESucc x)))
+
+export
+fltInvNot : {fm : Fin m}
+         -> {fn : Fin n}
+         -> Not (fm `FLT` fn)
+         -> fn `FLTE` fm
+fltInvNot contra = case flteInvNot contra of FLTESucc x => x
