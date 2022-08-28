@@ -7,6 +7,7 @@ import Data.Vect
 import Decidable.Equality
 
 import Data.Bits.Axioms.MetaMath
+import Data.Fin.Order
 
 %default total
 
@@ -67,7 +68,12 @@ namespace FisoBV
   export
   finToFactors : {w : _} -> Fin (bound w) -> Vect w Bit
   finToFactors {w = Z} FZ = []
-  finToFactors {w = S w} fin = ?w
+  finToFactors {w = S w} f with (f `minusF` bound w)
+    _ | MinuendSmaller smaller = let f = strengthenFLT _ _ smaller
+                                  in O :: finToFactors f
+    _ | MDifference diff _ = let p = plusMinusZero (bound w) (bound w)
+                                 diff = replace {p = Fin} p diff
+                              in I :: finToFactors diff
 
   export
   finToBV : {w : _} -> UnsignedF w -> UnsignedBV w
@@ -84,21 +90,3 @@ namespace FisoBV
   export
   bvToFin : {w : _} -> UnsignedBV w -> UnsignedF w
   bvToFin (MkU bv) = MkU $ accBV bv
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
