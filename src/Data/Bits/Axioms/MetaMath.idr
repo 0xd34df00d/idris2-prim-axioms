@@ -32,6 +32,11 @@ eqZeroNotPositive : n = 0 -> 0 `LT` n -> Void
 eqZeroNotPositive Refl LTEZero impossible
 eqZeroNotPositive Refl (LTESucc x) impossible
 
+export
+plusMinusZero : (a, b : _) -> (a + (b + 0)) `minus` a = b
+plusMinusZero _ b = rewrite plusZeroRightNeutral b in minusPlus _
+
+
 public export %inline
 bound : (1 w : Nat) -> Nat
 bound w = 2 ^^ w
