@@ -31,6 +31,25 @@ export
 isFLT : (fm : Fin m) -> (fn : Fin n) -> Dec (fm `FLT` fn)
 isFLT fm fn = FS fm `isFLTE` fn
 
+-- If m > n and (fm : Fin m) < (fn : Fin (S n)),
+-- then fm could be strengthened to have the bound n.
+export
+strengthenFLT : {n : _} -> (fm : Fin m) -> (fn : Fin (S n)) -> fm `FLT` fn -> Fin n
+strengthenFLT {n = Z} _ (FS fn) _ = absurd fn
+strengthenFLT {n = S n} FZ (FS fn) (FLTESucc flt) = FZ
+strengthenFLT {n = S n} (FS fm) (FS fn) (FLTESucc flt) = FS $ strengthenFLT fm fn flt
+
+-- `strengthenFLT` indeed doesn't change the value of the Fin.
+export
+strengthenFLTPreserves : {n : _}
+                      -> (fm : Fin m)
+                      -> (fn : Fin (S n))
+                      -> (flt : fm `FLT` fn)
+                      -> fm ~~~ strengthenFLT fm fn flt
+strengthenFLTPreserves {n = Z} _ (FS fn) _ = absurd fn
+strengthenFLTPreserves {n = S n} FZ (FS fn) (FLTESucc flt) = FZ
+strengthenFLTPreserves {n = S n} (FS fm) (FS x) (FLTESucc flt) = FS $ strengthenFLTPreserves fm x flt
+
 export
 flteInv : fm `FLTE` fn -> Not (fn `FLT` fm)
 flteInv FLTEZero flt = uninhabited flt
