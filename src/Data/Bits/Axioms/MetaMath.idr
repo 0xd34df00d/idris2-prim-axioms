@@ -23,17 +23,17 @@ ltePlusLeft : {a, b, c : _}
 ltePlusLeft {a} a≤b = rewrite sym $ plusZeroRightNeutral a in plusLteMonotone a≤b LTEZero
 
 export
-powNonNeg : (n, k : Nat) -> 0 `LT` S n ^^ k
+powNonNeg : (n, k : Nat) -> Z `LT` S n ^^ k
 powNonNeg n Z = LTESucc LTEZero
 powNonNeg n (S k) = ltePlusLeft $ powNonNeg n k
 
 export
-eqZeroNotPositive : n = 0 -> 0 `LT` n -> Void
+eqZeroNotPositive : n = Z -> Z `LT` n -> Void
 eqZeroNotPositive Refl LTEZero impossible
 eqZeroNotPositive Refl (LTESucc x) impossible
 
 export
-plusMinusZero : (a, b : _) -> (a + (b + 0)) `minus` a = b
+plusMinusZero : (a, b : _) -> (a + (b + Z)) `minus` a = b
 plusMinusZero _ b = rewrite plusZeroRightNeutral b in minusPlus _
 
 
