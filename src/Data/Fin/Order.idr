@@ -55,6 +55,16 @@ strengthenFLTPreserves {n = S n} FZ (FS fn) (FLTESucc flt) = FZ
 strengthenFLTPreserves {n = S n} (FS fm) (FS fn) (FLTESucc flt) = FS $ strengthenFLTPreserves fm fn flt
 
 export
+strengthenFLTPlusFZ : {m, n : _}
+                   -> (fm : Fin (n + m))
+                   -> (fn : Fin (S n))
+                   -> (flt : fm `FLT` fn)
+                   -> strengthenFLT fm fn flt + FZ {k = m} = fm
+strengthenFLTPlusFZ {n = Z} _ (FS fn) _ = absurd fn
+strengthenFLTPlusFZ {n = S n} FZ (FS fn) (FLTESucc flt) = Refl
+strengthenFLTPlusFZ {n = S n} (FS fm) (FS fn) (FLTESucc flt) = cong FS $ strengthenFLTPlusFZ fm fn flt
+
+export
 flteInv : fm `FLTE` fn -> Not (fn `FLT` fm)
 flteInv FLTEZero flt = uninhabited flt
 flteInv (FLTESucc flte) (FLTESucc flt) = flteInv flte flt
