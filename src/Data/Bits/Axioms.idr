@@ -90,3 +90,16 @@ namespace FisoBV
   export
   bvToFin : {w : _} -> UnsignedBV w -> UnsignedF w
   bvToFin (MkU bv) = MkU $ accBV bv
+
+  export
+  isoFtoBVtoF : {w : _} -> (f : Fin (bound w)) -> accBV (finToFactors {w} f) = f
+  isoFtoBVtoF {w = Z} FZ = Refl
+  isoFtoBVtoF {w = S w} f = ?w2
+  isoFtoBVtoF {w = S w} f with (f `minusF` bound w)
+    _ | MinuendSmaller smaller with (plusZeroRightNeutral $ bound w)
+      _ | boundEq with (bound w + Z)
+        _ | _ = case boundEq of Refl => rewrite isoFtoBVtoF {w} (strengthenFLT _ _ smaller)
+                                        in strengthenFLTPlusFZ f last smaller
+    _ | MDifference diff eq with (plusZeroRightNeutral $ bound w)
+      _ | boundEq with (bound w + Z)
+        _ | _ = case boundEq of Refl => ?iso1_rhs_2
