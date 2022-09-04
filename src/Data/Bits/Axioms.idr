@@ -1,6 +1,6 @@
 module Data.Bits.Axioms
 
-import Data.Fin
+import Data.Fin as F
 import Data.Fin.Extra
 import Data.Nat
 import Data.Vect
@@ -105,3 +105,21 @@ namespace FisoBV
                       | ((bound w + bound w) `minus` bound w)
         _ | Refl | _ = rewrite isoFtoBVtoF {w} diff in
                                hetPointwiseIsTransport Refl eq
+
+  export
+  isoBVtoFtoBV : {w : _} -> (bv : Vect w Bit) -> finToFactors {w} (accBV bv) = bv
+  isoBVtoFtoBV {w = Z} [] = Refl
+  isoBVtoFtoBV {w = S w} (b :: bv) with (plusZeroRightNeutral $ bound w)
+                                      | (bound w + Z)
+    _ | Refl | _ with ((accBV bv + bitToVal w b) `minusF` bound w)
+      _ | MinuendSmaller smaller
+          = case b of
+                 O => ?wut11
+                 I => ?wut12  --absurd
+      _ | MDifference diff eq with (minusPlus {n = bound w} (bound w))
+                                 | ((bound w + bound w) `minus` bound w)
+        _ | Refl | _
+            = case b of
+                   O => let eq' = eq `F.Equality.transitive` plusZeroRightNeutral (accBV bv)
+                         in absurd $ pointwisePlusLastAbsurd _ _ eq'
+                   I => ?wut22
