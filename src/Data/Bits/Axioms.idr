@@ -114,8 +114,14 @@ namespace FisoBV
     _ | Refl | _ with ((accBV bv + bitToVal w b) `minusF` bound w)
       _ | MinuendSmaller smaller
           = case b of
-                 O => ?wut11
-                 I => ?wut12  --absurd
+                 O => let rec = isoBVtoFtoBV bv
+                          step = cong finToFactors
+                               $ sym
+                               $ homoPointwiseIsEqual
+                               $ symmetric (plusZeroRightNeutral $ accBV bv) `transitive`
+                                 strengthenFLTPreserves (accBV bv + FZ) last smaller
+                       in cong (O ::) $ rewrite plusZeroRightNeutral (bound w) in step `trans` rec
+                 I => absurd $ flteInv (fltePlusLeft _ _) smaller
       _ | MDifference diff eq with (minusPlus {n = bound w} (bound w))
                                  | ((bound w + bound w) `minus` bound w)
         _ | Refl | _
