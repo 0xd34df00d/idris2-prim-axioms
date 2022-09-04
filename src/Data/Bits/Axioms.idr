@@ -82,10 +82,9 @@ namespace FisoBV
   export
   accBV : {w : _} -> Vect w Bit -> Fin (bound w)
   accBV {w = Z} [] = FZ
-  accBV {w = S w} (b :: bs) = let rec = accBV bs
-                                  b' = bitToVal w b
-                               in rewrite plusZeroRightNeutral (bound w)
-                               in rec + b'
+  accBV {w = S w} (b :: bs) with (plusZeroRightNeutral $ bound w)
+                               | (bound w + Z)
+    _ | Refl | _ = accBV bs + bitToVal w b
 
   export
   bvToFin : {w : _} -> UnsignedBV w -> UnsignedF w
