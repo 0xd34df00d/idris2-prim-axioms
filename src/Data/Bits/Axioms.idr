@@ -122,4 +122,6 @@ namespace FisoBV
             = case b of
                    O => let eq' = eq `F.Equality.transitive` plusZeroRightNeutral (accBV bv)
                          in absurd $ pointwisePlusLastAbsurd _ _ eq'
-                   I => ?wut22
+                   I => let eq' = cong finToFactors $ pointwisePlusRightCancel' _ _ _ eq
+                            rec = isoBVtoFtoBV bv
+                         in cong (I ::) $ eq' `trans` rec
