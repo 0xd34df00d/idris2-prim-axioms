@@ -96,6 +96,16 @@ fltePointwiseRight (FS _) FZ FZ (FLTESucc _) impossible
 fltePointwiseRight (FS _) FZ (FS x) (FLTESucc _) impossible
 fltePointwiseRight (FS _) (FS _) (FS pw) (FLTESucc flte) = FLTESucc $ fltePointwiseRight _ _ pw flte
 
+export
+fltePlusLeft : {m, n : _}
+            -> (fm : Fin (S m))
+            -> (fn : Fin n)
+            -> fm `FLTE` fn + fm
+fltePlusLeft FZ fn = FLTEZero
+fltePlusLeft {m = S m} (FS fm) fn = let rec = FLTESucc $ fltePlusLeft fm fn
+                                        pwEq = plusSuccRightSucc fn fm
+                                     in fltePointwiseRight _ _ pwEq rec
+
 public export
 last' : (n : _) -> Fin (S n)
 last' _ = last
