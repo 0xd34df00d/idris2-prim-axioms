@@ -36,7 +36,7 @@ namespace AsFin
     MkU val1 + MkU val2 = MkU $ boundedFinNonEmpty val1 val2 (+)
     MkU val1 * MkU val2 = MkU $ boundedFinNonEmpty val1 val2 (*)
     fromInteger z with (bound w) proof p
-      _ | Z = absurd $ eqZeroNotPositive p (powNonNeg 1 w)
+      _ | Z = absurd $ eqZeroNotPositive p (powPositive 1 w)
       _ | S _ = MkU $ rewrite p in Num.fromInteger z
 
 namespace AsBV
