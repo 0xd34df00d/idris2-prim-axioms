@@ -1,6 +1,7 @@
 module Data.Bits.Axioms.MetaMath
 
 import Data.Fin
+import Data.Fin.Extra
 
 %default total
 
@@ -40,3 +41,19 @@ plusMinusZero _ b = rewrite plusZeroRightNeutral b in minusPlus _
 public export %inline
 bound : (1 w : Nat) -> Nat
 bound w = 2 ^^ w
+
+
+export
+pointwisePlusLastAbsurd : {n : Nat}
+                       -> (f1, f2 : Fin n)
+                       -> Not (f1 + last {n = n} ~~~ f2)
+pointwisePlusLastAbsurd {n = n} f1 f2 eq
+  = let natEq = sym (finToNatPlusHomo f1 (last {n = n})) `trans` finToNatQuotient eq
+        lte = replace {p = \p => S (finToNat f2) `LTE` p} (sym $ finToNatLastIsBound {n}) (elemSmallerThanBound f2)
+     in helper lte natEq
+  where
+    helper : {n1, n : _}
+          -> n2 `LT` n
+          -> Not (n1 + n = n2)
+    helper n2lt Refl = let prf' = plusLteMonotone LTEZero reflexive
+                        in LTEImpliesNotGT prf' n2lt
