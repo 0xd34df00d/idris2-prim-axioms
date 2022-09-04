@@ -85,7 +85,18 @@ fltInvNot : {fm : Fin m}
          -> fn `FLTE` fm
 fltInvNot contra = case flteInvNot contra of FLTESucc x => x
 
-public export %inline
+export
+fltePointwiseRight : (f1 : Fin _)
+                  -> (f2 : Fin _)
+                  -> f1 ~~~ f2
+                  -> f `FLTE` f1
+                  -> f `FLTE` f2
+fltePointwiseRight _ _ _ FLTEZero = FLTEZero
+fltePointwiseRight (FS _) FZ FZ (FLTESucc _) impossible
+fltePointwiseRight (FS _) FZ (FS x) (FLTESucc _) impossible
+fltePointwiseRight (FS _) (FS _) (FS pw) (FLTESucc flte) = FLTESucc $ fltePointwiseRight _ _ pw flte
+
+public export
 last' : (n : _) -> Fin (S n)
 last' _ = last
 
