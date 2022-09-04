@@ -57,3 +57,13 @@ pointwisePlusLastAbsurd f1 f2 eq
           -> Not (n1 + n = n2)
     helper n2lt Refl = let prf' = plusLteMonotone LTEZero reflexive
                         in LTEImpliesNotGT prf' n2lt
+
+export
+finToNatEqualityAsPointwise : (fm : Fin m)
+                           -> (fn : Fin n)
+                           -> finToNat fm = finToNat fn
+                           -> fm ~~~ fn
+finToNatEqualityAsPointwise FZ FZ _ = FZ
+finToNatEqualityAsPointwise FZ (FS fn) prf = absurd prf
+finToNatEqualityAsPointwise (FS fm) FZ prf = absurd prf
+finToNatEqualityAsPointwise (FS fm) (FS fn) prf = FS $ finToNatEqualityAsPointwise fm fn (injective prf)
