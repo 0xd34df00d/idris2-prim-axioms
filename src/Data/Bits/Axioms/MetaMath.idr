@@ -67,3 +67,25 @@ finToNatEqualityAsPointwise FZ FZ _ = FZ
 finToNatEqualityAsPointwise FZ (FS fn) prf = absurd prf
 finToNatEqualityAsPointwise (FS fm) FZ prf = absurd prf
 finToNatEqualityAsPointwise (FS fm) (FS fn) prf = FS $ finToNatEqualityAsPointwise fm fn (injective prf)
+
+infixl 1 `trans`
+
+export
+pointwisePlusRightCancel : (f1 : Fin m)
+                        -> (f2 : Fin n)
+                        -> (f : Fin (S _))
+                        -> f1 + f ~~~ f2 + f
+                        -> f1 ~~~ f2
+pointwisePlusRightCancel f1 f2 f pw
+  = let eq = sym (finToNatPlusHomo f1 f) `trans`
+             finToNatQuotient pw         `trans`
+             finToNatPlusHomo f2 f
+        eq' = plusRightCancel _ _ _ eq
+     in finToNatEqualityAsPointwise _ _ eq'
+
+export
+pointwisePlusRightCancel' : (f1, f2 : Fin m)
+                         -> (f : Fin (S n))
+                         -> f1 + f ~~~ f2 + f
+                         -> f1 = f2
+pointwisePlusRightCancel' f1 f2 f pw = homoPointwiseIsEqual $ pointwisePlusRightCancel f1 f2 f pw
