@@ -100,9 +100,9 @@ namespace FisoBV
                                   | (bound w + Z)
       _ | Refl | _ = rewrite isoFtoBVtoF {w} (strengthenFLT _ _ smaller) in
                              strengthenFLTPlusFZ f last smaller
-    _ | MDifference diff eq with (plusMinusZero (bound w) (bound w), plusZeroRightNeutral $ bound w)
-      _ | (pmEq, boundEq) with (bound w + Z)
-        _ | _ with (boundEq)
-          _ | Refl with ((bound w + bound w) `minus` bound w)
-            _ | _ = case pmEq of Refl => rewrite isoFtoBVtoF {w} diff in
-                                                 hetPointwiseIsTransport Refl eq
+    _ | MDifference diff eq with (plusZeroRightNeutral $ bound w)
+                               | (bound w + Z)
+      _ | Refl | _ with (minusPlus {n = bound w} (bound w))
+                      | ((bound w + bound w) `minus` bound w)
+        _ | Refl | _ = rewrite isoFtoBVtoF {w} diff in
+                               hetPointwiseIsTransport Refl eq
