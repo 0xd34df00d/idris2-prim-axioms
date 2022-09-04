@@ -47,9 +47,9 @@ export
 pointwisePlusLastAbsurd : {n : Nat}
                        -> (f1, f2 : Fin n)
                        -> Not (f1 + last {n = n} ~~~ f2)
-pointwisePlusLastAbsurd {n = n} f1 f2 eq
-  = let natEq = sym (finToNatPlusHomo f1 (last {n = n})) `trans` finToNatQuotient eq
-        lte = replace {p = \p => S (finToNat f2) `LTE` p} (sym $ finToNatLastIsBound {n}) (elemSmallerThanBound f2)
+pointwisePlusLastAbsurd f1 f2 eq
+  = let natEq = sym (finToNatPlusHomo f1 last) `trans` finToNatQuotient eq
+        lte = replace {p = LTE (S (finToNat f2))} (sym finToNatLastIsBound) (elemSmallerThanBound f2)
      in helper lte natEq
   where
     helper : {n1, n : _}
