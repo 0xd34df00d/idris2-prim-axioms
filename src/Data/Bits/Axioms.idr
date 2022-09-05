@@ -1,5 +1,6 @@
 module Data.Bits.Axioms
 
+import Data.Bits
 import Data.Fin as F
 import Data.Fin.Extra
 import Data.Nat
@@ -7,6 +8,7 @@ import Data.Vect
 import Decidable.Equality
 
 import Data.Bits.Axioms.MetaMath
+import Data.Bits.BitDef
 import Data.Fin.Order
 
 %default total
@@ -40,16 +42,6 @@ namespace AsFin
       _ | S _ = MkU $ rewrite p in Num.fromInteger z
 
 namespace AsBV
-  public export
-  data Bit = O | I
-
-  public export
-  DecEq Bit where
-    decEq I I = Yes Refl
-    decEq I O = No $ \case Refl impossible
-    decEq O I = No $ \case Refl impossible
-    decEq O O = Yes Refl
-
   public export
   data UnsignedBV : (w : Nat) -> Type where
     MkU : (bv : Vect w Bit) -> UnsignedBV w
