@@ -93,7 +93,6 @@ namespace FisoBV
   export
   isoFtoBVtoF : {w : _} -> (f : Fin (bound w)) -> accBV (finToFactors {w} f) = f
   isoFtoBVtoF {w = Z} FZ = Refl
-  isoFtoBVtoF {w = S w} f = ?w2
   isoFtoBVtoF {w = S w} f with (f `minusF` bound w)
     _ | MinuendSmaller smaller with (plusZeroRightNeutral $ bound w)
                                   | (bound w + Z)
