@@ -10,6 +10,7 @@ import Decidable.Equality
 import Data.Bits.Axioms.MetaMath
 import Data.Bits.BitDef
 import Data.Fin.Order
+import Data.Vect.Utils
 
 %default total
 
@@ -122,3 +123,33 @@ namespace FisoBV
                    I => let eq' = cong finToFactors $ pointwisePlusRightCancel' _ _ _ eq
                             rec = isoBVtoFtoBV bv
                          in cong (I ::) $ eq' `trans` rec
+
+public export
+{w : _} -> Bits (UnsignedBV w) where
+  Index = Fin w
+
+  MkU bv1 .&. MkU bv2 = MkU $ zipWith and bv1 bv2
+  MkU bv1 .|. MkU bv2 = MkU $ zipWith or bv1 bv2
+  MkU bv1 `xor` MkU bv2 = MkU $ zipWith xor bv1 bv2
+
+  shiftL (MkU bv) s with (splitAtFin s bv)
+    _ | TheSplit {n1 = n1, n2 = n2} _ after _ = MkU $ rewrite plusCommutative n1 n2 in
+                                                              after ++ replicate _ O
+
+  shiftR (MkU bv) s with (splitAtFin s bv)
+    _ | TheSplit {n1 = n1, n2 = n2} before _ _ = MkU $ rewrite plusCommutative n1 n2 in
+                                                               replicate _ O ++ before
+
+  bit pos = MkU $ replaceAt pos I (replicate _ O)
+
+  zeroBits = MkU $ replicate _ O
+
+  complement (MkU bv) = MkU $ not <$> bv
+
+  oneBits = MkU $ replicate _ I
+
+  testBit (MkU bv) pos = toBool $ pos `index` bv
+
+  clearBit (MkU bv) pos = MkU $ replaceAt pos O bv
+
+  setBit (MkU bv) pos = MkU $ replaceAt pos I bv
