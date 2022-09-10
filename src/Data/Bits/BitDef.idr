@@ -16,12 +16,12 @@ DecEq Bit where
 
 public export
 and : Bit -> Bit -> Bit
-and I I = I
+and I b = b
 and _ _ = O
 
 public export
 or : Bit -> Bit -> Bit
-or O O = O
+or O b = b
 or _ _ = I
 
 public export
