@@ -11,4 +11,6 @@ depends = base
 modules = Data.Bits.Axioms
         , Data.Bits.Axioms.MetaMath
         , Data.Bits.BitDef
+        , Data.Bits.Theorems
         , Data.Fin.Order
+        , Data.Vect.Utils
