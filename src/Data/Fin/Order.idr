@@ -10,6 +10,8 @@ data FLTE : (fm : Fin m) -> (fn : Fin n) -> Type where
   FLTEZero : FZ `FLTE` fn
   FLTESucc : fm `FLTE` fn -> FS fm `FLTE` FS fn
 
+%name FLTE flte
+
 public export
 FLT : (fm : Fin m) -> (fn : Fin n) -> Type
 FLT fm fn = FS fm `FLTE` fn
