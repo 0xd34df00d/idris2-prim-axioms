@@ -45,3 +45,8 @@ andRightId : (b : Bit)
           -> b `and` I = b
 andRightId O = Refl
 andRightId I = Refl
+
+export
+andLeftId : (b : Bit)
+         -> I `and` b = b
+andLeftId b = Refl
