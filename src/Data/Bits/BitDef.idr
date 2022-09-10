@@ -50,3 +50,9 @@ export
 andLeftId : (b : Bit)
          -> I `and` b = b
 andLeftId b = Refl
+
+export
+andCommutes : (b1, b2 : Bit)
+           -> b1 `and` b2 = b2 `and` b1
+andCommutes O b2 = case b2 of { O => Refl ; I => Refl }
+andCommutes I b2 = case b2 of { O => Refl ; I => Refl }
