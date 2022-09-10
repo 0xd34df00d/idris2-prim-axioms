@@ -3,6 +3,7 @@ module Data.Bits.Theorems
 import Data.Bits as B
 import Data.Fin
 import Data.Vect
+import Data.Vect.Properties.Index
 
 import Data.Bits.Axioms
 import Data.Bits.BitDef as B
@@ -18,7 +19,7 @@ andRightId (MkU bv) = cong MkU $ pointwiseEq (zipWith and bv (replicate _ I)) bv
   where
     f : (i : _) -> index i (zipWith B.and bv (replicate _ I)) = index i bv
     f i = zipWithIndexLinear and bv (replicate w I) i `trans`
-          rewrite anyIndexOfReplicate w I i in B.andRightId _
+          rewrite indexReplicate i I in B.andRightId _
 
 export
 andLeftId : {w : _}
@@ -28,7 +29,7 @@ andLeftId (MkU bv) = cong MkU $ pointwiseEq (zipWith and (replicate _ I) bv) bv 
   where
     f : (i : _) -> index i (zipWith B.and (replicate _ I) bv) = index i bv
     f i = zipWithIndexLinear and (replicate w I) bv i `trans`
-          rewrite anyIndexOfReplicate w I i in B.andLeftId _
+          rewrite indexReplicate i I in B.andLeftId _
 
 export
 andCommutes : (bv1, bv2 : UnsignedBV w)
@@ -48,7 +49,7 @@ andRightZero (MkU bv) = cong MkU $ pointwiseEq (zipWith and bv (replicate _ O)) 
   where
     f : (i : _) -> index i (zipWith B.and bv (replicate _ O)) = index i (replicate _ O)
     f i = zipWithIndexLinear and bv (replicate w O) i `trans`
-          rewrite anyIndexOfReplicate w O i in B.andRightZero _
+          rewrite indexReplicate i O in B.andRightZero _
 
 export
 andLeftZero : {w : _}
@@ -58,4 +59,4 @@ andLeftZero (MkU bv) = cong MkU $ pointwiseEq (zipWith and (replicate _ O) bv) (
   where
     f : (i : _) -> index i (zipWith B.and (replicate _ O) bv) = index i (replicate _ O)
     f i = zipWithIndexLinear and (replicate w O) bv i `trans`
-          rewrite anyIndexOfReplicate w O i in Refl
+          rewrite indexReplicate i O in Refl

@@ -28,11 +28,3 @@ pointwiseEq [] [] pwEq = Refl
 pointwiseEq (x :: xs) (y :: ys) pwEq = rewrite pwEq FZ in
                                        rewrite pointwiseEq xs ys (\idx => pwEq (FS idx)) in
                                                Refl
-
-export
-anyIndexOfReplicate : (n : _)
-                   -> (val : _)
-                   -> (i : _)
-                   -> index i (replicate n val) = val
-anyIndexOfReplicate _ _ FZ = Refl
-anyIndexOfReplicate _ _ (FS i) = anyIndexOfReplicate _ _ i
