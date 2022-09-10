@@ -39,3 +39,9 @@ public export
 toBool : Bit -> Bool
 toBool O = False
 toBool I = True
+
+export
+andRightId : (b : Bit)
+          -> b `and` I = b
+andRightId O = Refl
+andRightId I = Refl
