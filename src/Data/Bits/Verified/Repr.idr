@@ -1,17 +1,18 @@
-module Data.Bits.Theorems
+module Data.Bits.Verified.Repr
 
 import Data.Bits as B
 import Data.Fin
 import Data.Vect
 import Data.Vect.Properties.Index
 
-import Data.Bits.Axioms
 import Data.Bits.BitDef as B
 import Data.Bits.Repr
+import Data.Bits.Verified
 import Data.Vect.Utils
 
 %default total
 
+export
 {w : _} -> VerifiedBits (UnsignedBV w) where
   andRightId (MkU bv) = cong MkU $ pointwiseEq (zipWith and bv (replicate _ I)) bv f
     where
