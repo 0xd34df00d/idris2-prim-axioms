@@ -17,13 +17,13 @@ export
   andRightId (MkU bv) = cong MkU $ pointwiseEq (zipWith and bv (replicate _ I)) bv f
     where
       f : (i : _) -> index i (zipWith B.and bv (replicate _ I)) = index i bv
-      f i = zipWithIndexLinear and bv (replicate w I) i `trans`
+      f i = zipWithIndexLinear and bv (replicate _ I) i `trans`
             rewrite indexReplicate i I in B.andRightId _
 
   andLeftId (MkU bv) = cong MkU $ pointwiseEq (zipWith and (replicate _ I) bv) bv f
     where
       f : (i : _) -> index i (zipWith B.and (replicate _ I) bv) = index i bv
-      f i = zipWithIndexLinear and (replicate w I) bv i `trans`
+      f i = zipWithIndexLinear and (replicate _ I) bv i `trans`
             rewrite indexReplicate i I in B.andLeftId _
 
   andCommutes (MkU bv1) (MkU bv2) = cong MkU $ pointwiseEq (zipWith and bv1 bv2) (zipWith and bv2 bv1) f
@@ -36,11 +36,11 @@ export
   andRightZero (MkU bv) = cong MkU $ pointwiseEq (zipWith and bv (replicate _ O)) (replicate _ O) f
     where
       f : (i : _) -> index i (zipWith B.and bv (replicate _ O)) = index i (replicate _ O)
-      f i = zipWithIndexLinear and bv (replicate w O) i `trans`
+      f i = zipWithIndexLinear and bv (replicate _ O) i `trans`
             rewrite indexReplicate i O in B.andRightZero _
 
   andLeftZero (MkU bv) = cong MkU $ pointwiseEq (zipWith and (replicate _ O) bv) (replicate _ O) f
     where
       f : (i : _) -> index i (zipWith B.and (replicate _ O) bv) = index i (replicate _ O)
-      f i = zipWithIndexLinear and (replicate w O) bv i `trans`
+      f i = zipWithIndexLinear and (replicate _ O) bv i `trans`
             rewrite indexReplicate i O in Refl
