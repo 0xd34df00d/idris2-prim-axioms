@@ -133,12 +133,14 @@ public export
   MkU bv1 `xor` MkU bv2 = MkU $ zipWith xor bv1 bv2
 
   shiftL (MkU bv) s with (splitAtFin s bv)
-    _ | TheSplit {n1 = n1, n2 = n2} _ after _ = MkU $ rewrite plusCommutative n1 n2 in
-                                                              after ++ replicate _ O
+    shiftL (MkU (before ++ after)) s | TheSplit {n1 = n1, n2 = n2} before after _
+                                       = MkU $ rewrite plusCommutative n1 n2 in
+                                                       after ++ replicate _ O
 
   shiftR (MkU bv) s with (splitAtFin s bv)
-    _ | TheSplit {n1 = n1, n2 = n2} before _ _ = MkU $ rewrite plusCommutative n1 n2 in
-                                                               replicate _ O ++ before
+    shiftR (MkU (before ++ after)) s | TheSplit {n1 = n1, n2 = n2} before after _
+                                       = MkU $ rewrite plusCommutative n1 n2 in
+                                                       replicate _ O ++ before
 
   bit pos = MkU $ replaceAt pos I (replicate _ O)
 
