@@ -5,7 +5,7 @@ import Data.Bits as B
 %default total
 
 public export
-interface Bits ty => VerifiedBits ty where
+interface FiniteBits ty => VerifiedBits ty where
   andRightId   : (v : ty)
               -> v .&. B.oneBits = v
   andLeftId    : (v : ty)
