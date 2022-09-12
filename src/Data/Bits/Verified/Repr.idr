@@ -44,3 +44,8 @@ export
       f : (i : _) -> index i (zipWith B.and (replicate _ O) bv) = index i (replicate _ O)
       f i = zipWithIndexLinear and (replicate _ O) bv i `trans`
             rewrite indexReplicate i O in Refl
+
+  bitSizePred = w
+  bitSizeCorrelates = Refl
+
+  bitsToIndex' = id

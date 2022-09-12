@@ -17,3 +17,8 @@ interface FiniteBits ty => VerifiedBits ty where
   andCommutes  : (v1, v2 : ty)
               -> v1 .&. v2 = v2 .&. v1
 
+  bitSizePred : Nat
+  bitSizeCorrelates : S bitSizePred = bitSize {a = ty}
+
+  bitsToIndex' : Fin (S bitSizePred) -> Index {a = ty}
+  bitsToIndex' fin = bitsToIndex {a = ty} $ replace {p = Fin} bitSizeCorrelates fin
