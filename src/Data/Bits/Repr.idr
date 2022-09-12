@@ -153,3 +153,15 @@ public export
   clearBit (MkU bv) pos = MkU $ replaceAt pos O bv
 
   setBit (MkU bv) pos = MkU $ replaceAt pos I bv
+
+public export
+{w : _} -> FiniteBits (UnsignedBV w) where
+  bitSize = w
+  bitsToIndex = id
+  popCount (MkU bv) = cnt bv
+    where
+      cnt : Vect w' Bit -> Nat
+      cnt [] = Z
+      cnt (x :: xs) = case x of
+                           O => cnt xs
+                           I => S $ cnt xs
