@@ -13,7 +13,7 @@ import Data.Vect.Utils
 %default total
 
 export
-{w : _} -> VerifiedBits (UnsignedBV w) where
+{w : _} -> VerifiedBits (UnsignedBV (S w)) where
   andRightId (MkU bv) = cong MkU $ pointwiseEq (zipWith and bv (replicate _ I)) bv f
     where
       f : (i : _) -> index i (zipWith B.and bv (replicate _ I)) = index i bv
