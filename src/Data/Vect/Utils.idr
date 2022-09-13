@@ -25,10 +25,10 @@ data SplitResult : {n : Nat} -> SplitDirection -> (pos : Fin n) -> (xs : Vect n 
           -> SplitResult dir pos (before ++ after)
 
 export
-splitAtFin : {n : _} -> (pos : Fin n) -> (xs : Vect n a) -> SplitResult pos xs
-splitAtFin FZ xs = TheSplit [] xs Refl
-splitAtFin (FS pos) (x :: xs) with (splitAtFin pos xs)
-  splitAtFin (FS pos) (x :: before ++ after) | TheSplit before after eq = TheSplit (x :: before) after (cong S eq)
+splitLAtFin : {n : _} -> (pos : Fin n) -> (xs : Vect n a) -> SplitResult FromLeft pos xs
+splitLAtFin FZ xs = TheSplit [] xs Refl
+splitLAtFin (FS pos) (x :: xs) with (splitLAtFin pos xs)
+  splitLAtFin (FS pos) (x :: before ++ after) | TheSplit before after eq = TheSplit (x :: before) after (cong S eq)
 
 export
 appendRightNeutral : {n : _} -> (xs : Vect n a) -> xs ++ [] ~=~ xs
