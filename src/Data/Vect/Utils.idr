@@ -8,6 +8,12 @@ import Data.Vect
 public export
 data SplitDirection = FromLeft | FromRight
 
+public export %inline
+splitDirDestr : (l, r : a) -> SplitDirection -> a
+splitDirDestr l r dir = case dir of
+                             FromLeft => l
+                             FromRight => r
+
 public export
 data SplitResult : {n : Nat} -> SplitDirection -> (pos : Fin n) -> (xs : Vect n a) -> Type where
   TheSplit : {n1, n2 : _}
@@ -15,8 +21,7 @@ data SplitResult : {n : Nat} -> SplitDirection -> (pos : Fin n) -> (xs : Vect n 
           -> {pos : Fin (n1 + n2)}
           -> (before : Vect n1 a)
           -> (after : Vect n2 a)
-          -> (eq : case dir of FromLeft  => n1 = finToNat pos
-                               FromRight => n2 = finToNat pos)
+          -> (eq : splitDirDestr n1 n2 dir = finToNat pos)
           -> SplitResult dir pos (before ++ after)
 
 export
