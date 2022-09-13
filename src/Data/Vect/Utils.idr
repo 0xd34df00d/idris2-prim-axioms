@@ -35,6 +35,21 @@ vecToListHomo [] [] _ = Refl
 vecToListHomo (x :: xs) (y :: ys) prf = case lstInjectiveHead prf of
                                              Refl => cong (x ::) $ vecToListHomo xs ys (lstInjectiveTail prf)
 
+vecToListSizeHomo : (xs : Vect m a)
+                 -> (ys : Vect n a)
+                 -> vecToList xs = vecToList ys
+                 -> m = n
+vecToListSizeHomo [] [] prf = Refl
+vecToListSizeHomo [] (_ :: _) Refl impossible
+vecToListSizeHomo (_ :: _) [] Refl impossible
+vecToListSizeHomo (_ :: xs) (_ :: ys) prf = cong S $ vecToListSizeHomo xs ys (lstInjectiveTail prf)
+
+vecToListHomoHetero : (xs : Vect m a)
+                   -> (ys : Vect n a)
+                   -> vecToList xs = vecToList ys
+                   -> xs = ys
+vecToListHomoHetero xs ys prf = case vecToListSizeHomo xs ys prf of Refl => vecToListHomo xs ys prf
+
 export
 reverseParts : {m, n : _}
             -> (xs : Vect m a)
