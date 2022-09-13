@@ -50,3 +50,9 @@ export
   bitSizeCorrelates = Refl
 
   bitsToIndex' = id
+
+  shiftLZero (MkU bv) with (splitAtFin FZ bv)
+    shiftLZero (MkU ([] ++ after)) | TheSplit {n2 = S n} [] after _ with (appendRightNeutral after)
+      _ | eqPrf with (plusZeroRightNeutral n)
+                   | (plus n Z)
+        _ | Refl | _ = cong MkU eqPrf

@@ -22,3 +22,6 @@ interface FiniteBits ty => VerifiedBits ty where
 
   bitsToIndex' : Fin (S bitSizePred) -> Index {a = ty}
   bitsToIndex' fin = bitsToIndex {a = ty} $ replace {p = Fin} bitSizeCorrelates fin
+
+  shiftLZero : (v : ty)
+            -> shiftL v (bitsToIndex' FZ) = v
