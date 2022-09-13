@@ -50,6 +50,12 @@ vecToListHomoHetero : (xs : Vect m a)
                    -> xs = ys
 vecToListHomoHetero xs ys prf = case vecToListSizeHomo xs ys prf of Refl => vecToListHomo xs ys prf
 
+vecToListConcat : (xs : Vect n a)
+               -> (ys : Vect m a)
+               -> vecToList (xs ++ ys) = vecToList xs ++ vecToList ys
+vecToListConcat [] _ = Refl
+vecToListConcat (x :: xs) ys = cong (x ::) $ vecToListConcat xs ys
+
 export
 reverseParts : {m, n : _}
             -> (xs : Vect m a)
