@@ -14,15 +14,26 @@ appendRightNeutral {n = S n} (x :: xs) with (appendRightNeutral xs)
     _ | Refl | _ = cong (x ::) rec
 
 
-export
-reverseHead : (h : a) -> (xs : Vect n a) -> reverse (h :: xs) ~=~ reverse xs ++ [h]
-reverseHead h [] = Refl
-reverseHead h (x :: xs) = let rec = reverseHead x xs in ?reverseHead_rhs_dfbb
+lstInjectiveHead : {xs, ys : List a}
+                -> x :: xs = y :: ys
+                -> x = y
+lstInjectiveHead Refl = Refl
 
-export
-reverseReverseId : (xs : Vect n a) -> reverse (reverse xs) = xs
-reverseReverseId [] = Refl
-reverseReverseId (x :: xs) = let rec = reverseReverseId xs in ?wut
+lstInjectiveTail : {xs, ys : List a}
+                -> x :: xs = y :: ys
+                -> xs = ys
+lstInjectiveTail Refl = Refl
+
+vecToList : Vect n a -> List a
+vecToList [] = []
+vecToList (x :: xs) = x :: vecToList xs
+
+vecToListHomo : (xs, ys : _)
+             -> vecToList xs = vecToList ys
+             -> xs = ys
+vecToListHomo [] [] _ = Refl
+vecToListHomo (x :: xs) (y :: ys) prf = case lstInjectiveHead prf of
+                                             Refl => cong (x ::) $ vecToListHomo xs ys (lstInjectiveTail prf)
 
 export
 reverseParts : {m, n : _}
