@@ -5,6 +5,14 @@ import Data.Vect
 
 %default total
 
+export
+appendRightNeutral : {n : _} -> (xs : Vect n a) -> xs ++ [] ~=~ xs
+appendRightNeutral [] = Refl
+appendRightNeutral {n = S n} (x :: xs) with (appendRightNeutral xs)
+  _ | rec with (plusZeroRightNeutral n)
+             | (plus n Z)
+    _ | Refl | _ = cong (x ::) rec
+
 public export
 data SplitDirection = FromLeft | FromRight
 
@@ -29,11 +37,3 @@ splitLAtFin : {n : _} -> (pos : Fin n) -> (xs : Vect n a) -> SplitResult FromLef
 splitLAtFin FZ xs = TheSplit [] xs Refl
 splitLAtFin (FS pos) (x :: xs) with (splitLAtFin pos xs)
   splitLAtFin (FS pos) (x :: before ++ after) | TheSplit before after eq = TheSplit (x :: before) after (cong S eq)
-
-export
-appendRightNeutral : {n : _} -> (xs : Vect n a) -> xs ++ [] ~=~ xs
-appendRightNeutral [] = Refl
-appendRightNeutral {n = S n} (x :: xs) with (appendRightNeutral xs)
-  _ | rec with (plusZeroRightNeutral n)
-             | (plus n Z)
-    _ | Refl | _ = cong (x ::) rec
