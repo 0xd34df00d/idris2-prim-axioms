@@ -1,6 +1,7 @@
 module Data.Vect.Utils
 
 import Data.Fin
+import Data.List
 import Data.Vect
 
 %default total
@@ -65,6 +66,16 @@ vecToListConcat : (xs : Vect n a)
                -> vecToList (xs ++ ys) = vecToList xs ++ vecToList ys
 vecToListConcat [] _ = Refl
 vecToListConcat (x :: xs) ys = cong (x ::) $ vecToListConcat xs ys
+
+vecToListReverseOnto : (acc : Vect n a)
+                    -> (xs : Vect m a)
+                    -> vecToList (reverse'Onto acc xs) = reverseOnto (vecToList acc) (vecToList xs)
+vecToListReverseOnto acc [] = Refl
+vecToListReverseOnto acc (x :: xs) = vecToListReverseOnto (x :: acc) xs
+
+vecToListReverse : (xs : Vect n a)
+                -> vecToList (reverse' xs) = reverse (vecToList xs)
+vecToListReverse = vecToListReverseOnto []
 
 export
 reverseParts : {m, n : _}
