@@ -112,6 +112,12 @@ public export
 last' : (n : _) -> Fin (S n)
 last' _ = last
 
+export
+lastIsLast : (fn : Fin n)
+          -> fn `FLTE` last' n
+lastIsLast FZ = FLTEZero
+lastIsLast (FS f) = FLTESucc (lastIsLast f)
+
 -- The result of subtracting `last : Fin (S m)` from `fn : Fin n`.
 --
 -- The reason for passing `n : Nat` and subtracting `last` is that
