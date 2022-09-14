@@ -77,6 +77,18 @@ vecToListReverse : (xs : Vect n a)
                 -> vecToList (reverse' xs) = reverse (vecToList xs)
 vecToListReverse = vecToListReverseOnto []
 
+reverseAppend : (xs : Vect m a)
+             -> (ys : Vect n a)
+             -> reverse' ys ++ reverse' xs ~=~ reverse' (xs ++ ys)
+reverseAppend xs ys = vecToListHomoHetero _ _ $
+                        rewrite vecToListReverse (xs ++ ys) in
+                        rewrite vecToListConcat (reverse' ys) (reverse' xs) in
+                        rewrite vecToListConcat xs ys in
+                        rewrite vecToListReverse xs in
+                        rewrite vecToListReverse ys in
+                        rewrite revAppend (vecToList xs) (vecToList ys) in
+                                Refl
+
 reverseConcat : (xs : Vect m a)
              -> (ys : Vect n a)
              -> xs ++ ys ~=~ reverse' (reverse' ys ++ reverse' xs)
