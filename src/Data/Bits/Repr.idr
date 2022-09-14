@@ -137,7 +137,7 @@ public export
                                        = MkU $ rewrite plusCommutative n1 n2 in
                                                        after ++ replicate _ O
 
-  shiftR (MkU bv) s with (splitLAtFin s bv)
+  shiftR (MkU bv) s with (splitRAtFin s bv)
     shiftR (MkU (before ++ after)) s | TheSplit {n1 = n1, n2 = n2} before after _
                                        = MkU $ rewrite plusCommutative n1 n2 in
                                                        replicate _ O ++ before
