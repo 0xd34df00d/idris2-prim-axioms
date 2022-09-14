@@ -90,6 +90,14 @@ reverseConcat xs ys = vecToListHomoHetero (xs ++ ys) (reverse' $ reverse' ys ++ 
                         rewrite reverseInvolutive (vecToList (xs ++ ys)) in
                                 Refl
 
+reverseInvolutive : (xs : Vect n a)
+                 -> xs = reverse' (reverse' xs)
+reverseInvolutive xs = vecToListHomo xs (reverse' $ reverse' xs) $
+                        rewrite vecToListReverse (reverse' xs) in
+                        rewrite vecToListReverse xs in
+                        rewrite reverseInvolutive (vecToList xs) in
+                                Refl
+
 
 public export
 data SplitDirection = FromLeft | FromRight
