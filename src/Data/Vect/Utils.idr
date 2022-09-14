@@ -77,16 +77,18 @@ vecToListReverse : (xs : Vect n a)
                 -> vecToList (reverse' xs) = reverse (vecToList xs)
 vecToListReverse = vecToListReverseOnto []
 
-export
-reverseParts : {m, n : _}
-            -> (xs : Vect m a)
-            -> (ys : Vect n a)
-            -> xs ++ ys ~=~ reverse (reverse ys ++ reverse xs)
-reverseParts {n = n} [] ys = let r = appendRightNeutral (reverse ys) in
-                                 rewrite plusZeroRightNeutral n in
-                                         -- rewrite appendRightNeutral (reverse ys) in
-                                                 ?reverseParts_rhs_0
-reverseParts (x :: xs) ys = ?reverseParts_rhs_1
+reverseConcat : (xs : Vect m a)
+             -> (ys : Vect n a)
+             -> xs ++ ys ~=~ reverse' (reverse' ys ++ reverse' xs)
+reverseConcat xs ys = vecToListHomoHetero (xs ++ ys) (reverse' $ reverse' ys ++ reverse' xs) $
+                        rewrite vecToListReverse (reverse' ys ++ reverse' xs) in
+                        rewrite vecToListConcat (reverse' ys) (reverse' xs) in
+                        rewrite vecToListReverse ys in
+                        rewrite vecToListReverse xs in
+                        rewrite revAppend (vecToList xs) (vecToList ys) in
+                        rewrite sym $ vecToListConcat xs ys in
+                        rewrite reverseInvolutive (vecToList (xs ++ ys)) in
+                                Refl
 
 
 public export
