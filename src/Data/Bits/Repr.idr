@@ -54,11 +54,12 @@ namespace AsBV
                                    No contra => No $ \case Refl => contra Refl
 
 namespace FisoBV
+  public export
   bitToVal : (w : _) -> Bit -> Fin (S (bound w))
   bitToVal _ O = FZ
   bitToVal _ I = last
 
-  export
+  public export
   finToFactors : {w : _} -> Fin (bound w) -> Vect w Bit
   finToFactors {w = Z} FZ = []
   finToFactors {w = S w} f with (f `minusF` bound w)
@@ -68,18 +69,18 @@ namespace FisoBV
                                  diff = replace {p = Fin} p diff
                               in I :: finToFactors diff
 
-  export
+  public export
   finToBV : {w : _} -> UnsignedF w -> UnsignedBV w
   finToBV (MkU val) = MkU $ finToFactors val
 
-  export
+  public export
   accBV : {w : _} -> Vect w Bit -> Fin (bound w)
   accBV {w = Z} [] = FZ
   accBV {w = S w} (b :: bs) with (plusZeroRightNeutral $ bound w)
                                | (bound w + Z)
     _ | Refl | _ = accBV bs + bitToVal w b
 
-  export
+  public export
   bvToFin : {w : _} -> UnsignedBV w -> UnsignedF w
   bvToFin (MkU bv) = MkU $ accBV bv
 
