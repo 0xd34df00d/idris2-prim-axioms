@@ -94,8 +94,6 @@ fltePointwiseRight : (f1 : Fin _)
                   -> f `FLTE` f1
                   -> f `FLTE` f2
 fltePointwiseRight _ _ _ FLTEZero = FLTEZero
-fltePointwiseRight (FS _) FZ FZ (FLTESucc _) impossible
-fltePointwiseRight (FS _) FZ (FS x) (FLTESucc _) impossible
 fltePointwiseRight (FS _) (FS _) (FS pw) (FLTESucc flte) = FLTESucc $ fltePointwiseRight _ _ pw flte
 
 export
