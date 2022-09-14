@@ -25,3 +25,5 @@ interface FiniteBits ty => VerifiedBits ty where
 
   shiftLZero : (v : ty)
             -> shiftL v (bitsToIndex' FZ) = v
+  shiftRZero : (v : ty)
+            -> shiftR v (bitsToIndex' FZ) = v

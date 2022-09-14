@@ -51,8 +51,14 @@ export
 
   bitsToIndex' = id
 
-  shiftLZero (MkU bv) with (splitAtFin FZ bv)
+  shiftLZero (MkU bv) with (splitLAtFin FZ bv)
     shiftLZero (MkU ([] ++ after)) | TheSplit {n2 = S n} [] after _ with (appendRightNeutral after)
       _ | eqPrf with (plusZeroRightNeutral n)
                    | (plus n Z)
         _ | Refl | _ = cong MkU eqPrf
+
+  shiftRZero (MkU bv) with (splitRAtFin FZ bv)
+    shiftRZero (MkU (before ++ [])) | TheSplit {n1 = S n} before [] _ with (appendRightNeutral before)
+      _ | eqPrf with (plusZeroRightNeutral n)
+                   | (plus n Z)
+        _ | Refl | _ = cong MkU $ sym eqPrf
