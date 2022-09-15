@@ -58,21 +58,25 @@ natSubFinLast : (n : _)
 natSubFinLast Z = Refl
 natSubFinLast (S n) = natSubFinLast n
 
+-- TODO potentially move this out to base libs
+[finToNatBound] (n : _) => (f : Fin n) => Uninhabited (n = finToNat f) where
+  uninhabited {n = n} {f = f} = go n f
+    where
+      go : (n : _) -> (f : Fin n) -> Not (n = finToNat f)
+      go Z f _ = uninhabited f
+      go (S n) FZ prf = uninhabited prf
+      go (S n) (FS f) prf = go n f (injective prf)
+
 export
 natSubFinPlus : (n1, n2 : Nat)
              -> (f : Fin (n1 + n2))
              -> n2 = finToNat f
              -> natSubFin (n1 + n2) f = n1
-natSubFinPlus n1 Z f prf with (plusZeroRightNeutral n1)
-                            | (n1 + Z)
-  _ | Refl | _ = case f of
-                      FZ => Refl
-                      FS _ => absurd prf
-natSubFinPlus n1 (S n2) f prf with (plusSuccRightSucc n1 n2)
-                                 | (n1 + S n2)
-  _ | Refl | _ = case f of
-                      FZ => absurd prf
-                      FS f => natSubFinPlus n1 n2 f (injective prf)
+natSubFinPlus Z n2 f prf = absurd @{finToNatBound} prf
+natSubFinPlus (S n1) _ FZ Refl = cong S $ plusZeroRightNeutral n1
+natSubFinPlus (S n1) (S n2) (FS f) prf = let sEqPrf = plusSuccRightSucc n1 n2 in
+                                         rewrite sym sEqPrf in
+                                                 natSubFinPlus (S n1) n2 (rewrite sEqPrf in f) (injective prf)
 
 export
 pointwisePlusLastAbsurd : {n : Nat}
