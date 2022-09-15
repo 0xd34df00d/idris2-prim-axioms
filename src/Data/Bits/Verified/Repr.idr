@@ -2,16 +2,37 @@ module Data.Bits.Verified.Repr
 
 import Data.Bits as B
 import Data.Fin
+import Data.Fin.Extra
 import Data.Vect
 import Data.Vect.Properties.Index
 import Data.Vect.Properties.Tabulate
 
+import Data.Bits.Axioms.MetaMath
 import Data.Bits.BitDef as B
 import Data.Bits.Repr
 import Data.Bits.Verified
+import Data.Fin.Order
 import Data.Vect.Utils
 
 %default total
+
+export
+accBVLeftZero : {w : _}
+             -> (bv : Vect w Bit)
+             -> accBV (O :: bv) ~~~ accBV bv
+accBVLeftZero {w = w} bv with (plusZeroRightNeutral $ bound w)
+                            | (bound w + Z)
+  _ | Refl | _ = plusZeroRightNeutral (accBV bv)
+
+export
+zeroPaddedBound : {n : _}
+               -> (m : _)
+               -> (right : Vect n Bit)
+               -> accBV (replicate m O ++ right) `FLTE` last' (bound n)
+zeroPaddedBound Z right = lastIsLast (accBV right)
+zeroPaddedBound (S m) right = let pw = symmetric $ accBVLeftZero (replicate m O ++ right)
+                               in fltePointwiseLeft _ _ pw (zeroPaddedBound m right)
+
 
 export
 {w : _} -> VerifiedBits (UnsignedBV (S w)) where
