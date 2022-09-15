@@ -39,7 +39,7 @@ shiftRBoundedImpl : {w : _}
                  -> getFinVal (bvToFin (v `shiftR` s)) `FLTE` last' (bound $ w `natSubFin` s)
 shiftRBoundedImpl (MkU bv) s with (splitRAtFin s bv)
   shiftRBoundedImpl (MkU _) s | TheSplit {n1 = n1, n2 = n2} before after eq
-                                = rewrite natSubFinPlus n2 n1 s eq in
+                                = rewrite natSubFinPlus n1 n2 s eq in
                                   rewrite plusCommutative n1 n2 in
                                           zeroPaddedBound n2 before
 
