@@ -42,6 +42,11 @@ public export %inline
 bound : (1 w : Nat) -> Nat
 bound w = 2 ^^ w
 
+public export
+natSubFin : (n : Nat) -> Fin n -> Nat
+natSubFin (S n) FZ = S n
+natSubFin (S n) (FS f) = natSubFin n f
+
 
 export
 pointwisePlusLastAbsurd : {n : Nat}
