@@ -47,6 +47,17 @@ natSubFin : (n : Nat) -> Fin n -> Nat
 natSubFin (S n) FZ = S n
 natSubFin (S n) (FS f) = natSubFin n f
 
+export
+natSubFinZero : (n : _)
+             -> S n `natSubFin` FZ = S n
+natSubFinZero n = Refl
+
+export
+natSubFinLast : (n : _)
+             -> S n `natSubFin` last {n = n} = S Z
+natSubFinLast Z = Refl
+natSubFinLast (S n) = natSubFinLast n
+
 
 export
 pointwisePlusLastAbsurd : {n : Nat}
