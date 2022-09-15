@@ -20,6 +20,10 @@ namespace AsFin
     MkU : (val : Fin (bound w)) -> UnsignedF w
 
   public export
+  getFinVal : UnsignedF w -> Fin (bound w)
+  getFinVal (MkU val) = val
+
+  public export
   DecEq (UnsignedF w) where
     decEq (MkU val1) (MkU val2) = case decEq val1 val2 of
                                        Yes Refl => Yes Refl
