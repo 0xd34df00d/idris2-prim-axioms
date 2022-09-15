@@ -33,6 +33,15 @@ zeroPaddedBound Z right = lastIsLast (accBV right)
 zeroPaddedBound (S m) right = let pw = symmetric $ accBVLeftZero (replicate m O ++ right)
                                in fltePointwiseLeft _ _ pw (zeroPaddedBound m right)
 
+shiftRBoundedImpl : {w : _}
+                 -> (v : UnsignedBV w)
+                 -> (s : Fin w)
+                 -> getFinVal (bvToFin (v `shiftR` s)) `FLTE` last' (bound $ w `natSubFin` s)
+shiftRBoundedImpl (MkU bv) s with (splitRAtFin s bv)
+  shiftRBoundedImpl (MkU _) s | TheSplit {n1 = n1, n2 = n2} before after eq
+                                = rewrite natSubFinPlus n2 n1 s eq in
+                                  rewrite plusCommutative n1 n2 in
+                                          zeroPaddedBound n2 before
 
 export
 {w : _} -> VerifiedBits (UnsignedBV (S w)) where

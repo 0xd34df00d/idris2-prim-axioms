@@ -58,6 +58,12 @@ natSubFinLast : (n : _)
 natSubFinLast Z = Refl
 natSubFinLast (S n) = natSubFinLast n
 
+export
+natSubFinPlus : (n1, n2 : Nat)
+             -> (f : Fin (n2 + n1))
+             -> n1 = finToNat f
+             -> natSubFin (n2 + n1) f = n2
+
 
 export
 pointwisePlusLastAbsurd : {n : Nat}
