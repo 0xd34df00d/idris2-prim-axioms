@@ -2,10 +2,14 @@ module Data.Bits.Verified
 
 import Data.Bits as B
 
+import Data.Bits.Axioms.MetaMath
+
 %default total
 
 public export
 interface FiniteBits ty => VerifiedBits ty where
+  toNum : ty -> Fin (bound $ bitSize {a = ty})
+
   andRightId   : (v : ty)
               -> v .&. B.oneBits = v
   andLeftId    : (v : ty)

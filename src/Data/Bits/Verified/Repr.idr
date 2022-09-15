@@ -36,6 +36,8 @@ zeroPaddedBound (S m) right = let pw = symmetric $ accBVLeftZero (replicate m O 
 
 export
 {w : _} -> VerifiedBits (UnsignedBV (S w)) where
+  toNum (MkU bv) = accBV bv
+
   andRightId (MkU bv) = cong MkU $ vectorExtensionality (zipWith and bv (replicate _ I)) bv f
     where
       f : (i : _) -> index i (zipWith B.and bv (replicate _ I)) = index i bv
