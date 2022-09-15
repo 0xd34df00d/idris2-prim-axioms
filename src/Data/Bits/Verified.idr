@@ -3,6 +3,7 @@ module Data.Bits.Verified
 import Data.Bits as B
 
 import Data.Bits.Axioms.MetaMath
+import Data.Fin.Order
 
 %default total
 
@@ -31,3 +32,6 @@ interface FiniteBits ty => VerifiedBits ty where
             -> v `shiftL` bitsToIndex' FZ = v
   shiftRZero : (v : ty)
             -> v `shiftR` bitsToIndex' FZ = v
+  shiftRBounded : (v : ty)
+               -> (s : Fin (bitSize {a = ty}))
+               -> toNum (v `shiftR` bitsToIndex {a = ty} s) `FLTE` last' (bound $ bitSize {a = ty} `natSubFin` s)

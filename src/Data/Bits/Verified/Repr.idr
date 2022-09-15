@@ -94,3 +94,10 @@ export
       _ | eqPrf with (plusZeroRightNeutral n)
                    | (plus n Z)
         _ | Refl | _ = cong MkU $ sym eqPrf
+
+  shiftRBounded v s = rewrite toNumCorrelates (v `shiftR` s) in
+                              shiftRBoundedImpl v s
+    where
+      toNumCorrelates : (ubv : UnsignedBV (S w))
+                     -> toNum ubv = getFinVal (bvToFin ubv)
+      toNumCorrelates (MkU _) = Refl
