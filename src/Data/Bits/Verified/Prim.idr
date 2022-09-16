@@ -38,6 +38,13 @@ interface (VerifiedBits repr, NonEmptyBits prim) => IsModelOf repr prim | prim w
          -> prim2repr (v1 .&. v2) = prim2repr v1 .&. prim2repr v2
   homoAnd = believe_me ()
 
+  homoShiftL : (0 v : prim)
+            -> (0 sPrim : Fin (bitSize {a = prim}))
+            -> (0 sRepr : Fin (bitSize {a = repr}))
+            -> (0 _ : finToNat sPrim = finToNat sRepr)
+            -> prim2repr (v `shiftL` bitsToIndex {a = prim} sPrim) = prim2repr v `shiftL` bitsToIndex {a = repr} sRepr
+  homoShiftL = believe_me ()
+
   prim2reprInjective : {0 v1, v2 : prim}
                     -> prim2repr v1 = prim2repr v2
                     -> v1 = v2
@@ -74,4 +81,10 @@ export
                                    `trans` R.andCommutes _ _
                                    `trans` sym (homoAnd v2 v1)
 
-  bitsToIndex' f = bitsToIndex {a = prim} $ rewrite sym $ bitSizeNonZero {prim = prim} in f
+  zeroIndex = rewrite sym $ bitSizeNonZero {ty = prim} in FZ
+  zeroIndexIsZero = Refl
+
+  shiftLZero v = let primZero : Fin (bitSize {a = prim})
+                     primZero = rewrite sym $ bitSizeNonZero {ty = prim} in FZ
+                  in prim2reprInjective $ homoShiftL v primZero zeroIndex (sym zeroIndexIsZero)
+                                  `trans` R.shiftLZero (prim2repr v)
