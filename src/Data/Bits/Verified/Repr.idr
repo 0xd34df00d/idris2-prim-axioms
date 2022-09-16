@@ -16,7 +16,6 @@ import Data.Vect.Utils
 
 %default total
 
-export
 accBVLeftZero : {w : _}
              -> (bv : Vect w Bit)
              -> accBV (O :: bv) ~~~ accBV bv
@@ -24,7 +23,6 @@ accBVLeftZero {w = w} bv with (plusZeroRightNeutral $ bound w)
                             | (bound w + Z)
   _ | Refl | _ = plusZeroRightNeutral (accBV bv)
 
-export
 zeroPaddedBound : {n : _}
                -> (m : _)
                -> (right : Vect n Bit)
