@@ -45,6 +45,13 @@ interface (VerifiedBits repr, NonEmptyBits prim) => IsModelOf repr prim | prim w
             -> prim2repr (v `shiftL` bitsToIndex {a = prim} sPrim) = prim2repr v `shiftL` bitsToIndex {a = repr} sRepr
   homoShiftL = believe_me ()
 
+  homoShiftR : (0 v : prim)
+            -> (0 sPrim : Fin (bitSize {a = prim}))
+            -> (0 sRepr : Fin (bitSize {a = repr}))
+            -> (0 _ : finToNat sPrim = finToNat sRepr)
+            -> prim2repr (v `shiftR` bitsToIndex {a = prim} sPrim) = prim2repr v `shiftR` bitsToIndex {a = repr} sRepr
+  homoShiftR = believe_me ()
+
   prim2reprInjective : {0 v1, v2 : prim}
                     -> prim2repr v1 = prim2repr v2
                     -> v1 = v2
@@ -86,3 +93,5 @@ export
 
   shiftLZero v = prim2reprInjective $ homoShiftL v (rewrite bitSizeNonZero {ty = prim} in FZ) zeroIndex zeroIndexIsZero
                               `trans` R.shiftLZero (prim2repr v)
+  shiftRZero v = prim2reprInjective $ homoShiftR v (rewrite bitSizeNonZero {ty = prim} in FZ) zeroIndex zeroIndexIsZero
+                              `trans` R.shiftRZero (prim2repr v)
