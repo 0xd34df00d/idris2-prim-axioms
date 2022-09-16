@@ -76,7 +76,8 @@ export
       f i = zipWithIndexLinear and (replicate _ O) bv i `trans`
             rewrite indexReplicate i O in Refl
 
-  bitsToIndex' = id
+  zeroIndex = FZ
+  zeroIndexIsZero = Refl
 
   shiftLZero (MkU bv) with (splitLAtFin FZ bv)
     shiftLZero (MkU ([] ++ after)) | TheSplit {n2 = S n} [] after _ with (appendRightNeutral after)

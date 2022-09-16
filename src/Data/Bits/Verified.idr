@@ -22,12 +22,13 @@ interface FiniteBits ty => VerifiedBits ty where
   andCommutes  : (v1, v2 : ty)
               -> v1 .&. v2 = v2 .&. v1
 
-  bitsToIndex' : Fin (S (pred $ bitSize {a = ty})) -> Index {a = ty}
+  zeroIndex : Fin (bitSize {a = ty})
+  zeroIndexIsZero : finToNat zeroIndex = Z
 
   shiftLZero : (v : ty)
-            -> v `shiftL` bitsToIndex' FZ = v
+            -> v `shiftL` bitsToIndex {a = ty} zeroIndex = v
   shiftRZero : (v : ty)
-            -> v `shiftR` bitsToIndex' FZ = v
+            -> v `shiftR` bitsToIndex {a = ty} zeroIndex = v
   shiftRBounded : (v : ty)
                -> (s : Fin (bitSize {a = ty}))
                -> toNum (v `shiftR` bitsToIndex {a = ty} s) `FLTE` last' (bound $ bitSize {a = ty} `natSubFin` s)
