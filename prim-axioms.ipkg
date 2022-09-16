@@ -8,8 +8,7 @@ sourcedir = "src"
 depends = base
         , contrib
 
-modules = Data.Bits.Axioms
-        , Data.Bits.Axioms.MetaMath
+modules = Data.Bits.Axioms.MetaMath
         , Data.Bits.BitDef
         , Data.Bits.Repr
         , Data.Bits.Verified
