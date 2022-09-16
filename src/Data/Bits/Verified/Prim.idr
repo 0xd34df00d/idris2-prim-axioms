@@ -3,14 +3,21 @@ module Data.Bits.Verified.Prim
 import Data.Bits as B
 
 import Data.Bits.Axioms
+import Data.Bits.Axioms.MetaMath
 import Data.Bits.Repr
 import Data.Bits.Verified as R
 import Data.Bits.Verified.Repr
+import Data.Fin.Order
 
 %default total
 
 export
-(IsModelOf _ prim, Bits prim) => VerifiedBits prim where
+(IsModelOf _ prim, FiniteBits prim, Cast prim Nat) => VerifiedBits prim where
+  toNum v = let %hint
+                smaller : cast v `LT` bound (bitSize {a = prim})
+                smaller = believe_me ()
+             in natToFinLT (cast v)
+
   andRightId v = prim2reprInjective $ homoAnd v B.oneBits
                               `trans` cong (prim2repr v .&.) homoOnes
                               `trans` R.andRightId (prim2repr v)
