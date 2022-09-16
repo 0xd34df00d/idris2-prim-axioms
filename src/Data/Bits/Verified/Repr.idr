@@ -76,9 +76,6 @@ export
       f i = zipWithIndexLinear and (replicate _ O) bv i `trans`
             rewrite indexReplicate i O in Refl
 
-  bitSizePred = w
-  bitSizeCorrelates = Refl
-
   bitsToIndex' = id
 
   shiftLZero (MkU bv) with (splitLAtFin FZ bv)
