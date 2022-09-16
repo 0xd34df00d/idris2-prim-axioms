@@ -11,8 +11,8 @@ import Data.Fin.Order
 
 %default total
 
-interface FiniteBits prim => NonEmptyBits prim where
-  bitSizeNonZero : S (pred (bitSize {a = prim})) = bitSize {a = prim}
+interface FiniteBits ty => NonEmptyBits ty where
+  bitSizeNonZero : S (pred (bitSize {a = ty})) = bitSize {a = ty}
 
 NonEmptyBits Bits8  where bitSizeNonZero = Refl
 NonEmptyBits Bits16 where bitSizeNonZero = Refl
