@@ -12,7 +12,7 @@ import Data.Fin.Order
 %default total
 
 interface FiniteBits ty => NonEmptyBits ty where
-  bitSizeNonZero : S (pred (bitSize {a = ty})) = bitSize {a = ty}
+  bitSizeNonZero : bitSize {a = ty} = S (pred (bitSize {a = ty}))
 
 NonEmptyBits Bits8  where bitSizeNonZero = Refl
 NonEmptyBits Bits16 where bitSizeNonZero = Refl
@@ -81,10 +81,8 @@ export
                                    `trans` R.andCommutes _ _
                                    `trans` sym (homoAnd v2 v1)
 
-  zeroIndex = rewrite sym $ bitSizeNonZero {ty = prim} in FZ
+  zeroIndex = rewrite bitSizeNonZero {ty = prim} in FZ
   zeroIndexIsZero = Refl
 
-  shiftLZero v = let primZero : Fin (bitSize {a = prim})
-                     primZero = rewrite sym $ bitSizeNonZero {ty = prim} in FZ
-                  in prim2reprInjective $ homoShiftL v primZero zeroIndex (sym zeroIndexIsZero)
-                                  `trans` R.shiftLZero (prim2repr v)
+  shiftLZero v = prim2reprInjective $ homoShiftL v (rewrite bitSizeNonZero {ty = prim} in FZ) zeroIndex zeroIndexIsZero
+                              `trans` R.shiftLZero (prim2repr v)

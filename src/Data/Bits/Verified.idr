@@ -23,7 +23,7 @@ interface FiniteBits ty => VerifiedBits ty where
               -> v1 .&. v2 = v2 .&. v1
 
   zeroIndex : Fin (bitSize {a = ty})
-  zeroIndexIsZero : finToNat zeroIndex = Z
+  zeroIndexIsZero : Z = finToNat zeroIndex
 
   shiftLZero : (v : ty)
             -> v `shiftL` bitsToIndex {a = ty} zeroIndex = v
