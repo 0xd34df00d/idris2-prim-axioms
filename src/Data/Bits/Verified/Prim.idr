@@ -11,8 +11,17 @@ import Data.Fin.Order
 
 %default total
 
+interface FiniteBits prim => NonEmptyBits prim where
+  bitSizeNonZero : S (pred (bitSize {a = prim})) = bitSize {a = prim}
+
+NonEmptyBits Bits8  where bitSizeNonZero = Refl
+NonEmptyBits Bits16 where bitSizeNonZero = Refl
+NonEmptyBits Bits32 where bitSizeNonZero = Refl
+NonEmptyBits Bits64 where bitSizeNonZero = Refl
+
+
 export
-(IsModelOf _ prim, FiniteBits prim, Cast prim Nat) => VerifiedBits prim where
+(IsModelOf _ prim, NonEmptyBits prim, Cast prim Nat) => VerifiedBits prim where
   toNum v = let %hint
                 smaller : cast v `LT` bound (bitSize {a = prim})
                 smaller = believe_me ()
@@ -35,3 +44,5 @@ export
   andCommutes v1 v2 = prim2reprInjective $ homoAnd v1 v2
                                    `trans` R.andCommutes _ _
                                    `trans` sym (homoAnd v2 v1)
+
+  bitsToIndex' f = bitsToIndex {a = prim} $ rewrite sym $ bitSizeNonZero {prim = prim} in f
