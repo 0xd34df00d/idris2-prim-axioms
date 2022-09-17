@@ -72,26 +72,26 @@ export
 
   andRightId v = prim2reprInjective $ homoAnd v B.oneBits
                               `trans` cong (prim2repr v .&.) homoOnes
-                              `trans` R.andRightId (prim2repr v)
+                              `trans` andRightId (prim2repr v)
   andLeftId v  = prim2reprInjective $ homoAnd _ v
                               `trans` cong (.&. prim2repr v) homoOnes
-                              `trans` R.andLeftId (prim2repr v)
+                              `trans` andLeftId (prim2repr v)
   andRightZero v = prim2reprInjective $ homoAnd v _
                                 `trans` cong (prim2repr v .&.) homoZeros
-                                `trans` R.andRightZero (prim2repr v)
+                                `trans` andRightZero (prim2repr v)
                                 `trans` sym homoZeros
   andLeftZero v  = prim2reprInjective $ homoAnd _ v
                                 `trans` cong (.&. prim2repr v) homoZeros
-                                `trans` R.andLeftZero (prim2repr v)
+                                `trans` andLeftZero (prim2repr v)
                                 `trans` sym homoZeros
   andCommutes v1 v2 = prim2reprInjective $ homoAnd v1 v2
-                                   `trans` R.andCommutes _ _
+                                   `trans` andCommutes _ _
                                    `trans` sym (homoAnd v2 v1)
 
   zeroIndex = rewrite bitSizeNonZero {ty = prim} in FZ
   zeroIndexIsZero = Refl
 
   shiftLZero v = prim2reprInjective $ homoShiftL v (rewrite bitSizeNonZero {ty = prim} in FZ) zeroIndex zeroIndexIsZero
-                              `trans` R.shiftLZero (prim2repr v)
+                              `trans` shiftLZero (prim2repr v)
   shiftRZero v = prim2reprInjective $ homoShiftR v (rewrite bitSizeNonZero {ty = prim} in FZ) zeroIndex zeroIndexIsZero
-                              `trans` R.shiftRZero (prim2repr v)
+                              `trans` shiftRZero (prim2repr v)
