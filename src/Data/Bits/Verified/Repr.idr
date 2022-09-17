@@ -64,6 +64,13 @@ export
       f i = zipWithIndexLinear and bv (replicate _ O) i `trans`
             rewrite indexReplicate i O in B.andRightZero _
 
+  orCommutes (MkU bv1) (MkU bv2) = cong MkU $ vectorExtensionality (zipWith or bv1 bv2) (zipWith or bv2 bv1) f
+    where
+      f : (i : _) -> index i (zipWith B.or bv1 bv2) = index i (zipWith B.or bv2 bv1)
+      f i = zipWithIndexLinear or bv1 bv2 i `trans`
+            B.orCommutes _ _                `trans`
+            sym (zipWithIndexLinear or bv2 bv1 i)
+
   orRightId (MkU bv) = cong MkU $ vectorExtensionality (zipWith or bv (replicate _ O)) bv f
     where
       f : (i : _) -> index i (zipWith B.or bv (replicate _ O)) = index i bv

@@ -24,6 +24,8 @@ interface FiniteBits ty => VerifiedBits ty where
               -> B.zeroBits .&. v = B.zeroBits
   andLeftZero v = andCommutes zeroBits v `trans` andRightZero v
 
+  orCommutes : (v1, v2 : ty)
+            -> v1 .|. v2 = v2 .|. v1
   orRightId  : (v : ty)
             -> v .|. B.zeroBits = v
   orLeftId   : (v : ty)
