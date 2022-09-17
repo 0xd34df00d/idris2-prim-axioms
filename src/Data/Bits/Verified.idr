@@ -22,6 +22,11 @@ interface FiniteBits ty => VerifiedBits ty where
   andCommutes  : (v1, v2 : ty)
               -> v1 .&. v2 = v2 .&. v1
 
+  orRightId  : (v : ty)
+            -> v .|. B.zeroBits = v
+  orLeftId   : (v : ty)
+            -> B.zeroBits .|. v = v
+
   zeroIndex : Fin (bitSize {a = ty})
   zeroIndexIsZero : Z = finToNat zeroIndex
 

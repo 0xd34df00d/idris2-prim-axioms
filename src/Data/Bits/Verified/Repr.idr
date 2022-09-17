@@ -76,6 +76,18 @@ export
       f i = zipWithIndexLinear and (replicate _ O) bv i `trans`
             rewrite indexReplicate i O in Refl
 
+  orRightId (MkU bv) = cong MkU $ vectorExtensionality (zipWith or bv (replicate _ O)) bv f
+    where
+      f : (i : _) -> index i (zipWith B.or bv (replicate _ O)) = index i bv
+      f i = zipWithIndexLinear or bv (replicate _ O) i `trans`
+            rewrite indexReplicate i O in B.orRightId _
+
+  orLeftId (MkU bv) = cong MkU $ vectorExtensionality (zipWith or (replicate _ O) bv) bv f
+    where
+      f : (i : _) -> index i (zipWith B.or (replicate _ O) bv) = index i bv
+      f i = zipWithIndexLinear or (replicate _ O) bv i `trans`
+            rewrite indexReplicate i O in B.orLeftId _
+
   zeroIndex = FZ
   zeroIndexIsZero = Refl
 
