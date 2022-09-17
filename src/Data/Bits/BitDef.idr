@@ -40,6 +40,7 @@ toBool : Bit -> Bool
 toBool O = False
 toBool I = True
 
+
 export
 andRightId : (b : Bit)
           -> b `and` I = b
@@ -67,3 +68,33 @@ andCommutes : (b1, b2 : Bit)
            -> b1 `and` b2 = b2 `and` b1
 andCommutes O b2 = case b2 of { O => Refl ; I => Refl }
 andCommutes I b2 = case b2 of { O => Refl ; I => Refl }
+
+
+export
+orRightId : (b : Bit)
+         -> b `or` O = b
+orRightId O = Refl
+orRightId I = Refl
+
+export
+orLeftId : (b : Bit)
+        -> O `or` b = b
+orLeftId b = Refl
+
+export
+orRightOne : (b : Bit)
+          -> b `or` I = I
+orRightOne O = Refl
+orRightOne I = Refl
+
+export
+orLeftOne : (b : Bit)
+         -> I `or` b = I
+orLeftOne O = Refl
+orLeftOne I = Refl
+
+export
+orCommutes : (b1, b2 : Bit)
+          -> b1 `or` b2 = b2 `or` b1
+orCommutes O b2 = case b2 of { O => Refl ; I => Refl }
+orCommutes I b2 = case b2 of { O => Refl ; I => Refl }
