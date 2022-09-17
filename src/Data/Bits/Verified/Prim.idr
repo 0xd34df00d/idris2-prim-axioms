@@ -28,6 +28,9 @@ interface (VerifiedBits repr, NonEmptyBits prim) => IsModelOf repr prim | prim w
   repr2prim : (0 _ : repr) -> prim
   repr2prim = believe_me ()
 
+  bitSizesMatch : bitSize {a = repr} = bitSize {a = prim}
+  bitSizesMatch = believe_me ()
+
   homoZeros : prim2repr B.zeroBits = B.zeroBits
   homoZeros = believe_me ()
 
