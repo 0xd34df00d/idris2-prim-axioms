@@ -50,7 +50,7 @@ andRightId I = Refl
 export
 andLeftId : (b : Bit)
          -> I `and` b = b
-andLeftId _ = Refl
+andLeftId b = Refl
 
 export
 andRightZero : (b : Bit)
@@ -61,7 +61,7 @@ andRightZero I = Refl
 export
 andLeftZero : (b : Bit)
            -> O `and` b = O
-andLeftZero _ = Refl
+andLeftZero b = Refl
 
 export
 andCommutes : (b1, b2 : Bit)
