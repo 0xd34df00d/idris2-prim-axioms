@@ -30,6 +30,7 @@ interface FiniteBits ty => VerifiedBits ty where
             -> v .|. B.zeroBits = v
   orLeftId   : (v : ty)
             -> B.zeroBits .|. v = v
+  orLeftId v = orCommutes zeroBits v `trans` orRightId v
 
   zeroIndex : Fin (bitSize {a = ty})
   zeroIndexIsZero : Z = finToNat zeroIndex
