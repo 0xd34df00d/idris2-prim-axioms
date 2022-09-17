@@ -11,16 +11,18 @@ public export
 interface FiniteBits ty => VerifiedBits ty where
   toNum : ty -> Fin (bound $ bitSize {a = ty})
 
+  andCommutes  : (v1, v2 : ty)
+              -> v1 .&. v2 = v2 .&. v1
   andRightId   : (v : ty)
               -> v .&. B.oneBits = v
   andLeftId    : (v : ty)
               -> B.oneBits .&. v = v
+  andLeftId v  = andCommutes oneBits v `trans` andRightId v
   andRightZero : (v : ty)
               -> v .&. B.zeroBits = B.zeroBits
   andLeftZero  : (v : ty)
               -> B.zeroBits .&. v = B.zeroBits
-  andCommutes  : (v1, v2 : ty)
-              -> v1 .&. v2 = v2 .&. v1
+  andLeftZero v = andCommutes zeroBits v `trans` andRightZero v
 
   orRightId  : (v : ty)
             -> v .|. B.zeroBits = v

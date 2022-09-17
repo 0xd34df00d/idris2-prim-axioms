@@ -73,23 +73,16 @@ export
                 smaller = believe_me ()
              in natToFinLT (cast v)
 
+  andCommutes v1 v2 = prim2reprInjective $ homoAnd v1 v2
+                                   `trans` andCommutes _ _
+                                   `trans` sym (homoAnd v2 v1)
   andRightId v = prim2reprInjective $ homoAnd v B.oneBits
                               `trans` cong (prim2repr v .&.) homoOnes
                               `trans` andRightId (prim2repr v)
-  andLeftId v  = prim2reprInjective $ homoAnd _ v
-                              `trans` cong (.&. prim2repr v) homoOnes
-                              `trans` andLeftId (prim2repr v)
   andRightZero v = prim2reprInjective $ homoAnd v _
                                 `trans` cong (prim2repr v .&.) homoZeros
                                 `trans` andRightZero (prim2repr v)
                                 `trans` sym homoZeros
-  andLeftZero v  = prim2reprInjective $ homoAnd _ v
-                                `trans` cong (.&. prim2repr v) homoZeros
-                                `trans` andLeftZero (prim2repr v)
-                                `trans` sym homoZeros
-  andCommutes v1 v2 = prim2reprInjective $ homoAnd v1 v2
-                                   `trans` andCommutes _ _
-                                   `trans` sym (homoAnd v2 v1)
 
   zeroIndex = rewrite bitSizeNonZero {ty = prim} in FZ
   zeroIndexIsZero = Refl
