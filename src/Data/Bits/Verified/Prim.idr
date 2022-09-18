@@ -62,12 +62,7 @@ export IsModelOf (UnsignedBV 64) Bits64 where
 
 
 export
-(IsModelOf _ prim, Cast prim Nat) => VerifiedBits prim where
-  toNum v = let %hint
-                smaller : cast v `LT` bound (bitSize {a = prim})
-                smaller = believe_me ()
-             in natToFinLT (cast v)
-
+(IsModelOf repr prim) => VerifiedBits prim where
   andCommutes v1 v2 = prim2reprInjective $ homoAnd v1 v2
                                    `trans` andCommutes _ _
                                    `trans` sym (homoAnd v2 v1)

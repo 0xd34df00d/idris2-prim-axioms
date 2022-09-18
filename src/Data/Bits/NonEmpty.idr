@@ -2,13 +2,38 @@ module Data.Bits.NonEmpty
 
 import Data.Bits as B
 
+import Data.Bits.Axioms.MetaMath
+
 %default total
 
 public export
 interface FiniteBits ty => NonEmptyBits ty where
   bitSizeNonZero : bitSize {a = ty} = S (pred (bitSize {a = ty}))
 
-export NonEmptyBits Bits8  where bitSizeNonZero = Refl
-export NonEmptyBits Bits16 where bitSizeNonZero = Refl
-export NonEmptyBits Bits32 where bitSizeNonZero = Refl
-export NonEmptyBits Bits64 where bitSizeNonZero = Refl
+  toNum : ty -> Fin (bound $ bitSize {a = ty})
+
+toNumBits : (FiniteBits ty, Cast ty Nat) => ty -> Fin (bound $ bitSize {a = ty})
+toNumBits v = let %hint
+                  smaller : cast v `LT` bound (bitSize {a = ty})
+                  smaller = believe_me ()
+               in natToFinLT (cast v)
+
+export
+NonEmptyBits Bits8  where
+  bitSizeNonZero = Refl
+  toNum = toNumBits
+
+export
+NonEmptyBits Bits16 where
+  bitSizeNonZero = Refl
+  toNum = toNumBits
+
+export
+NonEmptyBits Bits32 where
+  bitSizeNonZero = Refl
+  toNum = toNumBits
+
+export
+NonEmptyBits Bits64 where
+  bitSizeNonZero = Refl
+  toNum = toNumBits

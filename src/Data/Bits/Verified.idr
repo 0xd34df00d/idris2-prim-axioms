@@ -3,14 +3,13 @@ module Data.Bits.Verified
 import Data.Bits as B
 
 import Data.Bits.Axioms.MetaMath
+import public Data.Bits.NonEmpty
 import Data.Fin.Order
 
 %default total
 
 public export
-interface FiniteBits ty => VerifiedBits ty where
-  toNum : ty -> Fin (bound $ bitSize {a = ty})
-
+interface NonEmptyBits ty => VerifiedBits ty where
   andCommutes  : (v1, v2 : ty)
               -> v1 .&. v2 = v2 .&. v1
   andRightId   : (v : ty)

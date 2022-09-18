@@ -177,3 +177,4 @@ public export
 public export
 {w : _} -> NonEmptyBits (UnsignedBV (S w)) where
   bitSizeNonZero = Refl
+  toNum (MkU bv) = accBV bv

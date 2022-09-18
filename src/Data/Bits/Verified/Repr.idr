@@ -49,8 +49,6 @@ Zeros = replicate _ O
 
 export
 {w : _} -> VerifiedBits (UnsignedBV (S w)) where
-  toNum (MkU bv) = accBV bv
-
   andCommutes (MkU bv1) (MkU bv2) = cong MkU $ vectorExtensionality (zipWith and bv1 bv2) (zipWith and bv2 bv1) f
     where
       f : (i : _) -> index i (zipWith B.and bv1 bv2) = index i (zipWith B.and bv2 bv1)
