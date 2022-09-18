@@ -16,12 +16,12 @@ appendRightNeutral {n = S n} (x :: xs) with (appendRightNeutral xs)
 
 -- TODO remove this if/when `go` is moved outside of the `where` clause in base libs
 public export
-reverse'Onto : Vect n elem -> Vect m elem -> Vect (n + m) elem
+reverse'Onto : Vect n a -> Vect m a -> Vect (n + m) a
 reverse'Onto {n}           acc []        = rewrite plusZeroRightNeutral n in acc
 reverse'Onto {n} {m = S m} acc (x :: xs) = rewrite sym $ plusSuccRightSucc n m in reverse'Onto (x :: acc) xs
 
 public export
-reverse' : Vect len elem -> Vect len elem
+reverse' : Vect len a -> Vect len a
 reverse' = reverse'Onto []
 
 
