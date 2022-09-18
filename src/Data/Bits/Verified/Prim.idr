@@ -61,6 +61,11 @@ export IsModelOf (UnsignedBV 32) Bits32 where
 export IsModelOf (UnsignedBV 64) Bits64 where
 
 
+toNumEqual : IsModelOf repr prim
+          => (0 v : prim)
+          -> toNum (prim2repr v) ~~~ toNum v
+toNumEqual v = believe_me ()
+
 export
 (IsModelOf repr prim) => VerifiedBits prim where
   andCommutes v1 v2 = prim2reprInjective $ homoAnd v1 v2
