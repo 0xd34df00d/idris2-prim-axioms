@@ -9,6 +9,7 @@ import Decidable.Equality
 
 import Data.Bits.Axioms.MetaMath
 import Data.Bits.BitDef
+import Data.Bits.NonEmpty
 import Data.Fin.Order
 import Data.Vect.Utils
 
@@ -172,3 +173,7 @@ public export
       cnt (x :: xs) = case x of
                            O => cnt xs
                            I => S $ cnt xs
+
+public export
+{w : _} -> NonEmptyBits (UnsignedBV (S w)) where
+  bitSizeNonZero = Refl
