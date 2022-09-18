@@ -48,20 +48,10 @@ andRightId O = Refl
 andRightId I = Refl
 
 export
-andLeftId : (b : Bit)
-         -> I `and` b = b
-andLeftId b = Refl
-
-export
 andRightZero : (b : Bit)
             -> b `and` O = O
 andRightZero O = Refl
 andRightZero I = Refl
-
-export
-andLeftZero : (b : Bit)
-           -> O `and` b = O
-andLeftZero b = Refl
 
 export
 andCommutes : (b1, b2 : Bit)
@@ -77,21 +67,10 @@ orRightId O = Refl
 orRightId I = Refl
 
 export
-orLeftId : (b : Bit)
-        -> O `or` b = b
-orLeftId b = Refl
-
-export
 orRightOne : (b : Bit)
           -> b `or` I = I
 orRightOne O = Refl
 orRightOne I = Refl
-
-export
-orLeftOne : (b : Bit)
-         -> I `or` b = I
-orLeftOne O = Refl
-orLeftOne I = Refl
 
 export
 orCommutes : (b1, b2 : Bit)
