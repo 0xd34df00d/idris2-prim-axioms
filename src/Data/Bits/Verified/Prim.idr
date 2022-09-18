@@ -3,21 +3,13 @@ module Data.Bits.Verified.Prim
 import Data.Bits as B
 
 import Data.Bits.Axioms.MetaMath
+import Data.Bits.NonEmpty
 import Data.Bits.Repr
 import Data.Bits.Verified as R
 import Data.Bits.Verified.Repr
 import Data.Fin.Order
 
 %default total
-
-interface FiniteBits ty => NonEmptyBits ty where
-  bitSizeNonZero : bitSize {a = ty} = S (pred (bitSize {a = ty}))
-
-NonEmptyBits Bits8  where bitSizeNonZero = Refl
-NonEmptyBits Bits16 where bitSizeNonZero = Refl
-NonEmptyBits Bits32 where bitSizeNonZero = Refl
-NonEmptyBits Bits64 where bitSizeNonZero = Refl
-
 
 export
 interface (VerifiedBits repr, NonEmptyBits prim) => IsModelOf repr prim | prim where
