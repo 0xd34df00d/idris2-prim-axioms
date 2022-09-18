@@ -41,6 +41,10 @@ interface (VerifiedBits repr, NonEmptyBits prim) => IsModelOf repr prim | prim w
          -> prim2repr (v1 .&. v2) = prim2repr v1 .&. prim2repr v2
   homoAnd = believe_me ()
 
+  homoOr : (0 v1, v2 : prim)
+        -> prim2repr (v1 .|. v2) = prim2repr v1 .|. prim2repr v2
+  homoOr = believe_me ()
+
   homoShiftL : (0 v : prim)
             -> (0 sPrim : Fin (bitSize {a = prim}))
             -> (0 sRepr : Fin (bitSize {a = repr}))
@@ -76,13 +80,24 @@ export
   andCommutes v1 v2 = prim2reprInjective $ homoAnd v1 v2
                                    `trans` andCommutes _ _
                                    `trans` sym (homoAnd v2 v1)
-  andRightId v = prim2reprInjective $ homoAnd v B.oneBits
+  andRightId v = prim2reprInjective $ homoAnd v oneBits
                               `trans` cong (prim2repr v .&.) homoOnes
                               `trans` andRightId (prim2repr v)
   andRightZero v = prim2reprInjective $ homoAnd v _
                                 `trans` cong (prim2repr v .&.) homoZeros
                                 `trans` andRightZero (prim2repr v)
                                 `trans` sym homoZeros
+
+  orCommutes v1 v2 = prim2reprInjective $ homoOr v1 v2
+                                  `trans` orCommutes _ _
+                                  `trans` sym (homoOr v2 v1)
+  orRightId v = prim2reprInjective $ homoOr v zeroBits
+                             `trans` cong (prim2repr v .|.) homoZeros
+                             `trans` orRightId (prim2repr v)
+  orRightOne v = prim2reprInjective $ homoOr v _
+                              `trans` cong (prim2repr v .|.) homoOnes
+                              `trans` orRightOne (prim2repr v)
+                              `trans` sym homoOnes
 
   zeroIndex = rewrite bitSizeNonZero {ty = prim} in FZ
   zeroIndexIsZero = Refl
