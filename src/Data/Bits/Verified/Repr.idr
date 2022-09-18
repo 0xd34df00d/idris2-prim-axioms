@@ -41,6 +41,12 @@ shiftRBoundedImpl (MkU bv) s with (splitRAtFin s bv)
                                   rewrite plusCommutative n1 n2 in
                                           zeroPaddedBound n2 before
 
+Ones : {w : _} -> Vect w Bit
+Ones = replicate _ I
+
+Zeros : {w : _} -> Vect w Bit
+Zeros = replicate _ O
+
 export
 {w : _} -> VerifiedBits (UnsignedBV (S w)) where
   toNum (MkU bv) = accBV bv
@@ -52,16 +58,16 @@ export
             B.andCommutes _ _                `trans`
             sym (zipWithIndexLinear and bv2 bv1 i)
 
-  andRightId (MkU bv) = cong MkU $ vectorExtensionality (zipWith and bv (replicate _ I)) bv f
+  andRightId (MkU bv) = cong MkU $ vectorExtensionality (zipWith and bv Ones) bv f
     where
-      f : (i : _) -> index i (zipWith B.and bv (replicate _ I)) = index i bv
-      f i = zipWithIndexLinear and bv (replicate _ I) i `trans`
+      f : (i : _) -> index i (zipWith B.and bv Ones) = index i bv
+      f i = zipWithIndexLinear and bv Ones i `trans`
             rewrite indexReplicate i I in B.andRightId _
 
-  andRightZero (MkU bv) = cong MkU $ vectorExtensionality (zipWith and bv (replicate _ O)) (replicate _ O) f
+  andRightZero (MkU bv) = cong MkU $ vectorExtensionality (zipWith and bv Zeros) Zeros f
     where
-      f : (i : _) -> index i (zipWith B.and bv (replicate _ O)) = index i (replicate _ O)
-      f i = zipWithIndexLinear and bv (replicate _ O) i `trans`
+      f : (i : _) -> index i (zipWith B.and bv Zeros) = index i Zeros
+      f i = zipWithIndexLinear and bv Zeros i `trans`
             rewrite indexReplicate i O in B.andRightZero _
 
   orCommutes (MkU bv1) (MkU bv2) = cong MkU $ vectorExtensionality (zipWith or bv1 bv2) (zipWith or bv2 bv1) f
@@ -71,16 +77,16 @@ export
             B.orCommutes _ _                `trans`
             sym (zipWithIndexLinear or bv2 bv1 i)
 
-  orRightId (MkU bv) = cong MkU $ vectorExtensionality (zipWith or bv (replicate _ O)) bv f
+  orRightId (MkU bv) = cong MkU $ vectorExtensionality (zipWith or bv Zeros) bv f
     where
-      f : (i : _) -> index i (zipWith B.or bv (replicate _ O)) = index i bv
-      f i = zipWithIndexLinear or bv (replicate _ O) i `trans`
+      f : (i : _) -> index i (zipWith B.or bv Zeros) = index i bv
+      f i = zipWithIndexLinear or bv Zeros i `trans`
             rewrite indexReplicate i O in B.orRightId _
 
-  orRightOne (MkU bv) = cong MkU $ vectorExtensionality (zipWith or bv (replicate _ I)) (replicate _ I) f
+  orRightOne (MkU bv) = cong MkU $ vectorExtensionality (zipWith or bv Ones) Ones f
     where
-      f : (i : _) -> index i (zipWith B.or bv (replicate _ I)) = index i (replicate _ I)
-      f i = zipWithIndexLinear or bv (replicate _ I) i `trans`
+      f : (i : _) -> index i (zipWith B.or bv Ones) = index i Ones
+      f i = zipWithIndexLinear or bv Ones i `trans`
             rewrite indexReplicate i I in B.orRightOne _
 
   zeroIndex = FZ
