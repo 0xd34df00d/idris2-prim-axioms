@@ -2,7 +2,6 @@ module Data.Bits.Verified.Prim
 
 import Data.Bits as B
 
-import Data.Bits.Axioms
 import Data.Bits.Axioms.MetaMath
 import Data.Bits.Repr
 import Data.Bits.Verified as R
