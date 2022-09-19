@@ -11,6 +11,10 @@ bitSizeTy : (0 ty : Type) -> FiniteBits ty => Nat
 bitSizeTy ty = bitSize {a = ty}
 
 public export
+bitsToIndexTy : (0 ty : Type) -> FiniteBits ty => Fin (bitSizeTy ty) -> Index {a = ty}
+bitsToIndexTy ty = bitsToIndex {a = ty}
+
+public export
 interface FiniteBits ty => NonEmptyBits ty where
   bitSizeNonZero : bitSizeTy ty = S (pred (bitSizeTy ty))
 

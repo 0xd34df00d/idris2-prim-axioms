@@ -49,7 +49,7 @@ homoShiftL : IsModelOf repr prim
           -> (0 sPrim : Fin (bitSizeTy prim))
           -> (0 sRepr : Fin (bitSizeTy repr))
           -> (0 _ : finToNat sPrim = finToNat sRepr)
-          -> prim2repr (v `shiftL` bitsToIndex {a = prim} sPrim) = prim2repr v `shiftL` bitsToIndex {a = repr} sRepr
+          -> prim2repr (v `shiftL` bitsToIndexTy prim sPrim) = prim2repr v `shiftL` bitsToIndexTy repr sRepr
 homoShiftL = believe_me ()
 
 homoShiftR : IsModelOf repr prim
@@ -57,7 +57,7 @@ homoShiftR : IsModelOf repr prim
           -> (0 sPrim : Fin (bitSizeTy prim))
           -> (0 sRepr : Fin (bitSizeTy repr))
           -> (0 _ : finToNat sPrim = finToNat sRepr)
-          -> prim2repr (v `shiftR` bitsToIndex {a = prim} sPrim) = prim2repr v `shiftR` bitsToIndex {a = repr} sRepr
+          -> prim2repr (v `shiftR` bitsToIndexTy prim sPrim) = prim2repr v `shiftR` bitsToIndexTy repr sRepr
 homoShiftR = believe_me ()
 
 prim2reprInjective : IsModelOf repr prim
@@ -106,7 +106,7 @@ export
 
   shiftRBounded v s with ( shiftRBounded (prim2repr v) (rewrite bitSizesMatch {prim = prim} in s)
                          , homoShiftR v s (rewrite bitSizesMatch {prim = prim} in s) Refl
-                         , toNumEqual (v `shiftR` bitsToIndex {a = prim} s)
+                         , toNumEqual (v `shiftR` bitsToIndexTy prim s)
                          )
     _ | (reprPrf, homoShiftRPrf, toNumEq) with (bitSizesMatch {prim = prim})
                                              | (bitSizeTy repr)
