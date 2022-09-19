@@ -19,52 +19,58 @@ interface (VerifiedBits repr, NonEmptyBits prim) => IsModelOf repr prim | prim w
   repr2prim : (0 _ : repr) -> prim
   repr2prim = believe_me ()
 
-  bitSizesMatch : bitSizeTy repr = bitSizeTy prim
-  bitSizesMatch = believe_me ()
-
-  homoZeros : prim2repr B.zeroBits = B.zeroBits
-  homoZeros = believe_me ()
-
-  homoOnes : prim2repr B.oneBits = B.oneBits
-  homoOnes = believe_me ()
-
-  homoAnd : (0 v1, v2 : prim)
-         -> prim2repr (v1 .&. v2) = prim2repr v1 .&. prim2repr v2
-  homoAnd = believe_me ()
-
-  homoOr : (0 v1, v2 : prim)
-        -> prim2repr (v1 .|. v2) = prim2repr v1 .|. prim2repr v2
-  homoOr = believe_me ()
-
-  homoShiftL : (0 v : prim)
-            -> (0 sPrim : Fin (bitSizeTy prim))
-            -> (0 sRepr : Fin (bitSizeTy repr))
-            -> (0 _ : finToNat sPrim = finToNat sRepr)
-            -> prim2repr (v `shiftL` bitsToIndex {a = prim} sPrim) = prim2repr v `shiftL` bitsToIndex {a = repr} sRepr
-  homoShiftL = believe_me ()
-
-  homoShiftR : (0 v : prim)
-            -> (0 sPrim : Fin (bitSizeTy prim))
-            -> (0 sRepr : Fin (bitSizeTy repr))
-            -> (0 _ : finToNat sPrim = finToNat sRepr)
-            -> prim2repr (v `shiftR` bitsToIndex {a = prim} sPrim) = prim2repr v `shiftR` bitsToIndex {a = repr} sRepr
-  homoShiftR = believe_me ()
-
-  prim2reprInjective : {0 v1, v2 : prim}
-                    -> prim2repr v1 = prim2repr v2
-                    -> v1 = v2
-  prim2reprInjective = believe_me ()
-
 export IsModelOf (UnsignedBV 8)  Bits8  where
 export IsModelOf (UnsignedBV 16) Bits16 where
 export IsModelOf (UnsignedBV 32) Bits32 where
 export IsModelOf (UnsignedBV 64) Bits64 where
 
 
+bitSizesMatch : IsModelOf repr prim => bitSizeTy repr = bitSizeTy prim
+bitSizesMatch = believe_me ()
+
+homoZeros : IsModelOf repr prim => prim2repr {prim = prim} B.zeroBits = B.zeroBits
+homoZeros = believe_me ()
+
+homoOnes : IsModelOf repr prim => prim2repr {prim = prim} B.oneBits = B.oneBits
+homoOnes = believe_me ()
+
+homoAnd : IsModelOf repr prim
+       => (0 v1, v2 : prim)
+       -> prim2repr (v1 .&. v2) = prim2repr v1 .&. prim2repr v2
+homoAnd = believe_me ()
+
+homoOr : IsModelOf repr prim
+      => (0 v1, v2 : prim)
+      -> prim2repr (v1 .|. v2) = prim2repr v1 .|. prim2repr v2
+homoOr = believe_me ()
+
+homoShiftL : IsModelOf repr prim
+          => (0 v : prim)
+          -> (0 sPrim : Fin (bitSizeTy prim))
+          -> (0 sRepr : Fin (bitSizeTy repr))
+          -> (0 _ : finToNat sPrim = finToNat sRepr)
+          -> prim2repr (v `shiftL` bitsToIndex {a = prim} sPrim) = prim2repr v `shiftL` bitsToIndex {a = repr} sRepr
+homoShiftL = believe_me ()
+
+homoShiftR : IsModelOf repr prim
+          => (0 v : prim)
+          -> (0 sPrim : Fin (bitSizeTy prim))
+          -> (0 sRepr : Fin (bitSizeTy repr))
+          -> (0 _ : finToNat sPrim = finToNat sRepr)
+          -> prim2repr (v `shiftR` bitsToIndex {a = prim} sPrim) = prim2repr v `shiftR` bitsToIndex {a = repr} sRepr
+homoShiftR = believe_me ()
+
+prim2reprInjective : IsModelOf repr prim
+                  => {0 v1, v2 : prim}
+                  -> prim2repr v1 = prim2repr v2
+                  -> v1 = v2
+prim2reprInjective = believe_me ()
+
 toNumEqual : IsModelOf repr prim
           => (0 v : prim)
           -> toNum v ~=~ toNum (prim2repr v)
 toNumEqual v = believe_me ()
+
 
 export
 (IsModelOf repr prim) => VerifiedBits prim where
