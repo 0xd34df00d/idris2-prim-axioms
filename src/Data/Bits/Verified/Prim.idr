@@ -63,7 +63,7 @@ export IsModelOf (UnsignedBV 64) Bits64 where
 
 toNumEqual : IsModelOf repr prim
           => (0 v : prim)
-          -> toNum (prim2repr v) ~~~ toNum v
+          -> toNum v ~=~ toNum (prim2repr v)
 toNumEqual v = believe_me ()
 
 export
