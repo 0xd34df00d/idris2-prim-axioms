@@ -7,7 +7,7 @@ import Data.Bits.Axioms.MetaMath
 %default total
 
 public export
-bitSizeTy : (ty : Type) -> FiniteBits ty => Nat
+bitSizeTy : (0 ty : Type) -> FiniteBits ty => Nat
 bitSizeTy ty = bitSize {a = ty}
 
 public export
