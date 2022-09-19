@@ -9,10 +9,11 @@ import Data.Bits.Repr
 
 data BvLTE : (l, r : Vect w Bit) -> Type where
   EmptyLTE  : BvLTE [] []
-  HereLT    : (l, r : Vect w Bit)
-           -> BvLTE (O :: l) (I :: r)
+  HereLT    : BvLTE (O :: l) (I :: r)
   ThereLTE  : BvLTE l r
            -> BvLTE (b :: l) (b :: r)
+
+%name BvLTE bvLTE
 
 mutual
   bvLteThere : (l, r : _) -> Dec (b :: l `BvLTE` b :: r)
@@ -23,9 +24,9 @@ mutual
   isBvLTE : (l, r : _) -> Dec (l `BvLTE` r)
   isBvLTE [] [] = Yes EmptyLTE
   isBvLTE (O :: l) (O :: r) = bvLteThere l r
-  isBvLTE (O :: l) (I :: r) = Yes $ HereLT l r
+  isBvLTE (O :: l) (I :: r) = Yes HereLT
   isBvLTE (I :: l) (O :: r) = No $ \lte => case lte of
                                                 EmptyLTE impossible
-                                                HereLT _ _ impossible
+                                                HereLT impossible
                                                 ThereLTE _ impossible
   isBvLTE (I :: l) (I :: r) = bvLteThere l r
