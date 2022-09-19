@@ -7,11 +7,16 @@ import Data.Bits.Axioms.MetaMath
 %default total
 
 public export
-bitSizeTy : (0 ty : Type) -> FiniteBits ty => Nat
+bitSizeTy : (0 ty : Type)
+         -> FiniteBits ty
+         => Nat
 bitSizeTy ty = bitSize {a = ty}
 
 public export
-bitsToIndexTy : (0 ty : Type) -> FiniteBits ty => Fin (bitSizeTy ty) -> Index {a = ty}
+bitsToIndexTy : (0 ty : Type)
+             -> FiniteBits ty
+             => Fin (bitSizeTy ty)
+             -> Index {a = ty}
 bitsToIndexTy ty = bitsToIndex {a = ty}
 
 public export
@@ -20,7 +25,9 @@ interface FiniteBits ty => NonEmptyBits ty where
 
   toNum : ty -> Fin (bound $ bitSizeTy ty)
 
-toNumBits : (FiniteBits ty, Cast ty Nat) => ty -> Fin (bound $ bitSizeTy ty)
+toNumBits : (FiniteBits ty, Cast ty Nat)
+         => ty
+         -> Fin (bound $ bitSizeTy ty)
 toNumBits v = let %hint
                   smaller : cast v `LT` bound (bitSizeTy ty)
                   smaller = believe_me ()

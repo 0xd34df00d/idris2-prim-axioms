@@ -25,13 +25,16 @@ export IsModelOf (UnsignedBV 32) Bits32 where
 export IsModelOf (UnsignedBV 64) Bits64 where
 
 
-bitSizesMatch : IsModelOf repr prim => bitSizeTy repr = bitSizeTy prim
+bitSizesMatch : IsModelOf repr prim
+             => bitSizeTy repr = bitSizeTy prim
 bitSizesMatch = believe_me ()
 
-homoZeros : IsModelOf repr prim => prim2repr {prim = prim} B.zeroBits = B.zeroBits
+homoZeros : IsModelOf repr prim
+         => prim2repr {prim = prim} B.zeroBits = B.zeroBits
 homoZeros = believe_me ()
 
-homoOnes : IsModelOf repr prim => prim2repr {prim = prim} B.oneBits = B.oneBits
+homoOnes : IsModelOf repr prim
+        => prim2repr {prim = prim} B.oneBits = B.oneBits
 homoOnes = believe_me ()
 
 homoAnd : IsModelOf repr prim
