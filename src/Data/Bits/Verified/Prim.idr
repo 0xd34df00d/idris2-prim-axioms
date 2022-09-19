@@ -98,11 +98,12 @@ export
   shiftRZero v = prim2reprInjective $ homoShiftR v (rewrite bitSizeNonZero {ty = prim} in FZ) zeroIndex zeroIndexIsZero
                               `trans` shiftRZero (prim2repr v)
 
-  shiftRBounded v s = let reprPrf = shiftRBounded (prim2repr v) (rewrite bitSizesMatch {prim = prim} in s)
-                          foo = sym $ homoShiftR v s (rewrite bitSizesMatch {prim = prim} in s) Refl
-                          eq = toNumEqual (v `shiftR` bitsToIndex {a = prim} s)
-                          reprPrf' = replace
-                                      {p = \val => FLTE (toNum val) (last' $ bound $ natSubFin (bitSizeTy repr) (rewrite bitSizesMatch {prim = prim} in s))}
-                                      foo
-                                      (shiftRBounded (prim2repr v) (rewrite bitSizesMatch {prim = prim} in s))
-                       in ?rhs
+  shiftRBounded v s with ( shiftRBounded (prim2repr v) (rewrite bitSizesMatch {prim = prim} in s)
+                         , homoShiftR v s (rewrite bitSizesMatch {prim = prim} in s) Refl
+                         , toNumEqual (v `shiftR` bitsToIndex {a = prim} s)
+                         )
+    _ | (reprPrf, homoShiftRPrf, toNumEq) with (bitSizesMatch {prim = prim} {repr = repr})
+                                             | (bitSize {a = repr})
+      _ | Refl | _ = rewrite toNumEq in
+                     rewrite homoShiftRPrf in
+                             reprPrf
