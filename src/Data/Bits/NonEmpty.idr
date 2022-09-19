@@ -12,7 +12,7 @@ bitSizeTy ty = bitSize {a = ty}
 
 public export
 interface FiniteBits ty => NonEmptyBits ty where
-  bitSizeNonZero : bitSize {a = ty} = S (pred (bitSizeTy ty))
+  bitSizeNonZero : bitSizeTy ty = S (pred (bitSizeTy ty))
 
   toNum : ty -> Fin (bound $ bitSizeTy ty)
 

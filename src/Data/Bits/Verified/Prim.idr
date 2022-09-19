@@ -19,7 +19,7 @@ interface (VerifiedBits repr, NonEmptyBits prim) => IsModelOf repr prim | prim w
   repr2prim : (0 _ : repr) -> prim
   repr2prim = believe_me ()
 
-  bitSizesMatch : bitSize {a = repr} = bitSize {a = prim}
+  bitSizesMatch : bitSizeTy repr = bitSizeTy prim
   bitSizesMatch = believe_me ()
 
   homoZeros : prim2repr B.zeroBits = B.zeroBits
@@ -37,15 +37,15 @@ interface (VerifiedBits repr, NonEmptyBits prim) => IsModelOf repr prim | prim w
   homoOr = believe_me ()
 
   homoShiftL : (0 v : prim)
-            -> (0 sPrim : Fin (bitSize {a = prim}))
-            -> (0 sRepr : Fin (bitSize {a = repr}))
+            -> (0 sPrim : Fin (bitSizeTy prim))
+            -> (0 sRepr : Fin (bitSizeTy repr))
             -> (0 _ : finToNat sPrim = finToNat sRepr)
             -> prim2repr (v `shiftL` bitsToIndex {a = prim} sPrim) = prim2repr v `shiftL` bitsToIndex {a = repr} sRepr
   homoShiftL = believe_me ()
 
   homoShiftR : (0 v : prim)
-            -> (0 sPrim : Fin (bitSize {a = prim}))
-            -> (0 sRepr : Fin (bitSize {a = repr}))
+            -> (0 sPrim : Fin (bitSizeTy prim))
+            -> (0 sRepr : Fin (bitSizeTy repr))
             -> (0 _ : finToNat sPrim = finToNat sRepr)
             -> prim2repr (v `shiftR` bitsToIndex {a = prim} sPrim) = prim2repr v `shiftR` bitsToIndex {a = repr} sRepr
   homoShiftR = believe_me ()
@@ -102,8 +102,8 @@ export
                          , homoShiftR v s (rewrite bitSizesMatch {prim = prim} in s) Refl
                          , toNumEqual (v `shiftR` bitsToIndex {a = prim} s)
                          )
-    _ | (reprPrf, homoShiftRPrf, toNumEq) with (bitSizesMatch {prim = prim} {repr = repr})
-                                             | (bitSize {a = repr})
+    _ | (reprPrf, homoShiftRPrf, toNumEq) with (bitSizesMatch {prim = prim})
+                                             | (bitSizeTy repr)
       _ | Refl | _ = rewrite toNumEq in
                      rewrite homoShiftRPrf in
                              reprPrf
