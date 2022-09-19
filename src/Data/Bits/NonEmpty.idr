@@ -7,14 +7,18 @@ import Data.Bits.Axioms.MetaMath
 %default total
 
 public export
+bitSizeTy : (ty : Type) -> FiniteBits ty => Nat
+bitSizeTy ty = bitSize {a = ty}
+
+public export
 interface FiniteBits ty => NonEmptyBits ty where
-  bitSizeNonZero : bitSize {a = ty} = S (pred (bitSize {a = ty}))
+  bitSizeNonZero : bitSize {a = ty} = S (pred (bitSizeTy ty))
 
-  toNum : ty -> Fin (bound $ bitSize {a = ty})
+  toNum : ty -> Fin (bound $ bitSizeTy ty)
 
-toNumBits : (FiniteBits ty, Cast ty Nat) => ty -> Fin (bound $ bitSize {a = ty})
+toNumBits : (FiniteBits ty, Cast ty Nat) => ty -> Fin (bound $ bitSizeTy ty)
 toNumBits v = let %hint
-                  smaller : cast v `LT` bound (bitSize {a = ty})
+                  smaller : cast v `LT` bound (bitSizeTy ty)
                   smaller = believe_me ()
                in natToFinLT (cast v)
 
