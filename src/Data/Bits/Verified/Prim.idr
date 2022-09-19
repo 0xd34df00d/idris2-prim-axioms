@@ -25,7 +25,8 @@ export IsModelOf (UnsignedBV 32) Bits32 where
 export IsModelOf (UnsignedBV 64) Bits64 where
 
 
-bitSizesMatch : IsModelOf repr prim
+bitSizesMatch : (0 prim : Type)
+             -> IsModelOf repr prim
              => bitSizeTy repr = bitSizeTy prim
 bitSizesMatch = believe_me ()
 
@@ -99,19 +100,19 @@ export
                               `trans` orRightOne (prim2repr v)
                               `trans` sym homoOnes
 
-  zeroIndex = rewrite bitSizeNonZero {ty = prim} in FZ
+  zeroIndex = rewrite bitSizeNonZeroTy prim in FZ
   zeroIndexIsZero = Refl
 
-  shiftLZero v = prim2reprInjective $ homoShiftL v (rewrite bitSizeNonZero {ty = prim} in FZ) zeroIndex zeroIndexIsZero
+  shiftLZero v = prim2reprInjective $ homoShiftL v (rewrite bitSizeNonZeroTy prim in FZ) zeroIndex zeroIndexIsZero
                               `trans` shiftLZero (prim2repr v)
-  shiftRZero v = prim2reprInjective $ homoShiftR v (rewrite bitSizeNonZero {ty = prim} in FZ) zeroIndex zeroIndexIsZero
+  shiftRZero v = prim2reprInjective $ homoShiftR v (rewrite bitSizeNonZeroTy prim in FZ) zeroIndex zeroIndexIsZero
                               `trans` shiftRZero (prim2repr v)
 
-  shiftRBounded v s with ( shiftRBounded (prim2repr v) (rewrite bitSizesMatch {prim = prim} in s)
-                         , homoShiftR v s (rewrite bitSizesMatch {prim = prim} in s) Refl
+  shiftRBounded v s with ( shiftRBounded (prim2repr v) (rewrite bitSizesMatch prim in s)
+                         , homoShiftR v s (rewrite bitSizesMatch prim in s) Refl
                          , toNumEqual (v `shiftR` bitsToIndexTy prim s)
                          )
-    _ | (reprPrf, homoShiftRPrf, toNumEq) with (bitSizesMatch {prim = prim})
+    _ | (reprPrf, homoShiftRPrf, toNumEq) with (bitSizesMatch prim)
                                              | (bitSizeTy repr)
       _ | Refl | _ = rewrite toNumEq in
                      rewrite homoShiftRPrf in

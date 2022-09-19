@@ -25,6 +25,12 @@ interface FiniteBits ty => NonEmptyBits ty where
 
   toNum : ty -> Fin (bound $ bitSizeTy ty)
 
+public export
+bitSizeNonZeroTy : (0 ty : Type)
+                -> NonEmptyBits ty
+                => bitSizeTy ty = S (pred (bitSizeTy ty))
+bitSizeNonZeroTy ty = bitSizeNonZero {ty = ty}
+
 toNumBits : (FiniteBits ty, Cast ty Nat)
          => ty
          -> Fin (bound $ bitSizeTy ty)
