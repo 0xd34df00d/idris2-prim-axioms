@@ -34,6 +34,12 @@ isFLT : (fm : Fin m) -> (fn : Fin n) -> Dec (fm `FLT` fn)
 isFLT fm fn = FS fm `isFLTE` fn
 
 export
+flteRefl : {f : _}
+        -> f `FLTE` f
+flteRefl {f = FZ} = FLTEZero
+flteRefl {f = FS f} = FLTESucc flteRefl
+
+export
 flteTrans : f1 `FLTE` f2
          -> f2 `FLTE` f3
          -> f1 `FLTE` f3
