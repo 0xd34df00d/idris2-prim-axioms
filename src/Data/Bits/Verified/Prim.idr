@@ -72,7 +72,7 @@ prim2reprInjective = believe_me ()
 
 toNumEqual : IsModelOf repr prim
           => (0 v : prim)
-          -> toNum v ~=~ toNum (prim2repr v)
+          -> toNum v ~~~ toNum (prim2repr v)
 toNumEqual v = believe_me ()
 
 zeroIndexesEqual : (0 ty1, ty2 : Type)
@@ -110,12 +110,6 @@ export
   shiftRZero v = prim2reprInjective $ homoShiftR v _ _ (zeroIndexesEqual prim repr)
                               `trans` shiftRZero (prim2repr v)
 
-  shiftRBounded v s with ( shiftRBounded (prim2repr v) (rewrite bitSizesMatch prim in s)
-                         , homoShiftR v s (rewrite bitSizesMatch prim in s) Refl
-                         , toNumEqual (v `shiftR` bitsToIndexTy prim s)
-                         )
-    _ | (reprPrf, homoShiftRPrf, toNumEq) with (bitSizesMatch prim)
-                                             | (bitSizeTy repr)
-      _ | Refl | _ = rewrite toNumEq in
-                     rewrite homoShiftRPrf in
-                             reprPrf
+  shiftRBounded v s = fltePointwiseLeft _ _ (symmetric $ toNumEqual (v `shiftR` bitsToIndexTy prim s))
+                    $ rewrite homoShiftR v s (rewrite bitSizesMatch prim in s) Refl in
+                              shiftRBounded (prim2repr v) (rewrite bitSizesMatch prim in s)
