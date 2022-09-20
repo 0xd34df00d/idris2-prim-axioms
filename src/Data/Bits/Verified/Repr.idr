@@ -10,6 +10,7 @@ import Data.Vect.Properties.Tabulate
 import Data.Bits.Axioms.MetaMath
 import Data.Bits.BitDef as B
 import Data.Bits.Repr
+import Data.Bits.Repr.Order
 import Data.Bits.Verified
 import Data.Fin.Order
 import Data.Vect.Utils
@@ -67,6 +68,8 @@ export
       f : (i : _) -> index i (zipWith B.and bv Zeros) = index i Zeros
       f i = zipWithIndexLinear and bv Zeros i `trans`
             rewrite indexReplicate i O in B.andRightZero _
+
+  andRightLess (MkU bv1) (MkU bv2) = lteHomo _ _ (bvLteAndRight _ _)
 
   orCommutes (MkU bv1) (MkU bv2) = cong MkU $ vectorExtensionality (zipWith or bv1 bv2) (zipWith or bv2 bv1) f
     where

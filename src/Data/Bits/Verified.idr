@@ -22,6 +22,8 @@ interface NonEmptyBits ty => VerifiedBits ty where
   andLeftZero  : (v : ty)
               -> B.zeroBits .&. v = B.zeroBits
   andLeftZero v = andCommutes zeroBits v `trans` andRightZero v
+  andRightLess : (v1, v2 : ty)
+              -> toNum (v1 .&. v2) `FLTE` toNum v2
 
   orCommutes : (v1, v2 : ty)
             -> v1 .|. v2 = v2 .|. v1
