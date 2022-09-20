@@ -90,6 +90,8 @@ export
       f i = zipWithIndexLinear or bv Ones i `trans`
             rewrite indexReplicate i I in B.orRightOne _
 
+  orRightLess (MkU bv1) (MkU bv2) = lteHomo _ _ (bvLteOrRight _ _)
+
   zeroIndex = FZ
   zeroIndexIsZero = Refl
 

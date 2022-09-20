@@ -41,6 +41,12 @@ interface NonEmptyBits ty => VerifiedBits ty where
             -> B.oneBits .|. v= B.oneBits
   orLeftOne v = orCommutes oneBits v `trans` orRightOne v
 
+  orRightLess : (v1, v2 : ty)
+             -> toNum v2 `FLTE` toNum (v1 .|. v2)
+  orLeftLess  : (v1, v2 : ty)
+             -> toNum v1 `FLTE` toNum (v1 .|. v2)
+  orLeftLess v1 v2 = rewrite orCommutes v1 v2 in orRightLess v2 v1
+
   zeroIndex : Fin (bitSize {a = ty})
   zeroIndexIsZero : Z = finToNat zeroIndex
 
