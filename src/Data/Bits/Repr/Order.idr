@@ -6,7 +6,7 @@ import Data.Fin.Order
 import Data.Vect
 
 import Data.Bits.Axioms.MetaMath
-import Data.Bits.BitDef
+import Data.Bits.BitDef as B
 import Data.Bits.Repr
 
 %default total
@@ -52,3 +52,13 @@ lteHomo {w = S w} (_ :: l) (_ :: r) HereLT with (plusZeroRightNeutral $ bound w)
 lteHomo {w = S w} (_ :: l) (_ :: r) (ThereLTE bvLTE) with (plusZeroRightNeutral $ bound w)
                                                         | (bound w + Z)
   _ | Refl | _ = fltePlusBoth $ lteHomo _ _ bvLTE
+
+
+export
+bvLteAndRight : (v1, v2 : Vect w Bit)
+             -> zipWith B.and v1 v2 `BvLTE` v2
+bvLteAndRight [] [] = EmptyLTE
+bvLteAndRight (O :: v1) (O :: v2) = ThereLTE (bvLteAndRight v1 v2)
+bvLteAndRight (O :: v1) (I :: v2) = HereLT
+bvLteAndRight (I :: v1) (O :: v2) = ThereLTE (bvLteAndRight v1 v2)
+bvLteAndRight (I :: v1) (I :: v2) = ThereLTE (bvLteAndRight v1 v2)
