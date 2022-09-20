@@ -46,6 +46,14 @@ flteTrans : f1 `FLTE` f2
 flteTrans FLTEZero _ = FLTEZero
 flteTrans (FLTESucc flte) (FLTESucc flte') = FLTESucc (flteTrans flte flte')
 
+export
+Reflexive (Fin _) FLTE where
+  reflexive = flteRefl
+
+export
+Transitive (Fin _) FLTE where
+  transitive = flteTrans
+
 -- If m > n and (fm : Fin m) < (fn : Fin (S n)),
 -- then fm could be strengthened to have the bound n.
 export
