@@ -25,11 +25,26 @@ interface FiniteBits ty => NonEmptyBits ty where
 
   toNum : ty -> Fin (bound $ bitSizeTy ty)
 
+  zeroIndex : Fin (bitSizeTy ty)
+  zeroIndexIsZero : Z = finToNat zeroIndex
+
 public export
 bitSizeNonZeroTy : (0 ty : Type)
                 -> NonEmptyBits ty
                 => bitSizeTy ty = S (pred (bitSizeTy ty))
-bitSizeNonZeroTy ty = bitSizeNonZero {ty = ty}
+bitSizeNonZeroTy ty = bitSizeNonZero {ty}
+
+public export
+zeroIndexTy : (0 ty : Type)
+           -> NonEmptyBits ty
+           => Fin (bitSizeTy ty)
+zeroIndexTy ty = zeroIndex {ty}
+
+public export
+zeroIndexIsZeroTy : (0 ty : Type)
+                 -> NonEmptyBits ty
+                 => Z = finToNat (zeroIndexTy ty)
+zeroIndexIsZeroTy ty = zeroIndexIsZero {ty}
 
 toNumBits : (FiniteBits ty, Cast ty Nat)
          => ty
@@ -43,18 +58,26 @@ export
 NonEmptyBits Bits8  where
   bitSizeNonZero = Refl
   toNum = toNumBits
+  zeroIndex = FZ
+  zeroIndexIsZero = Refl
 
 export
 NonEmptyBits Bits16 where
   bitSizeNonZero = Refl
   toNum = toNumBits
+  zeroIndex = FZ
+  zeroIndexIsZero = Refl
 
 export
 NonEmptyBits Bits32 where
   bitSizeNonZero = Refl
   toNum = toNumBits
+  zeroIndex = FZ
+  zeroIndexIsZero = Refl
 
 export
 NonEmptyBits Bits64 where
   bitSizeNonZero = Refl
   toNum = toNumBits
+  zeroIndex = FZ
+  zeroIndexIsZero = Refl

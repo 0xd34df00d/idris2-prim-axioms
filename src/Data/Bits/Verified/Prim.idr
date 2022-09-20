@@ -75,6 +75,11 @@ toNumEqual : IsModelOf repr prim
           -> toNum v ~=~ toNum (prim2repr v)
 toNumEqual v = believe_me ()
 
+zeroIndexesEqual : (0 ty1, ty2 : Type)
+                -> NonEmptyBits ty1
+                => NonEmptyBits ty2
+                => finToNat (zeroIndexTy ty1) = finToNat (zeroIndexTy ty2)
+zeroIndexesEqual ty1 ty2 = sym (zeroIndexIsZeroTy ty1) `trans` zeroIndexIsZeroTy ty2
 
 export
 (IsModelOf repr prim) => VerifiedBits prim where
@@ -100,12 +105,9 @@ export
                               `trans` orRightOne (prim2repr v)
                               `trans` sym homoOnes
 
-  zeroIndex = rewrite bitSizeNonZeroTy prim in FZ
-  zeroIndexIsZero = Refl
-
-  shiftLZero v = prim2reprInjective $ homoShiftL v (rewrite bitSizeNonZeroTy prim in FZ) zeroIndex zeroIndexIsZero
+  shiftLZero v = prim2reprInjective $ homoShiftL v _ _ (zeroIndexesEqual prim repr)
                               `trans` shiftLZero (prim2repr v)
-  shiftRZero v = prim2reprInjective $ homoShiftR v (rewrite bitSizeNonZeroTy prim in FZ) zeroIndex zeroIndexIsZero
+  shiftRZero v = prim2reprInjective $ homoShiftR v _ _ (zeroIndexesEqual prim repr)
                               `trans` shiftRZero (prim2repr v)
 
   shiftRBounded v s with ( shiftRBounded (prim2repr v) (rewrite bitSizesMatch prim in s)

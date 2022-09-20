@@ -100,10 +100,6 @@ export
                                           cong MkU $ mapId bv
 
 
-  zeroIndex = FZ
-  zeroIndexIsZero = Refl
-
-
   shiftLZero (MkU bv) with (splitLAtFin FZ bv)
     shiftLZero (MkU ([] ++ after)) | TheSplit {n2 = S n} [] after _ with (appendRightNeutral after)
       _ | eqPrf with (plusZeroRightNeutral n)
