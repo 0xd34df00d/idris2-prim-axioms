@@ -62,3 +62,12 @@ bvLteAndRight (O :: v1) (O :: v2) = ThereLTE (bvLteAndRight v1 v2)
 bvLteAndRight (O :: v1) (I :: v2) = HereLT
 bvLteAndRight (I :: v1) (O :: v2) = ThereLTE (bvLteAndRight v1 v2)
 bvLteAndRight (I :: v1) (I :: v2) = ThereLTE (bvLteAndRight v1 v2)
+
+export
+bvLteOrRight : (v1, v2 : Vect w Bit)
+            -> v2 `BvLTE` zipWith B.or v1 v2
+bvLteOrRight [] [] = EmptyLTE
+bvLteOrRight (O :: v1) (O :: v2) = ThereLTE (bvLteOrRight v1 v2)
+bvLteOrRight (O :: v1) (I :: v2) = ThereLTE (bvLteOrRight v1 v2)
+bvLteOrRight (I :: v1) (O :: v2) = HereLT
+bvLteOrRight (I :: v1) (I :: v2) = ThereLTE (bvLteOrRight v1 v2)
