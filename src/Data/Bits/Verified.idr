@@ -59,14 +59,14 @@ interface NonEmptyBits ty => VerifiedBits ty where
   complementInvolutive : (v : ty)
                       -> complement (complement v) = v
 
-  zeroIndex : Fin (bitSize {a = ty})
+  zeroIndex : Fin (bitSizeTy ty)
   zeroIndexIsZero : Z = finToNat zeroIndex
 
   -- Properties of shifts
   shiftLZero : (v : ty)
-            -> v `shiftL` bitsToIndex {a = ty} zeroIndex = v
+            -> v `shiftL` bitsToIndexTy ty zeroIndex = v
   shiftRZero : (v : ty)
-            -> v `shiftR` bitsToIndex {a = ty} zeroIndex = v
+            -> v `shiftR` bitsToIndexTy ty zeroIndex = v
   shiftRBounded : (v : ty)
-               -> (s : Fin (bitSize {a = ty}))
-               -> toNum (v `shiftR` bitsToIndex {a = ty} s) `FLTE` last' (bound $ bitSize {a = ty} `natSubFin` s)
+               -> (s : Fin (bitSizeTy ty))
+               -> toNum (v `shiftR` bitsToIndexTy ty s) `FLTE` last' (bound $ bitSizeTy ty `natSubFin` s)
