@@ -11,6 +11,7 @@ import Data.Bits.Repr
 
 %default total
 
+public export
 data BvLTE : (l, r : Vect w Bit) -> Type where
   EmptyLTE  : BvLTE [] []
   HereLT    : BvLTE (O :: l) (I :: r)
@@ -25,6 +26,7 @@ mutual
                         Yes prf => Yes $ ThereLTE prf
                         No contra => No $ \case ThereLTE lte => contra lte
 
+  export
   isBvLTE : (l, r : _) -> Dec (l `BvLTE` r)
   isBvLTE [] [] = Yes EmptyLTE
   isBvLTE (O :: l) (O :: r) = bvLteThere l r
@@ -36,6 +38,7 @@ mutual
   isBvLTE (I :: l) (I :: r) = bvLteThere l r
 
 
+export
 lteHomo : {w : _}
        -> (l, r : Vect w Bit)
        -> l `BvLTE` r
