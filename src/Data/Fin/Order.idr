@@ -136,6 +136,16 @@ fltePlusLeft {m = S m} (FS fm) fn = let rec = FLTESucc $ fltePlusLeft fm fn
                                         pwEq = plusSuccRightSucc fn fm
                                      in fltePointwiseRight _ _ pwEq rec
 
+export
+fltePlusBoth : {m, n, k : _}
+            -> {fm : Fin m}
+            -> {fn : Fin n}
+            -> {f : Fin (S k)}
+            -> fm `FLTE` fn
+            -> fm + f `FLTE` fn + f
+fltePlusBoth FLTEZero = fltePointwiseLeft _ _ (symmetric $ plusZeroLeftNeutral _) (fltePlusLeft _ _)
+fltePlusBoth (FLTESucc flte) = FLTESucc (fltePlusBoth flte)
+
 public export
 last' : (n : _) -> Fin (S n)
 last' _ = last
