@@ -55,6 +55,10 @@ interface NonEmptyBits ty => VerifiedBits ty where
              -> toNum v1 `FLTE` toNum (v1 .|. v2)
   orLeftLess v1 v2 = rewrite orCommutes v1 v2 in orRightLess v2 v1
 
+  -- Properties of `complement`
+  complementInvolutive : (v : ty)
+                      -> complement (complement v) = v
+
   zeroIndex : Fin (bitSize {a = ty})
   zeroIndexIsZero : Z = finToNat zeroIndex
 

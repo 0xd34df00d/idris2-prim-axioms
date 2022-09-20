@@ -77,3 +77,9 @@ orCommutes : (b1, b2 : Bit)
           -> b1 `or` b2 = b2 `or` b1
 orCommutes O b2 = case b2 of { O => Refl ; I => Refl }
 orCommutes I b2 = case b2 of { O => Refl ; I => Refl }
+
+export
+notInvolutive : (b : Bit)
+          -> not (not b) = b
+notInvolutive O = Refl
+notInvolutive I = Refl
