@@ -1,7 +1,11 @@
 module Data.Bits.Repr.Order
 
+import Data.Fin
+import Data.Fin.Extra
+import Data.Fin.Order
 import Data.Vect
 
+import Data.Bits.Axioms.MetaMath
 import Data.Bits.BitDef
 import Data.Bits.Repr
 
@@ -30,3 +34,18 @@ mutual
                                                 HereLT impossible
                                                 ThereLTE _ impossible
   isBvLTE (I :: l) (I :: r) = bvLteThere l r
+
+
+lteHomo : {w : _}
+       -> (l, r : Vect w Bit)
+       -> l `BvLTE` r
+       -> accBV l `FLTE` accBV r
+lteHomo _ _ EmptyLTE = FLTEZero
+lteHomo {w = S w} (_ :: l) (_ :: r) HereLT with (plusZeroRightNeutral $ bound w)
+                                              | (bound w + Z)
+  _ | Refl | _ = let rec = lastIsLast (accBV l) in
+                 fltePointwiseLeft _ _ (symmetric $ plusZeroRightNeutral $ accBV l)
+               $ lastIsLast (accBV l) `flteTrans` fltePlusLeft _ _
+lteHomo {w = S w} (_ :: l) (_ :: r) (ThereLTE bvLTE) with (plusZeroRightNeutral $ bound w)
+                                                        | (bound w + Z)
+  _ | Refl | _ = fltePlusBoth $ lteHomo _ _ bvLTE
