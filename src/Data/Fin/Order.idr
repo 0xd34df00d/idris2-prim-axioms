@@ -33,6 +33,13 @@ export
 isFLT : (fm : Fin m) -> (fn : Fin n) -> Dec (fm `FLT` fn)
 isFLT fm fn = FS fm `isFLTE` fn
 
+export
+flteTrans : f1 `FLTE` f2
+         -> f2 `FLTE` f3
+         -> f1 `FLTE` f3
+flteTrans FLTEZero _ = FLTEZero
+flteTrans (FLTESucc flte) (FLTESucc flte') = FLTESucc (flteTrans flte flte')
+
 -- If m > n and (fm : Fin m) < (fn : Fin (S n)),
 -- then fm could be strengthened to have the bound n.
 export
