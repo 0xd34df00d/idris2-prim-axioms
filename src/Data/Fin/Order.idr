@@ -109,22 +109,18 @@ fltInvNot : {fm : Fin m}
 fltInvNot contra = case flteInvNot contra of FLTESucc x => x
 
 export
-fltePointwiseRight : (f1 : Fin _)
-                  -> (f2 : Fin _)
-                  -> f1 ~~~ f2
+fltePointwiseRight : f1 ~~~ f2
                   -> f `FLTE` f1
                   -> f `FLTE` f2
-fltePointwiseRight _ _ _ FLTEZero = FLTEZero
-fltePointwiseRight (FS _) (FS _) (FS pw) (FLTESucc flte) = FLTESucc $ fltePointwiseRight _ _ pw flte
+fltePointwiseRight _ FLTEZero = FLTEZero
+fltePointwiseRight (FS pw) (FLTESucc flte) = FLTESucc $ fltePointwiseRight pw flte
 
 export
-fltePointwiseLeft : (f1 : Fin _)
-                 -> (f2 : Fin _)
-                 -> f1 ~~~ f2
+fltePointwiseLeft : f1 ~~~ f2
                  -> f1 `FLTE` f
                  -> f2 `FLTE` f
-fltePointwiseLeft FZ FZ FZ FLTEZero = FLTEZero
-fltePointwiseLeft (FS _) (FS _) (FS pw) (FLTESucc flte) = FLTESucc $ fltePointwiseLeft _ _ pw flte
+fltePointwiseLeft FZ FLTEZero = FLTEZero
+fltePointwiseLeft (FS pw) (FLTESucc flte) = FLTESucc $ fltePointwiseLeft pw flte
 
 export
 fltePlusLeft : {m, n : _}
@@ -134,7 +130,7 @@ fltePlusLeft : {m, n : _}
 fltePlusLeft FZ fn = FLTEZero
 fltePlusLeft {m = S m} (FS fm) fn = let rec = FLTESucc $ fltePlusLeft fm fn
                                         pwEq = plusSuccRightSucc fn fm
-                                     in fltePointwiseRight _ _ pwEq rec
+                                     in fltePointwiseRight pwEq rec
 
 export
 fltePlusBoth : {m, n, k : _}
@@ -143,7 +139,7 @@ fltePlusBoth : {m, n, k : _}
             -> {f : Fin (S k)}
             -> fm `FLTE` fn
             -> fm + f `FLTE` fn + f
-fltePlusBoth FLTEZero = fltePointwiseLeft _ _ (symmetric $ plusZeroLeftNeutral _) (fltePlusLeft _ _)
+fltePlusBoth FLTEZero = fltePointwiseLeft (symmetric $ plusZeroLeftNeutral _) (fltePlusLeft _ _)
 fltePlusBoth (FLTESucc flte) = FLTESucc (fltePlusBoth flte)
 
 public export

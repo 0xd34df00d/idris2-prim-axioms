@@ -47,7 +47,7 @@ lteHomo _ _ EmptyLTE = FLTEZero
 lteHomo {w = S w} (_ :: l) (_ :: r) HereLT with (plusZeroRightNeutral $ bound w)
                                               | (bound w + Z)
   _ | Refl | _ = let rec = lastIsLast (accBV l) in
-                 fltePointwiseLeft _ _ (symmetric $ plusZeroRightNeutral $ accBV l)
+                 fltePointwiseLeft (symmetric $ plusZeroRightNeutral $ accBV l)
                $ lastIsLast (accBV l) `flteTrans` fltePlusLeft _ _
 lteHomo {w = S w} (_ :: l) (_ :: r) (ThereLTE bvLTE) with (plusZeroRightNeutral $ bound w)
                                                         | (bound w + Z)

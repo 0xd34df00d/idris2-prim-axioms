@@ -110,6 +110,6 @@ export
   shiftRZero v = prim2reprInjective $ homoShiftR v _ _ (zeroIndexesEqual prim repr)
                               `trans` shiftRZero (prim2repr v)
 
-  shiftRBounded v s = fltePointwiseLeft _ _ (symmetric $ toNumEqual (v `shiftR` bitsToIndexTy prim s))
+  shiftRBounded v s = fltePointwiseLeft (symmetric $ toNumEqual (v `shiftR` bitsToIndexTy prim s))
                     $ rewrite homoShiftR v s (rewrite bitSizesMatch prim in s) Refl in
                               shiftRBounded (prim2repr v) (rewrite bitSizesMatch prim in s)

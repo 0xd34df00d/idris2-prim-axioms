@@ -31,7 +31,7 @@ zeroPaddedBound : {n : _}
                -> accBV (replicate m O ++ right) `FLTE` last' (bound n)
 zeroPaddedBound Z right = lastIsLast (accBV right)
 zeroPaddedBound (S m) right = let pw = symmetric $ accBVLeftZero (replicate m O ++ right)
-                               in fltePointwiseLeft _ _ pw (zeroPaddedBound m right)
+                               in fltePointwiseLeft pw (zeroPaddedBound m right)
 
 shiftRBoundedImpl : {w : _}
                  -> (v : UnsignedBV w)
