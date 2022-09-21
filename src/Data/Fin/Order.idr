@@ -123,6 +123,13 @@ fltePointwiseLeft FZ FLTEZero = FLTEZero
 fltePointwiseLeft (FS pw) (FLTESucc flte) = FLTESucc $ fltePointwiseLeft pw flte
 
 export
+fltePointwiseBoth : (l1 ~~~ l2)
+                 -> (r1 ~~~ r2)
+                 -> l1 `FLTE` r1
+                 -> l2 `FLTE` r2
+fltePointwiseBoth pw1 pw2 = fltePointwiseRight pw2 . fltePointwiseLeft pw1
+
+export
 fltePlusLeft : {m, n : _}
             -> (fm : Fin (S m))
             -> (fn : Fin n)
