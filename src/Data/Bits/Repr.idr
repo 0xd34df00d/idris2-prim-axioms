@@ -21,7 +21,8 @@ namespace AsFin
     MkU : (val : Fin (bound w)) -> UnsignedF w
 
   public export
-  getFinVal : UnsignedF w -> Fin (bound w)
+  getFinVal : UnsignedF w ->
+              Fin (bound w)
   getFinVal (MkU val) = val
 
   public export
@@ -31,10 +32,10 @@ namespace AsFin
                                        No contra => No $ \case Refl => contra Refl
 
   public export
-  boundedFinNonEmpty : {w : _}
-                    -> (val1, val2 : Fin (bound w))
-                    -> ({n : _} -> Fin (S n) -> Fin (S n) -> Fin (S n))
-                    -> Fin (bound w)
+  boundedFinNonEmpty : {w : _} ->
+                       (val1, val2 : Fin (bound w)) ->
+                       ({n : _} -> Fin (S n) -> Fin (S n) -> Fin (S n)) ->
+                       Fin (bound w)
   boundedFinNonEmpty val1 val2 f with (bound w)
     _ | Z = absurd val1
     _ | S _ = f val1 val2
@@ -60,12 +61,16 @@ namespace AsBV
 
 namespace FisoBV
   public export
-  bitToVal : (w : _) -> Bit -> Fin (S (bound w))
+  bitToVal : (w : _) ->
+             Bit ->
+             Fin (S (bound w))
   bitToVal _ O = FZ
   bitToVal _ I = last
 
   public export
-  finToFactors : {w : _} -> Fin (bound w) -> Vect w Bit
+  finToFactors : {w : _} ->
+                 Fin (bound w) ->
+                 Vect w Bit
   finToFactors {w = Z} FZ = []
   finToFactors {w = S w} f with (f `minusF` bound w)
     _ | MinuendSmaller smaller = let f = strengthenFLT _ _ smaller
@@ -75,22 +80,30 @@ namespace FisoBV
                               in I :: finToFactors diff
 
   public export
-  finToBV : {w : _} -> UnsignedF w -> UnsignedBV w
+  finToBV : {w : _} ->
+            UnsignedF w ->
+            UnsignedBV w
   finToBV (MkU val) = MkU $ finToFactors val
 
   public export
-  accBV : {w : _} -> Vect w Bit -> Fin (bound w)
+  accBV : {w : _} ->
+          Vect w Bit ->
+          Fin (bound w)
   accBV {w = Z} [] = FZ
   accBV {w = S w} (b :: bs) with (plusZeroRightNeutral $ bound w)
                                | (bound w + Z)
     _ | Refl | _ = accBV bs + bitToVal w b
 
   public export
-  bvToFin : {w : _} -> UnsignedBV w -> UnsignedF w
+  bvToFin : {w : _} ->
+            UnsignedBV w ->
+            UnsignedF w
   bvToFin (MkU bv) = MkU $ accBV bv
 
   export
-  isoFtoBVtoF : {w : _} -> (f : Fin (bound w)) -> accBV (finToFactors {w} f) = f
+  isoFtoBVtoF : {w : _} ->
+                (f : Fin (bound w)) ->
+                accBV (finToFactors {w} f) = f
   isoFtoBVtoF {w = Z} FZ = Refl
   isoFtoBVtoF {w = S w} f with (f `minusF` bound w)
     _ | MinuendSmaller smaller with (plusZeroRightNeutral $ bound w)
@@ -105,7 +118,9 @@ namespace FisoBV
                                hetPointwiseIsTransport Refl eq
 
   export
-  isoBVtoFtoBV : {w : _} -> (bv : Vect w Bit) -> finToFactors {w} (accBV bv) = bv
+  isoBVtoFtoBV : {w : _} ->
+                 (bv : Vect w Bit) ->
+                 finToFactors {w} (accBV bv) = bv
   isoBVtoFtoBV {w = Z} [] = Refl
   isoBVtoFtoBV {w = S w} (b :: bv) with (plusZeroRightNeutral $ bound w)
                                       | (bound w + Z)

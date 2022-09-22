@@ -25,65 +25,65 @@ export IsModelOf (UnsignedBV 32) Bits32 where
 export IsModelOf (UnsignedBV 64) Bits64 where
 
 
-bitSizesMatch : (0 prim : Type)
-             -> IsModelOf repr prim
-             => bitSizeTy repr = bitSizeTy prim
+bitSizesMatch : (0 prim : Type) ->
+                IsModelOf repr prim =>
+                bitSizeTy repr = bitSizeTy prim
 bitSizesMatch = believe_me ()
 
-homoZeros : IsModelOf repr prim
-         => prim2repr {prim = prim} B.zeroBits = B.zeroBits
+homoZeros : IsModelOf repr prim =>
+            prim2repr {prim = prim} B.zeroBits = B.zeroBits
 homoZeros = believe_me ()
 
-homoOnes : IsModelOf repr prim
-        => prim2repr {prim = prim} B.oneBits = B.oneBits
+homoOnes : IsModelOf repr prim =>
+           prim2repr {prim = prim} B.oneBits = B.oneBits
 homoOnes = believe_me ()
 
-homoAnd : IsModelOf repr prim
-       => (0 v1, v2 : prim)
-       -> prim2repr (v1 .&. v2) = prim2repr v1 .&. prim2repr v2
+homoAnd : IsModelOf repr prim =>
+          (0 v1, v2 : prim) ->
+          prim2repr (v1 .&. v2) = prim2repr v1 .&. prim2repr v2
 homoAnd = believe_me ()
 
-homoOr : IsModelOf repr prim
-      => (0 v1, v2 : prim)
-      -> prim2repr (v1 .|. v2) = prim2repr v1 .|. prim2repr v2
+homoOr : IsModelOf repr prim =>
+         (0 v1, v2 : prim) ->
+         prim2repr (v1 .|. v2) = prim2repr v1 .|. prim2repr v2
 homoOr = believe_me ()
 
-homoComplement : IsModelOf repr prim
-              => (0 v : prim)
-              -> prim2repr (complement v) = complement (prim2repr v)
+homoComplement : IsModelOf repr prim =>
+                 (0 v : prim) ->
+                 prim2repr (complement v) = complement (prim2repr v)
 homoComplement = believe_me ()
 
-homoShiftL : IsModelOf repr prim
-          => (0 v : prim)
-          -> (0 sPrim : Fin (bitSizeTy prim))
-          -> (0 sRepr : Fin (bitSizeTy repr))
-          -> (0 _ : finToNat sPrim = finToNat sRepr)
-          -> prim2repr (v `shiftL` bitsToIndexTy prim sPrim) = prim2repr v `shiftL` bitsToIndexTy repr sRepr
+homoShiftL : IsModelOf repr prim =>
+             (0 v : prim) ->
+             (0 sPrim : Fin (bitSizeTy prim)) ->
+             (0 sRepr : Fin (bitSizeTy repr)) ->
+             (0 _ : finToNat sPrim = finToNat sRepr) ->
+             prim2repr (v `shiftL` bitsToIndexTy prim sPrim) = prim2repr v `shiftL` bitsToIndexTy repr sRepr
 homoShiftL = believe_me ()
 
-homoShiftR : IsModelOf repr prim
-          => (0 v : prim)
-          -> (0 sPrim : Fin (bitSizeTy prim))
-          -> (0 sRepr : Fin (bitSizeTy repr))
-          -> (0 _ : finToNat sPrim = finToNat sRepr)
-          -> prim2repr (v `shiftR` bitsToIndexTy prim sPrim) = prim2repr v `shiftR` bitsToIndexTy repr sRepr
+homoShiftR : IsModelOf repr prim =>
+             (0 v : prim) ->
+             (0 sPrim : Fin (bitSizeTy prim)) ->
+             (0 sRepr : Fin (bitSizeTy repr)) ->
+             (0 _ : finToNat sPrim = finToNat sRepr) ->
+             prim2repr (v `shiftR` bitsToIndexTy prim sPrim) = prim2repr v `shiftR` bitsToIndexTy repr sRepr
 homoShiftR = believe_me ()
 
-prim2reprInjective : IsModelOf repr prim
-                  => {0 v1, v2 : prim}
-                  -> prim2repr v1 = prim2repr v2
-                  -> v1 = v2
+prim2reprInjective : IsModelOf repr prim =>
+                     {0 v1, v2 : prim} ->
+                     prim2repr v1 = prim2repr v2 ->
+                     v1 = v2
 prim2reprInjective = believe_me ()
 
-toNumEqual : IsModelOf repr prim
-          => (0 v : prim)
-          -> toNum (prim2repr v) ~~~ toNum v
+toNumEqual : IsModelOf repr prim =>
+             (0 v : prim) ->
+             toNum (prim2repr v) ~~~ toNum v
 toNumEqual = believe_me ()
 
-zeroIndexesEqual : (0 ty1, ty2 : Type)
-                -> NonEmptyBits ty1
-                => NonEmptyBits ty2
-                => finToNat (zeroIndexTy ty1) = finToNat (zeroIndexTy ty2)
+zeroIndexesEqual : (0 ty1, ty2 : Type) ->
+                   NonEmptyBits ty1 =>
+                   NonEmptyBits ty2 =>
+                   finToNat (zeroIndexTy ty1) = finToNat (zeroIndexTy ty2)
 zeroIndexesEqual ty1 ty2 = sym (zeroIndexIsZeroTy ty1) `trans` zeroIndexIsZeroTy ty2
 
 export

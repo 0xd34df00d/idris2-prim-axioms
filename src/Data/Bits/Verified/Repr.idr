@@ -18,25 +18,25 @@ import Data.Vect.Utils
 
 %default total
 
-accBVLeftZero : {w : _}
-             -> (bv : Vect w Bit)
-             -> accBV (O :: bv) ~~~ accBV bv
+accBVLeftZero : {w : _} ->
+                (bv : Vect w Bit) ->
+                accBV (O :: bv) ~~~ accBV bv
 accBVLeftZero {w = w} bv with (plusZeroRightNeutral $ bound w)
                             | (bound w + Z)
   _ | Refl | _ = plusZeroRightNeutral (accBV bv)
 
-zeroPaddedBound : {n : _}
-               -> (m : _)
-               -> (right : Vect n Bit)
-               -> accBV (replicate m O ++ right) `FLTE` last' (bound n)
+zeroPaddedBound : {n : _} ->
+                  (m : _) ->
+                  (right : Vect n Bit) ->
+                  accBV (replicate m O ++ right) `FLTE` last' (bound n)
 zeroPaddedBound Z right = lastIsLast (accBV right)
 zeroPaddedBound (S m) right = let pw = symmetric $ accBVLeftZero (replicate m O ++ right)
                                in fltePointwiseLeft pw (zeroPaddedBound m right)
 
-shiftRBoundedImpl : {w : _}
-                 -> (v : UnsignedBV w)
-                 -> (s : Fin w)
-                 -> getFinVal (bvToFin (v `shiftR` s)) `FLTE` last' (bound $ w `natSubFin` s)
+shiftRBoundedImpl : {w : _} ->
+                    (v : UnsignedBV w) ->
+                    (s : Fin w) ->
+                    getFinVal (bvToFin (v `shiftR` s)) `FLTE` last' (bound $ w `natSubFin` s)
 shiftRBoundedImpl (MkU bv) s with (splitRAtFin s bv)
   shiftRBoundedImpl (MkU _) s | TheSplit {n1 = n1, n2 = n2} before after eq
                                 = rewrite natSubFinPlus n1 n2 s eq in

@@ -7,16 +7,16 @@ import Data.Bits.Axioms.MetaMath
 %default total
 
 public export
-bitSizeTy : (0 ty : Type)
-         -> FiniteBits ty
-         => Nat
+bitSizeTy : (0 ty : Type) ->
+            FiniteBits ty =>
+            Nat
 bitSizeTy ty = bitSize {a = ty}
 
 public export
-bitsToIndexTy : (0 ty : Type)
-             -> FiniteBits ty
-             => Fin (bitSizeTy ty)
-             -> Index {a = ty}
+bitsToIndexTy : (0 ty : Type) ->
+                FiniteBits ty =>
+                Fin (bitSizeTy ty) ->
+                Index {a = ty}
 bitsToIndexTy ty = bitsToIndex {a = ty}
 
 public export
@@ -29,26 +29,26 @@ interface FiniteBits ty => NonEmptyBits ty where
   zeroIndexIsZero : Z = finToNat zeroIndex
 
 public export
-bitSizeNonZeroTy : (0 ty : Type)
-                -> NonEmptyBits ty
-                => bitSizeTy ty = S (pred (bitSizeTy ty))
+bitSizeNonZeroTy : (0 ty : Type) ->
+                   NonEmptyBits ty =>
+                   bitSizeTy ty = S (pred (bitSizeTy ty))
 bitSizeNonZeroTy ty = bitSizeNonZero {ty}
 
 public export
-zeroIndexTy : (0 ty : Type)
-           -> NonEmptyBits ty
-           => Fin (bitSizeTy ty)
+zeroIndexTy : (0 ty : Type) ->
+              NonEmptyBits ty =>
+              Fin (bitSizeTy ty)
 zeroIndexTy ty = zeroIndex {ty}
 
 public export
-zeroIndexIsZeroTy : (0 ty : Type)
-                 -> NonEmptyBits ty
-                 => Z = finToNat (zeroIndexTy ty)
+zeroIndexIsZeroTy : (0 ty : Type) ->
+                    NonEmptyBits ty =>
+                    Z = finToNat (zeroIndexTy ty)
 zeroIndexIsZeroTy ty = zeroIndexIsZero {ty}
 
-toNumBits : (FiniteBits ty, Cast ty Nat)
-         => ty
-         -> Fin (bound $ bitSizeTy ty)
+toNumBits : (FiniteBits ty, Cast ty Nat) =>
+            ty ->
+            Fin (bound $ bitSizeTy ty)
 toNumBits v = let %hint
                   smaller : cast v `LT` bound (bitSizeTy ty)
                   smaller = believe_me ()
