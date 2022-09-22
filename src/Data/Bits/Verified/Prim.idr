@@ -93,6 +93,8 @@ export
                                 `trans` cong (prim2repr v .&.) homoZeros
                                 `trans` andRightZero (prim2repr v)
                                 `trans` sym homoZeros
+  andRightLess v1 v2 = fltePointwiseBoth (toNumEqual (v1 .&. v2)) (toNumEqual v2)
+                     $ rewrite homoAnd v1 v2 in andRightLess _ _
 
   orCommutes v1 v2 = prim2reprInjective $ homoOr v1 v2
                                   `trans` orCommutes _ _
