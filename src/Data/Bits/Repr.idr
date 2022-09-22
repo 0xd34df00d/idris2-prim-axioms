@@ -11,7 +11,7 @@ import Data.Bits.Axioms.MetaMath
 import Data.Bits.BitDef
 import Data.Bits.NonEmpty
 import Data.Fin.Order
-import Data.Vect.Utils
+import Data.Vect.Split
 
 %default total
 

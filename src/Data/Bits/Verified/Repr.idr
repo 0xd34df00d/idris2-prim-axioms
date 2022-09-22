@@ -14,6 +14,7 @@ import Data.Bits.Repr
 import Data.Bits.Repr.Order
 import Data.Bits.Verified
 import Data.Fin.Order
+import Data.Vect.Split
 import Data.Vect.Utils
 
 %default total
