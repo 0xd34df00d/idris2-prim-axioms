@@ -106,6 +106,8 @@ export
                               `trans` cong (prim2repr v .|.) homoOnes
                               `trans` orRightOne (prim2repr v)
                               `trans` sym homoOnes
+  orRightLess v1 v2 = fltePointwiseBoth (toNumEqual v2) (toNumEqual (v1 .|. v2))
+                    $ rewrite homoOr v1 v2 in orRightLess _ _
 
   shiftLZero v = prim2reprInjective $ homoShiftL v _ _ (zeroIndexesEqual prim repr)
                               `trans` shiftLZero (prim2repr v)
