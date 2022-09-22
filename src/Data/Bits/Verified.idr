@@ -30,7 +30,7 @@ interface NonEmptyBits ty => VerifiedBits ty where
               -> toNum (v1 .&. v2) `FLTE` toNum v2
   andLeftLess  : (v1, v2 : ty)
               -> toNum (v1 .&. v2) `FLTE` toNum v1
-  andLeftLess v1 v2 = rewrite andCommutes v1 v2 in andRightLess v2 v1
+  andLeftLess v1 v2 = replace {p = \v => toNum v `FLTE` toNum v1} (sym $ andCommutes v1 v2) (andRightLess v2 v1)
 
 
   -- Properties of `or`
@@ -53,7 +53,7 @@ interface NonEmptyBits ty => VerifiedBits ty where
              -> toNum v2 `FLTE` toNum (v1 .|. v2)
   orLeftLess  : (v1, v2 : ty)
              -> toNum v1 `FLTE` toNum (v1 .|. v2)
-  orLeftLess v1 v2 = rewrite orCommutes v1 v2 in orRightLess v2 v1
+  orLeftLess v1 v2 = replace {p = \v => toNum v1 `FLTE` toNum v} (sym $ orCommutes v1 v2) (orRightLess v2 v1)
 
   -- Properties of `complement`
   complementInvolutive : (v : ty)
