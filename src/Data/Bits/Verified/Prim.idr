@@ -48,6 +48,11 @@ homoOr : IsModelOf repr prim
       -> prim2repr (v1 .|. v2) = prim2repr v1 .|. prim2repr v2
 homoOr = believe_me ()
 
+homoComplement : IsModelOf repr prim
+              => (0 v : prim)
+              -> prim2repr (complement v) = complement (prim2repr v)
+homoComplement = believe_me ()
+
 homoShiftL : IsModelOf repr prim
           => (0 v : prim)
           -> (0 sPrim : Fin (bitSizeTy prim))
@@ -108,6 +113,10 @@ export
                               `trans` sym homoOnes
   orRightLess v1 v2 = fltePointwiseBoth (toNumEqual v2) (toNumEqual (v1 .|. v2))
                     $ rewrite homoOr v1 v2 in orRightLess _ _
+
+  complementInvolutive v = prim2reprInjective $ rewrite homoComplement (complement v) in
+                                                rewrite homoComplement v in
+                                                        complementInvolutive (prim2repr v)
 
   shiftLZero v = prim2reprInjective $ homoShiftL v _ _ (zeroIndexesEqual prim repr)
                               `trans` shiftLZero (prim2repr v)
