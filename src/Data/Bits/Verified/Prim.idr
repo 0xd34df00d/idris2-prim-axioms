@@ -87,7 +87,7 @@ zeroIndexesEqual : (0 ty1, ty2 : Type) ->
                    finToNat (zeroIndexTy ty1) = finToNat (zeroIndexTy ty2)
 zeroIndexesEqual ty1 ty2 = sym (zeroIndexIsZeroTy ty1) `trans` zeroIndexIsZeroTy ty2
 
-export
+public export
 [viaModel] (IsModelOf repr prim) => VerifiedBits prim where
   andCommutes v1 v2 = prim2reprInjective $ homoAnd v1 v2
                                    `trans` andCommutes _ _
