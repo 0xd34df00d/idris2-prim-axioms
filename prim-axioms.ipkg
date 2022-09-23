@@ -16,6 +16,7 @@ modules = Data.Bits.Axioms.MetaMath
         , Data.Bits.Verified.Prim
         , Data.Bits.Verified.Repr
         , Data.Fin.Order
+        , Data.Fin.Pointwise.Extra
         , Data.Vect.Reverse
         , Data.Vect.Split
         , Data.Vect.Utils
