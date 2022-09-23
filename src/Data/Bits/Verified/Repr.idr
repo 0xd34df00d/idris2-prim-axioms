@@ -8,12 +8,13 @@ import Data.Vect.Properties.Index
 import Data.Vect.Properties.Map
 import Data.Vect.Properties.Tabulate
 
-import Data.Bits.Axioms.MetaMath
 import Data.Bits.BitDef as B
 import Data.Bits.Repr
 import Data.Bits.Repr.Order
 import Data.Bits.Verified
 import Data.Fin.Order
+import Data.Fin.Sub
+import Data.Nat.Utils
 import Data.Vect.Split
 import Data.Vect.Utils
 

@@ -2,9 +2,10 @@ module Data.Bits.Verified
 
 import Data.Bits as B
 
-import Data.Bits.Axioms.MetaMath
 import public Data.Bits.NonEmpty
 import Data.Fin.Order
+import Data.Fin.Sub
+import Data.Nat.Utils
 
 %default total
 

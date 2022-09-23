@@ -8,8 +8,7 @@ sourcedir = "src"
 depends = base
         , contrib
 
-modules = Data.Bits.Axioms.MetaMath
-        , Data.Bits.BitDef
+modules = Data.Bits.BitDef
         , Data.Bits.Repr
         , Data.Bits.Repr.Order
         , Data.Bits.Verified
@@ -17,6 +16,7 @@ modules = Data.Bits.Axioms.MetaMath
         , Data.Bits.Verified.Repr
         , Data.Fin.Order
         , Data.Fin.Pointwise.Extra
+        , Data.Fin.Sub
         , Data.Nat.Utils
         , Data.Vect.Reverse
         , Data.Vect.Split

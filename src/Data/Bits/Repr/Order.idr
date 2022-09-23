@@ -5,9 +5,9 @@ import Data.Fin.Extra
 import Data.Fin.Order
 import Data.Vect
 
-import Data.Bits.Axioms.MetaMath
 import Data.Bits.BitDef as B
 import Data.Bits.Repr
+import Data.Nat.Utils
 
 %default total
 

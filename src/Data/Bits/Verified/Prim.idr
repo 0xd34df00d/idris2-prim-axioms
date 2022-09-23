@@ -2,12 +2,13 @@ module Data.Bits.Verified.Prim
 
 import Data.Bits as B
 
-import Data.Bits.Axioms.MetaMath
 import Data.Bits.NonEmpty
 import Data.Bits.Repr
 import Data.Bits.Verified as R
 import Data.Bits.Verified.Repr
 import Data.Fin.Order
+import Data.Fin.Sub
+import Data.Nat.Utils
 
 %default total
 
