@@ -127,3 +127,23 @@ public export
   shiftRBounded v s = fltePointwiseLeft (toNumEqual (v `shiftR` bitsToIndexTy prim s))
                     $ rewrite homoShiftR v s (rewrite bitSizesMatch prim in s) Refl in
                               shiftRBounded (prim2repr v) (rewrite bitSizesMatch prim in s)
+
+%hint
+public export
+vb8 : VerifiedBits  Bits8
+vb8 = viaModel
+
+%hint
+public export
+vb16 : VerifiedBits Bits16
+vb16 = viaModel
+
+%hint
+public export
+vb32 : VerifiedBits Bits32
+vb32 = viaModel
+
+%hint
+public export
+vb64 : VerifiedBits Bits64
+vb64 = viaModel
