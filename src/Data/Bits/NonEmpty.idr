@@ -2,7 +2,7 @@ module Data.Bits.NonEmpty
 
 import Data.Bits as B
 
-import Data.Bits.Axioms.MetaMath
+import Data.Nat.Utils
 
 %default total
 
