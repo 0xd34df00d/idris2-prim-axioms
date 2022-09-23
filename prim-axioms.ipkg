@@ -9,6 +9,7 @@ depends = base
         , contrib
 
 modules = Data.Bits.BitDef
+        , Data.Bits.NonEmpty
         , Data.Bits.Repr
         , Data.Bits.Repr.Order
         , Data.Bits.Verified
