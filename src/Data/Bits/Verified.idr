@@ -67,7 +67,7 @@ interface NonEmptyBits ty => VerifiedBits ty where
                v `shiftR` bitsToIndexTy ty (zeroIndexTy ty) = v
   shiftRBounded : (v : ty) ->
                   (s : Fin (bitSizeTy ty)) ->
-                  toNum (v `shiftR` bitsToIndexTy ty s) `LTE` bound (bitSizeTy ty `natSubFin` s)
+                  toNum (v `shiftR` bitsToIndexTy ty s) `LT` bound (bitSizeTy ty `natSubFin` s)
 
 infixl 8 .>>.**
 
@@ -76,5 +76,5 @@ export
            VerifiedBits ty =>
            (v : ty) ->
            (s : Fin (bitSizeTy ty)) ->
-           (res : ty ** toNum res `LTE` bound (bitSizeTy ty `natSubFin` s))
+           (res : ty ** toNum res `LT` bound (bitSizeTy ty `natSubFin` s))
 (.>>.**) {ty} v s = (v `shiftR` bitsToIndexTy ty s ** shiftRBounded v s)
