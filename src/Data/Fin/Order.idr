@@ -114,6 +114,18 @@ fltInvNot : {fm : Fin m} ->
 fltInvNot contra = case flteInvNot contra of FLTESucc x => x
 
 export
+flteStep : (f : Fin _) ->
+           f `FLTE` FS f
+flteStep FZ = FLTEZero
+flteStep (FS f) = FLTESucc (flteStep f)
+
+export
+fltIsFlte : {fm : _} ->
+            fm `FLT` fn ->
+            fm `FLTE` fn
+fltIsFlte flte = flteStep _ `flteTrans` flte
+
+export
 fltePointwiseRight : f1 ~~~ f2 ->
                      f `FLTE` f1 ->
                      f `FLTE` f2
