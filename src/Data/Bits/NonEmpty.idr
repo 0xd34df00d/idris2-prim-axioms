@@ -46,6 +46,7 @@ zeroIndexIsZeroTy : (0 ty : Type) ->
                     Z = finToNat (zeroIndexTy ty)
 zeroIndexIsZeroTy ty = zeroIndexIsZero {ty}
 
+public export
 toNumBits : (FiniteBits ty, Cast ty Nat) =>
             ty ->
             Fin (bound $ bitSizeTy ty)
