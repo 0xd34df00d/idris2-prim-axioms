@@ -68,3 +68,13 @@ interface NonEmptyBits ty => VerifiedBits ty where
   shiftRBounded : (v : ty) ->
                   (s : Fin (bitSizeTy ty)) ->
                   toNum (v `shiftR` bitsToIndexTy ty s) `FLTE` last' (bound $ bitSizeTy ty `natSubFin` s)
+
+infixl 8 .>>.**
+
+export
+(.>>.**) : {ty : Type} ->
+           VerifiedBits ty =>
+           (v : ty) ->
+           (s : Fin (bitSizeTy ty)) ->
+           (res : ty ** toNum res `FLTE` last' (bound $ bitSizeTy ty `natSubFin` s))
+(.>>.**) {ty} v s = (v `shiftR` bitsToIndexTy ty s ** shiftRBounded v s)
