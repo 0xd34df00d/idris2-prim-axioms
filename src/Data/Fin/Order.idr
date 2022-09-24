@@ -199,3 +199,13 @@ minusF : {n : _} ->
 minusF fn m = case fn `isFLT` last' m of
                    Yes prf => MinuendSmaller prf
                    No contra => minusFLTE _ $ fltInvNot contra
+
+export
+flteToLte' : {n, fm : _} ->
+             {f : Fin fm} ->
+             {auto 0 prf : n `LT` fm} ->
+             natToFinLT n {prf = prf} `FLTE` f ->
+             n `LTE` finToNat f
+flteToLte' {n = Z} _ = LTEZero
+flteToLte' {n = S _} {prf = LTESucc _} FLTEZero impossible
+flteToLte' {n = S n} {prf = LTESucc prf} (FLTESucc flte) = LTESucc $ flteToLte' flte
