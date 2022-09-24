@@ -193,6 +193,6 @@ public export
 public export
 {w : _} -> NonEmptyBits (UnsignedBV (S w)) where
   bitSizeNonZero = Refl
-  toNum (MkU bv) = accBV bv
+  toNum (MkU bv) = finToNat $ accBV bv
   zeroIndex = FZ
   zeroIndexIsZero = Refl

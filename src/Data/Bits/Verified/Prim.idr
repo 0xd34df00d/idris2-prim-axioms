@@ -78,7 +78,7 @@ prim2reprInjective = believe_me ()
 
 toNumEqual : IsModelOf repr prim =>
              (0 v : prim) ->
-             toNum (prim2repr v) ~~~ toNum v
+             toNum v = toNum (prim2repr v)
 toNumEqual = believe_me ()
 
 zeroIndexesEqual : (0 ty1, ty2 : Type) ->
@@ -99,8 +99,10 @@ public export
                                 `trans` cong (prim2repr v .&.) homoZeros
                                 `trans` andRightZero (prim2repr v)
                                 `trans` sym homoZeros
-  andRightLess v1 v2 = fltePointwiseBoth (toNumEqual (v1 .&. v2)) (toNumEqual v2)
-                     $ rewrite homoAnd v1 v2 in andRightLess _ _
+  andRightLess v1 v2 = rewrite toNumEqual (v1 .&. v2) in
+                       rewrite toNumEqual v2 in
+                       rewrite homoAnd v1 v2 in
+                               andRightLess _ _
 
   orCommutes v1 v2 = prim2reprInjective $ homoOr v1 v2
                                   `trans` orCommutes _ _
@@ -112,8 +114,10 @@ public export
                               `trans` cong (prim2repr v .|.) homoOnes
                               `trans` orRightOne (prim2repr v)
                               `trans` sym homoOnes
-  orRightLess v1 v2 = fltePointwiseBoth (toNumEqual v2) (toNumEqual (v1 .|. v2))
-                    $ rewrite homoOr v1 v2 in orRightLess _ _
+  orRightLess v1 v2 = rewrite toNumEqual (v1 .|. v2) in
+                      rewrite toNumEqual v2 in
+                      rewrite homoOr v1 v2 in
+                              orRightLess _ _
 
   complementInvolutive v = prim2reprInjective $ rewrite homoComplement (complement v) in
                                                 rewrite homoComplement v in
@@ -124,8 +128,8 @@ public export
   shiftRZero v = prim2reprInjective $ homoShiftR v _ _ (zeroIndexesEqual prim repr)
                               `trans` shiftRZero (prim2repr v)
 
-  shiftRBounded v s = fltePointwiseLeft (toNumEqual (v `shiftR` bitsToIndexTy prim s))
-                    $ rewrite homoShiftR v s (rewrite bitSizesMatch prim in s) Refl in
+  shiftRBounded v s = rewrite toNumEqual (v `shiftR` bitsToIndexTy prim s) in
+                      rewrite homoShiftR v s (rewrite bitSizesMatch prim in s) Refl in
                               shiftRBounded (prim2repr v) (rewrite bitSizesMatch prim in s)
 
 %hint

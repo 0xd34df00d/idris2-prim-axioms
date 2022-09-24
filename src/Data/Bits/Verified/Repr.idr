@@ -72,7 +72,7 @@ export
       f i = zipWithIndexLinear and bv Zeros i `trans`
             rewrite indexReplicate i O in B.andRightZero _
 
-  andRightLess (MkU bv1) (MkU bv2) = flteHomo _ _ (bvLteAndRight _ _)
+  andRightLess (MkU bv1) (MkU bv2) = lteHomo _ _ (bvLteAndRight _ _)
 
 
   orCommutes (MkU bv1) (MkU bv2) = cong MkU $ vectorExtensionality (zipWith or bv1 bv2) (zipWith or bv2 bv1) f
@@ -94,7 +94,7 @@ export
       f i = zipWithIndexLinear or bv Ones i `trans`
             rewrite indexReplicate i I in B.orRightOne _
 
-  orRightLess (MkU bv1) (MkU bv2) = flteHomo _ _ (bvLteOrRight _ _)
+  orRightLess (MkU bv1) (MkU bv2) = lteHomo _ _ (bvLteOrRight _ _)
 
 
   complementInvolutive (MkU bv) = rewrite mapFusion not not bv in
@@ -114,9 +114,10 @@ export
                    | (plus n Z)
         _ | Refl | _ = cong MkU $ sym eqPrf
 
-  shiftRBounded v s = rewrite toNumCorrelates (v `shiftR` s) in
-                              shiftRBoundedImpl v s
+  shiftRBounded v s = rewrite toNumCorrelates (v `shiftR` s) in 
+                      rewrite sym $ finToNatLastIsBound {n = bound $ natSubFin (S w) s} in
+                              flteToLte $ shiftRBoundedImpl v s
     where
-      toNumCorrelates : (ubv : UnsignedBV (S w))
-                     -> toNum ubv = getFinVal (bvToFin ubv)
+      toNumCorrelates : (ubv : UnsignedBV (S w)) ->
+                        toNum ubv = finToNat (getFinVal $ bvToFin ubv)
       toNumCorrelates (MkU _) = Refl
