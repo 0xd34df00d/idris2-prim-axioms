@@ -201,9 +201,9 @@ minusF fn m = case fn `isFLT` last' m of
                    No contra => minusFLTE _ $ fltInvNot contra
 
 export
-flteToLte' : {n, fm : _} ->
+flteToLte' : {n, fm, fn : _} ->
              {f : Fin fm} ->
-             {auto 0 prf : n `LT` fm} ->
+             {auto 0 prf : n `LT` fn} ->
              natToFinLT n {prf = prf} `FLTE` f ->
              n `LTE` finToNat f
 flteToLte' {n = Z} _ = LTEZero
