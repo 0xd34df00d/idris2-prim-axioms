@@ -41,19 +41,26 @@ mutual
 
 
 export
-lteHomo : {w : _} ->
-          (l, r : Vect w Bit) ->
-          l `BvLTE` r ->
-          accBV l `FLTE` accBV r
-lteHomo _ _ EmptyLTE = FLTEZero
-lteHomo {w = S w} (_ :: l) (_ :: r) HereLT with (plusZeroRightNeutral $ bound w)
-                                              | (bound w + Z)
+flteHomo : {w : _} ->
+           (l, r : Vect w Bit) ->
+           l `BvLTE` r ->
+           accBV l `FLTE` accBV r
+flteHomo _ _ EmptyLTE = FLTEZero
+flteHomo {w = S w} (_ :: l) (_ :: r) HereLT with (plusZeroRightNeutral $ bound w)
+                                               | (bound w + Z)
   _ | Refl | _ = let rec = lastIsLast (accBV l) in
                  fltePointwiseLeft (symmetric $ plusZeroRightNeutral $ accBV l)
                $ lastIsLast (accBV l) `flteTrans` fltePlusLeft _ _
-lteHomo {w = S w} (_ :: l) (_ :: r) (ThereLTE bvLTE) with (plusZeroRightNeutral $ bound w)
+flteHomo {w = S w} (_ :: l) (_ :: r) (ThereLTE bvLTE) with (plusZeroRightNeutral $ bound w)
                                                         | (bound w + Z)
-  _ | Refl | _ = fltePlusBoth $ lteHomo _ _ bvLTE
+  _ | Refl | _ = fltePlusBoth $ flteHomo _ _ bvLTE
+
+export
+lteHomo : {w : _} ->
+          (l, r : Vect w Bit) ->
+          l `BvLTE` r ->
+          finToNat (accBV l) `LTE` finToNat (accBV r)
+lteHomo l r bvLTE = flteToLte $ flteHomo l r bvLTE
 
 
 export
