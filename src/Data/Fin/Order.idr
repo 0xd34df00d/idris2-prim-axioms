@@ -172,8 +172,8 @@ last' _ = last
 
 export
 lastIsLast : (fn : Fin n) ->
-             fn `FLTE` last' n
-lastIsLast FZ = FLTEZero
+             fn `FLT` last' n
+lastIsLast FZ = FLTESucc FLTEZero
 lastIsLast (FS f) = FLTESucc (lastIsLast f)
 
 -- The result of subtracting `last : Fin (S m)` from `fn : Fin n`.

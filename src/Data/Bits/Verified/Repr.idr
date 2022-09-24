@@ -31,7 +31,7 @@ zeroPaddedBound : {n : _} ->
                   (m : _) ->
                   (right : Vect n Bit) ->
                   accBV (replicate m O ++ right) `FLTE` last' (bound n)
-zeroPaddedBound Z right = lastIsLast (accBV right)
+zeroPaddedBound Z right = fltIsFlte $ lastIsLast (accBV right)
 zeroPaddedBound (S m) right = let pw = symmetric $ accBVLeftZero (replicate m O ++ right)
                                in fltePointwiseLeft pw (zeroPaddedBound m right)
 
