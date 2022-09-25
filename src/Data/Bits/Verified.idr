@@ -71,7 +71,7 @@ interface NonEmptyBits ty => VerifiedBits ty where
 
 infixl 8 .>>.**
 
-export
+export %inline
 (.>>.**) : {ty : Type} ->
            VerifiedBits ty =>
            (v : ty) ->

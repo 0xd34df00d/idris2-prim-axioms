@@ -133,21 +133,21 @@ public export
                               shiftRBounded (prim2repr v) (rewrite bitSizesMatch prim in s)
 
 %hint
-public export
+public export %inline
 vb8 : VerifiedBits  Bits8
 vb8 = viaModel
 
 %hint
-public export
+public export %inline
 vb16 : VerifiedBits Bits16
 vb16 = viaModel
 
 %hint
-public export
+public export %inline
 vb32 : VerifiedBits Bits32
 vb32 = viaModel
 
 %hint
-public export
+public export %inline
 vb64 : VerifiedBits Bits64
 vb64 = viaModel
