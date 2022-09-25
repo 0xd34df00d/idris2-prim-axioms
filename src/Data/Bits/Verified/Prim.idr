@@ -15,10 +15,10 @@ import Data.Nat.Utils
 export
 interface (VerifiedBits repr, NonEmptyBits prim) => IsModelOf repr prim | prim where
   prim2repr : (0 _ : prim) -> repr
-  prim2repr = believe_me ()
+  prim2repr _ = believe_me "prim2repr"
 
   repr2prim : (0 _ : repr) -> prim
-  repr2prim = believe_me ()
+  repr2prim _ = believe_me "repr2prim"
 
 export IsModelOf (UnsignedBV 8)  Bits8  where
 export IsModelOf (UnsignedBV 16) Bits16 where
@@ -29,30 +29,30 @@ export IsModelOf (UnsignedBV 64) Bits64 where
 bitSizesMatch : (0 prim : Type) ->
                 IsModelOf repr prim =>
                 bitSizeTy repr = bitSizeTy prim
-bitSizesMatch = believe_me ()
+bitSizesMatch _ = believe_me "bitSizesMatch"
 
 homoZeros : IsModelOf repr prim =>
             prim2repr {prim = prim} B.zeroBits = B.zeroBits
-homoZeros = believe_me ()
+homoZeros = believe_me "homoZeros"
 
 homoOnes : IsModelOf repr prim =>
            prim2repr {prim = prim} B.oneBits = B.oneBits
-homoOnes = believe_me ()
+homoOnes = believe_me "homoOnes"
 
 homoAnd : IsModelOf repr prim =>
           (0 v1, v2 : prim) ->
           prim2repr (v1 .&. v2) = prim2repr v1 .&. prim2repr v2
-homoAnd = believe_me ()
+homoAnd _ _ = believe_me "homoAnd"
 
 homoOr : IsModelOf repr prim =>
          (0 v1, v2 : prim) ->
          prim2repr (v1 .|. v2) = prim2repr v1 .|. prim2repr v2
-homoOr = believe_me ()
+homoOr _ _ = believe_me "homoOr"
 
 homoComplement : IsModelOf repr prim =>
                  (0 v : prim) ->
                  prim2repr (complement v) = complement (prim2repr v)
-homoComplement = believe_me ()
+homoComplement _ = believe_me "homoComplement"
 
 homoShiftL : IsModelOf repr prim =>
              (0 v : prim) ->
@@ -60,7 +60,7 @@ homoShiftL : IsModelOf repr prim =>
              (0 sRepr : Fin (bitSizeTy repr)) ->
              (0 _ : finToNat sPrim = finToNat sRepr) ->
              prim2repr (v `shiftL` bitsToIndexTy prim sPrim) = prim2repr v `shiftL` bitsToIndexTy repr sRepr
-homoShiftL = believe_me ()
+homoShiftL _ _ _ _ = believe_me "homoShiftL"
 
 homoShiftR : IsModelOf repr prim =>
              (0 v : prim) ->
@@ -68,18 +68,18 @@ homoShiftR : IsModelOf repr prim =>
              (0 sRepr : Fin (bitSizeTy repr)) ->
              (0 _ : finToNat sPrim = finToNat sRepr) ->
              prim2repr (v `shiftR` bitsToIndexTy prim sPrim) = prim2repr v `shiftR` bitsToIndexTy repr sRepr
-homoShiftR = believe_me ()
+homoShiftR _ _ _ _ = believe_me "homoShiftR"
 
 prim2reprInjective : IsModelOf repr prim =>
                      {0 v1, v2 : prim} ->
                      prim2repr v1 = prim2repr v2 ->
                      v1 = v2
-prim2reprInjective = believe_me ()
+prim2reprInjective _ = believe_me "prim2reprInjective"
 
 toNumEqual : IsModelOf repr prim =>
              (0 v : prim) ->
              toNum v = toNum (prim2repr v)
-toNumEqual = believe_me ()
+toNumEqual _ = believe_me "toNumEqual"
 
 zeroIndexesEqual : (0 ty1, ty2 : Type) ->
                    NonEmptyBits ty1 =>
