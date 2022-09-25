@@ -109,3 +109,11 @@ public export %inline
          Fin (bitSizeTy ty)
 (.>>|) v s {maxBound} = let (v ** prf) = v .>>.** s
                          in natToFinLT (toNum v) {prf = prf `transitive` maxBound}
+
+export
+rightShiftBoundedPreserves : VerifiedBits ty =>
+                             (v : ty) ->
+                             (s : Fin (bitSizeTy ty)) ->
+                             (maxBound : bound (bitSizeTy ty `natSubFin` s) `LTE` bitSizeTy ty) ->
+                             finToNat (v .>>| s) = toNum (v `shiftR` bitsToIndexTy ty s)
+rightShiftBoundedPreserves v s maxBound = natToFinLtToNat _ {prf = shiftRBounded v s `transitive` maxBound}
