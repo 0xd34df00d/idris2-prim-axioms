@@ -97,3 +97,15 @@ asFinPreserves : VerifiedBits ty =>
                  (dpair : (v : ty ** toNum v `LT` n)) ->
                  finToNat (asFin dpair) = toNum (fst dpair)
 asFinPreserves (v ** prf) = natToFinLtToNat (toNum v) {prf = prf `transitive` lteAddRight n}
+
+
+infixl 8 .>>|
+
+public export %inline
+(.>>|) : VerifiedBits ty =>
+         (v : ty) ->
+         (s : Fin (bitSizeTy ty)) ->
+         {auto 0 maxBound : bound (bitSizeTy ty `natSubFin` s) `LTE` bitSizeTy ty} ->
+         Fin (bitSizeTy ty)
+(.>>|) v s {maxBound} = let (v ** prf) = v .>>.** s
+                         in natToFinLT (toNum v) {prf = prf `transitive` maxBound}
