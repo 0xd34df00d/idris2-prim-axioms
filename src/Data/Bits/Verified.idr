@@ -77,3 +77,23 @@ export %inline
            (s : Fin (bitSizeTy ty)) ->
            (res : ty ** toNum res `LT` bound (bitSizeTy ty `natSubFin` s))
 (.>>.**) {ty} v s = (v `shiftR` bitsToIndexTy ty s ** shiftRBounded v s)
+
+
+export %inline
+asFin : VerifiedBits ty =>
+        (v : ty ** toNum v `LT` n) ->
+        Fin (n + m)
+asFin (v ** prf) = natToFinLT (toNum v) {prf = prf `transitive` lteAddRight n}
+
+natToFinLtToNat : (x : Nat) ->
+                  {0 n : Nat} ->
+                  {auto 0 prf : x `LT` n} ->
+                  finToNat (natToFinLT {n} x) = x
+natToFinLtToNat Z {prf = LTESucc _} = Refl
+natToFinLtToNat (S x) {prf = LTESucc _} = cong S $ natToFinLtToNat x
+
+export
+asFinPreserves : VerifiedBits ty =>
+                 (dpair : (v : ty ** toNum v `LT` n)) ->
+                 finToNat (asFin dpair) = toNum (fst dpair)
+asFinPreserves (v ** prf) = natToFinLtToNat (toNum v) {prf = prf `transitive` lteAddRight n}
