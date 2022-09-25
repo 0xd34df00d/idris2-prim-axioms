@@ -46,28 +46,28 @@ zeroIndexIsZeroTy : (0 ty : Type) ->
                     Z = finToNat (zeroIndexTy ty)
 zeroIndexIsZeroTy ty = zeroIndexIsZero {ty}
 
-export
+export %inline
 NonEmptyBits Bits8  where
   bitSizeNonZero = Refl
   toNum = cast
   zeroIndex = FZ
   zeroIndexIsZero = Refl
 
-export
+export %inline
 NonEmptyBits Bits16 where
   bitSizeNonZero = Refl
   toNum = cast
   zeroIndex = FZ
   zeroIndexIsZero = Refl
 
-export
+export %inline
 NonEmptyBits Bits32 where
   bitSizeNonZero = Refl
   toNum = cast
   zeroIndex = FZ
   zeroIndexIsZero = Refl
 
-export
+export %inline
 NonEmptyBits Bits64 where
   bitSizeNonZero = Refl
   toNum = cast
