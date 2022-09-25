@@ -72,8 +72,7 @@ interface NonEmptyBits ty => VerifiedBits ty where
 infixl 8 .>>.**
 
 export %inline
-(.>>.**) : {ty : Type} ->
-           VerifiedBits ty =>
+(.>>.**) : VerifiedBits ty =>
            (v : ty) ->
            (s : Fin (bitSizeTy ty)) ->
            (res : ty ** toNum res `LT` bound (bitSizeTy ty `natSubFin` s))
