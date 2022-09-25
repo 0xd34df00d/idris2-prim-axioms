@@ -71,6 +71,14 @@ interface NonEmptyBits ty => VerifiedBits ty where
 
 infixl 8 .>>.**
 
+||| Shift `v` by `s` bits to the right, with a proof about the maximum value of the result.
+|||
+||| If type `ty` is `w` bits wide,
+||| then shifting a value of `ty` right by `s` bits produces
+||| a `res` that's less than `2 ^^ (w - s)`.
+||| This function returns the result `res` along with the proof of this "less-than" relation.
+|||
+||| See also `.>>|`.
 export %inline
 (.>>.**) : VerifiedBits ty =>
            (v : ty) ->
@@ -79,6 +87,8 @@ export %inline
 (.>>.**) {ty} v s = (v `shiftR` bitsToIndexTy ty s ** shiftRBounded v s)
 
 
+||| Given a value `v` and a proof that it's smaller than some natural `n`,
+||| convert `v` to any `Fin` with a bound ≥ `n`.
 export %inline
 asFin : VerifiedBits ty =>
         (v : ty ** toNum v `LT` n) ->
@@ -92,6 +102,7 @@ natToFinLtToNat : (x : Nat) ->
 natToFinLtToNat Z {prf = LTESucc _} = Refl
 natToFinLtToNat (S x) {prf = LTESucc _} = cong S $ natToFinLtToNat x
 
+||| `asFin` preserves the numeric value of its argument.
 export
 asFinPreserves : VerifiedBits ty =>
                  (dpair : (v : ty ** toNum v `LT` n)) ->
@@ -101,6 +112,25 @@ asFinPreserves (v ** prf) = natToFinLtToNat (toNum v) {prf = prf `transitive` lt
 
 infixl 8 .>>|
 
+||| Shift `v` by `s` bits to the right, wrapped in a type usable in subsequent shifts.
+|||
+||| Algorithms on a bit type `ty` sometimes take a value of `ty`,
+||| shift it right by some bits `s` and then use the result as an index for another shift.
+||| This helper function is handy for this particular task:
+||| ```idris example
+||| ex : Bits8 -> Bits8
+||| ex bs = bs `shiftR` (bs .>>| 6)
+||| ```
+|||
+||| Here, shifting a `Bits8` value to the right by `6` produces a value that's no bigger than `0b11 = 3`,
+||| so it can be used a right-shift on a `Bits8` value.
+|||
+||| The `rightShiftBoundedPreserves` theorem proves that this indeed behaves as a right shift.
+|||
+||| @ v The value to shift right.
+||| @ s The shift itself.
+||| @ maxBound A proof that the value after the shift can be used as an index itself.
+||| Most often, especially for statically known shifts, Idris is able to figure this out by itself.
 public export %inline
 (.>>|) : VerifiedBits ty =>
          (v : ty) ->
@@ -110,6 +140,7 @@ public export %inline
 (.>>|) v s {maxBound} = let (v ** prf) = v .>>.** s
                          in natToFinLT (toNum v) {prf = prf `transitive` maxBound}
 
+||| Proves `.>>|` behaves as a shift.
 export
 rightShiftBoundedPreserves : VerifiedBits ty =>
                              (v : ty) ->
