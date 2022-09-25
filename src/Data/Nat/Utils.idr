@@ -20,7 +20,7 @@ powOneLeft (S k) = plusZeroRightNeutral (1 ^^ k) `trans` powOneLeft k
 ltePlusLeft : {a, b, c : _} ->
               a `LTE` b ->
               a `LTE` b + c
-ltePlusLeft {a} a≤b = rewrite sym $ plusZeroRightNeutral a in plusLteMonotone a≤b LTEZero
+ltePlusLeft a≤b = rewrite sym $ plusZeroRightNeutral a in plusLteMonotone a≤b LTEZero
 
 export
 powPositive : (n, k : Nat) ->

@@ -18,14 +18,14 @@ natSubFinZero n = Refl
 
 export
 natSubFinLast : (n : _) ->
-                S n `natSubFin` last {n = n} = S Z
+                S n `natSubFin` last {n} = S Z
 natSubFinLast Z = Refl
 natSubFinLast (S n) = natSubFinLast n
 
 finIsNotBound : {n : _} ->
                 {f : Fin n} ->
                 Not (n = finToNat f)
-finIsNotBound {n = n} {f = f} = go n f
+finIsNotBound = go n f
   where
     go : (n : _) -> (f : Fin n) -> Not (n = finToNat f)
     go Z f _ = uninhabited f

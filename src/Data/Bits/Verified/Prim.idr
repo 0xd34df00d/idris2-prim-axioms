@@ -32,11 +32,11 @@ bitSizesMatch : (0 prim : Type) ->
 bitSizesMatch _ = believe_me "bitSizesMatch"
 
 homoZeros : IsModelOf repr prim =>
-            prim2repr {prim = prim} B.zeroBits = B.zeroBits
+            prim2repr {prim} B.zeroBits = B.zeroBits
 homoZeros = believe_me "homoZeros"
 
 homoOnes : IsModelOf repr prim =>
-           prim2repr {prim = prim} B.oneBits = B.oneBits
+           prim2repr {prim} B.oneBits = B.oneBits
 homoOnes = believe_me "homoOnes"
 
 homoAnd : IsModelOf repr prim =>

@@ -11,8 +11,8 @@ public export
 reverse'Onto : Vect n a ->
                Vect m a ->
                Vect (n + m) a
-reverse'Onto {n}           acc []        = rewrite plusZeroRightNeutral n in acc
-reverse'Onto {n} {m = S m} acc (x :: xs) = rewrite sym $ plusSuccRightSucc n m in reverse'Onto (x :: acc) xs
+reverse'Onto           acc []        = rewrite plusZeroRightNeutral n in acc
+reverse'Onto {m = S m} acc (x :: xs) = rewrite sym $ plusSuccRightSucc n m in reverse'Onto (x :: acc) xs
 
 public export
 reverse' : Vect len a ->

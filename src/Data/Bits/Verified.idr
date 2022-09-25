@@ -84,7 +84,7 @@ export %inline
            (v : ty) ->
            (s : Fin (bitSizeTy ty)) ->
            (res : ty ** toNum res `LT` bound (bitSizeTy ty `natSubFin` s))
-(.>>.**) {ty} v s = (v `shiftR` bitsToIndexTy ty s ** shiftRBounded v s)
+(.>>.**) v s = (v `shiftR` bitsToIndexTy ty s ** shiftRBounded v s)
 
 
 ||| Given a value `v` and a proof that it's smaller than some natural `n`,
@@ -137,8 +137,8 @@ public export %inline
          (s : Fin (bitSizeTy ty)) ->
          {auto 0 maxBound : bound (bitSizeTy ty `natSubFin` s) `LTE` bitSizeTy ty} ->
          Fin (bitSizeTy ty)
-(.>>|) v s {maxBound} = let (v ** prf) = v .>>.** s
-                         in natToFinLT (toNum v) {prf = prf `transitive` maxBound}
+(.>>|) v s = let (v ** prf) = v .>>.** s
+              in natToFinLT (toNum v) {prf = prf `transitive` maxBound}
 
 ||| Proves `.>>|` behaves as a shift.
 export
