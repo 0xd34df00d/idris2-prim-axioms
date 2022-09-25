@@ -69,6 +69,12 @@ interface NonEmptyBits ty => VerifiedBits ty where
                   (s : Fin (bitSizeTy ty)) ->
                   toNum (v `shiftR` bitsToIndexTy ty s) `LT` bound (bitSizeTy ty `natSubFin` s)
 
+infixl 8 .>>., .<<.
+public export %inline
+(.>>.), (.<<.) : Bits ty => ty -> Index {a = ty} -> ty
+(.>>.) = shiftR
+(.<<.) = shiftL
+
 infixl 8 .>>.**
 
 ||| Shift `v` by `s` bits to the right, with a proof about the maximum value of the result.
