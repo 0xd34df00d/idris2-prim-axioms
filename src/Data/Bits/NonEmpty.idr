@@ -12,7 +12,7 @@ bitSizeTy : (0 ty : Type) ->
             Nat
 bitSizeTy ty = bitSize {a = ty}
 
-public export
+public export %inline
 bitsToIndexTy : (0 ty : Type) ->
                 FiniteBits ty =>
                 Fin (bitSizeTy ty) ->
