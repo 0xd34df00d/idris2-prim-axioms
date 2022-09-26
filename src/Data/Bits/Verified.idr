@@ -97,7 +97,7 @@ public export %inline
            Bounded ty (bound (bitSizeTy ty `natSubFin` s))
 (.>>.**) v s = MkBounded (v `shiftR` bitsToIndexTy ty s) (shiftRBounded v s)
 
-infixl 8 .>>|
+infixl 8 .>>.|
 
 ||| Shift `v` by `s` bits to the right, wrapped in a type usable in subsequent shifts.
 |||
@@ -106,7 +106,7 @@ infixl 8 .>>|
 ||| This helper function is handy for this particular task:
 ||| ```idris example
 ||| ex : Bits8 -> Bits8
-||| ex bs = bs `shiftR` (bs .>>| 6)
+||| ex bs = bs `shiftR` (bs .>>.| 6)
 ||| ```
 |||
 ||| Here, shifting a `Bits8` value to the right by `6` produces a value that's no bigger than `0b11 = 3`,
@@ -119,13 +119,13 @@ infixl 8 .>>|
 ||| @ maxBound A proof that the value after the shift can be used as an index itself.
 ||| Most often, especially for statically known shifts, Idris is able to figure this out by itself.
 public export %inline
-(.>>|) : VerifiedBits ty =>
-         (v : ty) ->
-         (s : Fin (bitSizeTy ty)) ->
-         {auto 0 maxBound : bound (bitSizeTy ty `natSubFin` s) `LTE` bitSizeTy ty} ->
-         Fin (bitSizeTy ty)
-(.>>|) v s = let MkBounded v prf = v .>>.** s
-              in natToFinLT (toNum v) {prf = prf `transitive` maxBound}
+(.>>.|) : VerifiedBits ty =>
+          (v : ty) ->
+          (s : Fin (bitSizeTy ty)) ->
+          {auto 0 maxBound : bound (bitSizeTy ty `natSubFin` s) `LTE` bitSizeTy ty} ->
+          Fin (bitSizeTy ty)
+(.>>.|) v s = let MkBounded v prf = v .>>.** s
+               in natToFinLT (toNum v) {prf = prf `transitive` maxBound}
 
 ||| Proves `.>>|` behaves as a shift.
 export
@@ -133,7 +133,7 @@ rightShiftBoundedPreserves : VerifiedBits ty =>
                              (v : ty) ->
                              (s : Fin (bitSizeTy ty)) ->
                              (maxBound : bound (bitSizeTy ty `natSubFin` s) `LTE` bitSizeTy ty) ->
-                             finToNat (v .>>| s) = toNum (v `shiftR` bitsToIndexTy ty s)
+                             finToNat (v .>>.| s) = toNum (v `shiftR` bitsToIndexTy ty s)
 rightShiftBoundedPreserves v s maxBound = natToFinLtToNat _ {prf = shiftRBounded v s `transitive` maxBound}
 
 infix 7 .&.**, **.&.
