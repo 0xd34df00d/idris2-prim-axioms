@@ -90,7 +90,7 @@ infixl 8 .>>.**
 ||| This function returns the result `res` along with the proof of this "less-than" relation.
 |||
 ||| See also `.>>|`.
-export %inline
+public export %inline
 (.>>.**) : VerifiedBits ty =>
            (v : ty) ->
            (s : Fin (bitSizeTy ty)) ->
