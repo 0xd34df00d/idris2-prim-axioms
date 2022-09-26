@@ -3,6 +3,7 @@ module Data.Bits.Verified
 import Data.Bits as B
 
 import public Data.Bits.NonEmpty
+import Data.Bounded
 import Data.Fin.Order
 import Data.Fin.Sub
 import Data.Nat.Utils
@@ -89,32 +90,8 @@ export %inline
 (.>>.**) : VerifiedBits ty =>
            (v : ty) ->
            (s : Fin (bitSizeTy ty)) ->
-           (res : ty ** toNum res `LT` bound (bitSizeTy ty `natSubFin` s))
-(.>>.**) v s = (v `shiftR` bitsToIndexTy ty s ** shiftRBounded v s)
-
-
-||| Given a value `v` and a proof that it's smaller than some natural `n`,
-||| convert `v` to any `Fin` with a bound ≥ `n`.
-export %inline
-asFin : VerifiedBits ty =>
-        (v : ty ** toNum v `LT` n) ->
-        Fin (n + m)
-asFin (v ** prf) = natToFinLT (toNum v) {prf = prf `transitive` lteAddRight n}
-
-natToFinLtToNat : (x : Nat) ->
-                  {0 n : Nat} ->
-                  {auto 0 prf : x `LT` n} ->
-                  finToNat (natToFinLT {n} x) = x
-natToFinLtToNat Z {prf = LTESucc _} = Refl
-natToFinLtToNat (S x) {prf = LTESucc _} = cong S $ natToFinLtToNat x
-
-||| `asFin` preserves the numeric value of its argument.
-export
-asFinPreserves : VerifiedBits ty =>
-                 (dpair : (v : ty ** toNum v `LT` n)) ->
-                 finToNat (asFin dpair) = toNum (fst dpair)
-asFinPreserves (v ** prf) = natToFinLtToNat (toNum v) {prf = prf `transitive` lteAddRight n}
-
+           Bounded ty (bound (bitSizeTy ty `natSubFin` s))
+(.>>.**) v s = MkBounded (v `shiftR` bitsToIndexTy ty s) (shiftRBounded v s)
 
 infixl 8 .>>|
 
@@ -143,7 +120,7 @@ public export %inline
          (s : Fin (bitSizeTy ty)) ->
          {auto 0 maxBound : bound (bitSizeTy ty `natSubFin` s) `LTE` bitSizeTy ty} ->
          Fin (bitSizeTy ty)
-(.>>|) v s = let (v ** prf) = v .>>.** s
+(.>>|) v s = let MkBounded v prf = v .>>.** s
               in natToFinLT (toNum v) {prf = prf `transitive` maxBound}
 
 ||| Proves `.>>|` behaves as a shift.
