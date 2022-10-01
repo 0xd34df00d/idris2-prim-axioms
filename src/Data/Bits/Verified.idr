@@ -138,6 +138,13 @@ rightShiftBoundedPreserves : VerifiedBits ty =>
                              finToNat (v .>>.| s) = toNum (v `shiftR` bitsToIndexTy ty s)
 rightShiftBoundedPreserves v s maxBound = natToFinLtToNat _ {prf = shiftRBounded v s `transitive` maxBound}
 
+public export %inline
+asFin : VerifiedBits ty =>
+        Bounded ty n ->
+        {auto 0 boundCorrect : n `LTE` bitSizeTy ty} ->
+        Fin (bitSizeTy ty)
+asFin (MkBounded v prf) = natToFinLT (toNum v) {prf = prf `transitive` boundCorrect}
+
 infix 7 .&.**, **.&., .&.|, |.&.
 
 ||| An bit-`and` of two numbers `v1` and `v2`, with a proof that the result is less than `v2`.
