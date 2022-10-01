@@ -21,3 +21,11 @@ and this type checks:
 let shift = val .>>.| 59
  in val `shiftR` shift
 ```
+
+### General structure
+
+The primary module of interest is `Data.Bits.Verified`,
+which both defines the `VerifiedBits` interface and the helper functions.
+Another important module is `Data.Bits.Verified.Prim`,
+which actually defines the instances of `VerifiedBits` for the primitive types
+(and reexports `Data.Bits.Verified`).
