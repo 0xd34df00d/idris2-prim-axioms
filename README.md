@@ -29,3 +29,21 @@ which both defines the `VerifiedBits` interface and the helper functions.
 Another important module is `Data.Bits.Verified.Prim`,
 which actually defines the instances of `VerifiedBits` for the primitive types
 (and reexports `Data.Bits.Verified`).
+
+### Naming conventions
+
+The proof-producing helper functions generally have a `**` at the side about which they prove things.
+For instance:
+
+* `v1 .>>.** v2` produces a resulting value and a proof that the result is less than `2` to the power of `bitSize - v2`.
+* `v1 .&.** v2` produces a resulting value and a proof that the result is less than or equal to `v2`.
+
+The helpers that produce `Fin bitSize` have `|` at the side which is related to the bound,
+and they generally also have an implicit `auto`-searchable proof argument for the said side to be appropriate.
+For instance:
+
+* `v1 .&.| v2` wraps the result of bit-`and` into `Fin bitSize`, requiring an (implicit) proof of `v2` being less than the `bitSize`.
+* `v1 .>>.| v2` wraps the result of the right shift into `Fin bitSize`,
+  requiring an (implicit) proof of `v2` being large enough for `2` to the power of `bitSize - v2` to be less than `bitSize`.
+
+Generally, for static arguments (like in the motivating example) Idris is able to find these proofs itself.
