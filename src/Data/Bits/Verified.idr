@@ -136,7 +136,7 @@ rightShiftBoundedPreserves : VerifiedBits ty =>
                              finToNat (v .>>.| s) = toNum (v `shiftR` bitsToIndexTy ty s)
 rightShiftBoundedPreserves v s maxBound = natToFinLtToNat _ {prf = shiftRBounded v s `transitive` maxBound}
 
-infix 7 .&.**, **.&.
+infix 7 .&.**, **.&., .&.|, |.&.
 
 public export %inline
 (.&.**) : VerifiedBits ty =>
@@ -149,3 +149,19 @@ public export %inline
           (v1, v2 : ty) ->
           Bounded ty (S (toNum v1))
 v1 **.&. v2 = MkBounded (v1 .&. v2) (LTESucc $ andLeftLess v1 v2)
+
+public export %inline
+(.&.|) : VerifiedBits ty =>
+         (v1, v2 : ty) ->
+         {auto 0 maxBound : toNum v2 `LT` bitSizeTy ty} ->
+         Fin (bitSizeTy ty)
+v1 .&.| v2 = let MkBounded res prf = v1 .&.** v2
+              in natToFinLT (toNum res) {prf = prf `transitive` maxBound}
+
+public export %inline
+(|.&.) : VerifiedBits ty =>
+         (v1, v2 : ty) ->
+         {auto 0 maxBound : toNum v1 `LT` bitSizeTy ty} ->
+         Fin (bitSizeTy ty)
+v1 |.&. v2 = let MkBounded res prf = v1 **.&. v2
+              in natToFinLT (toNum res) {prf = prf `transitive` maxBound}
