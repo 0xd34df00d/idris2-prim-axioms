@@ -99,7 +99,9 @@ public export %inline
 
 infixl 8 .>>.|
 
-||| Shift `v` by `s` bits to the right, wrapped in a type usable in subsequent shifts.
+||| Shift `v` of type `ty` by `s` bits to the right,
+||| and wrap it into a `Fin` suitable for bit-indexing into `ty`
+||| (for subsequent shifts, or accessing individual bits, etc).
 |||
 ||| Algorithms on a bit type `ty` sometimes take a value of `ty`,
 ||| shift it right by some bits `s` and then use the result as an index for another shift.
@@ -138,18 +140,31 @@ rightShiftBoundedPreserves v s maxBound = natToFinLtToNat _ {prf = shiftRBounded
 
 infix 7 .&.**, **.&., .&.|, |.&.
 
+||| An bit-`and` of two numbers `v1` and `v2`, with a proof that the result is less than `v2`.
+|||
+||| See also `.&.|`.
 public export %inline
 (.&.**) : VerifiedBits ty =>
           (v1, v2 : ty) ->
           Bounded ty (S (toNum v2))
 v1 .&.** v2 = MkBounded (v1 .&. v2) (LTESucc $ andRightLess v1 v2)
 
+||| An bit-`and` of two numbers `v1` and `v2`, with a proof that the result is less than `v1`.
+|||
+||| See also `|.&.`.
 public export %inline
 (**.&.) : VerifiedBits ty =>
           (v1, v2 : ty) ->
           Bounded ty (S (toNum v1))
 v1 **.&. v2 = MkBounded (v1 .&. v2) (LTESucc $ andLeftLess v1 v2)
 
+||| An bit-`and` of two numbers `v1` and `v2` of type `ty`, wrapped in a `Fin` suitable for bit-indexing into `ty`
+||| (for subsequent shifts, or accessing individual bits, etc).
+|||
+||| This function requires the second operand to be less than the bit width of `ty`.
+||| For the version that uses the first one, see `|.&.`.
+|||
+||| See also `.&.**`.
 public export %inline
 (.&.|) : VerifiedBits ty =>
          (v1, v2 : ty) ->
@@ -158,6 +173,13 @@ public export %inline
 v1 .&.| v2 = let MkBounded res prf = v1 .&.** v2
               in natToFinLT (toNum res) {prf = prf `transitive` maxBound}
 
+||| An bit-`and` of two numbers `v1` and `v2` of type `ty`, wrapped in a `Fin` suitable for bit-indexing into `ty`
+||| (for subsequent shifts, or accessing individual bits, etc).
+|||
+||| This function requires the first operand to be less than the bit width of `ty`.
+||| For the version that uses the second one, see `.&.|`.
+|||
+||| See also `.&.**`.
 public export %inline
 (|.&.) : VerifiedBits ty =>
          (v1, v2 : ty) ->
