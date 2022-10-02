@@ -46,6 +46,13 @@ zeroIndexIsZeroTy : (0 ty : Type) ->
                     Z = finToNat (zeroIndexTy ty)
 zeroIndexIsZeroTy ty = zeroIndexIsZero {ty}
 
+export
+zeroIndexesEqual : (0 ty1, ty2 : Type) ->
+                   NonEmptyBits ty1 =>
+                   NonEmptyBits ty2 =>
+                   finToNat (zeroIndexTy ty1) = finToNat (zeroIndexTy ty2)
+zeroIndexesEqual ty1 ty2 = sym (zeroIndexIsZeroTy ty1) `trans` zeroIndexIsZeroTy ty2
+
 export %inline
 NonEmptyBits Bits8  where
   bitSizeNonZero = Refl
