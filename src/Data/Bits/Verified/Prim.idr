@@ -17,9 +17,6 @@ interface (VerifiedBits repr, NonEmptyBits prim) => IsModelOf repr prim | prim w
   prim2repr : (0 _ : prim) -> repr
   prim2repr _ = believe_me "prim2repr"
 
-  repr2prim : (0 _ : repr) -> prim
-  repr2prim _ = believe_me "repr2prim"
-
 export IsModelOf (UnsignedBV 8)  Bits8  where
 export IsModelOf (UnsignedBV 16) Bits16 where
 export IsModelOf (UnsignedBV 32) Bits32 where
