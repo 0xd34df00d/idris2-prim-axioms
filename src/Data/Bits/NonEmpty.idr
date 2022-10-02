@@ -40,7 +40,7 @@ zeroIndexTy : (0 ty : Type) ->
               Fin (bitSizeTy ty)
 zeroIndexTy ty = zeroIndex {ty}
 
-public export
+export
 zeroIndexIsZeroTy : (0 ty : Type) ->
                     NonEmptyBits ty =>
                     Z = finToNat (zeroIndexTy ty)
