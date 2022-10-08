@@ -17,3 +17,7 @@ data Bounded : (ty : Type) ->
 public export %inline
 bValue : NonEmptyBits ty => Bounded ty n -> ty
 bValue (MkBounded v _) = v
+
+public export %inline
+negate : Neg ty => Bounded ty n -> ty
+negate (MkBounded v _) = negate v
