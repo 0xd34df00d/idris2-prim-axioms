@@ -9,6 +9,8 @@ import Data.Fin.Order
 import Data.Fin.Sub
 import Data.Nat.Utils
 
+%default total
+
 infixl 8 .>>., .<<.
 public export %inline
 (.>>.), (.<<.) : Bits ty => ty -> Index {a = ty} -> ty
