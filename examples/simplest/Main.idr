@@ -1,5 +1,4 @@
-import Data.Bits
-import Data.Bits.Verified.Prim
+import Data.Bits.Verified
 
 import Data.Fin.Sub
 import Data.Nat.Utils
