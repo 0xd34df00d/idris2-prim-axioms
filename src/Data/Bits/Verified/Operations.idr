@@ -35,6 +35,13 @@ public export %inline
            Bounded ty (bound (bitSizeTy ty `natSubFin` s))
 (.>>.**) v s = MkBounded (v `shiftR` bitsToIndexTy ty s) (shiftRBounded v s)
 
+public export %inline
+asFin : NonEmptyBits ty =>
+        Bounded ty n ->
+        {auto 0 boundCorrect : n `LTE` bitSizeTy ty} ->
+        Fin (bitSizeTy ty)
+asFin (MkBounded v prf) = natToFinLT (toNum v) {prf = prf `transitive` boundCorrect}
+
 infixl 8 .>>.|
 
 ||| Shift `v` of type `ty` by `s` bits to the right,
@@ -64,8 +71,7 @@ public export %inline
           (s : Fin (bitSizeTy ty)) ->
           {auto 0 maxBound : bound (bitSizeTy ty `natSubFin` s) `LTE` bitSizeTy ty} ->
           Fin (bitSizeTy ty)
-(.>>.|) v s = let MkBounded v prf = v .>>.** s
-               in natToFinLT (toNum v) {prf = prf `transitive` maxBound}
+(.>>.|) v s = asFin $ v .>>.** s
 
 ||| Proves `.>>|` behaves as a shift.
 export
@@ -75,13 +81,6 @@ rightShiftBoundedPreserves : VerifiedBits ty =>
                              (maxBound : bound (bitSizeTy ty `natSubFin` s) `LTE` bitSizeTy ty) ->
                              finToNat (v .>>.| s) = toNum (v `shiftR` bitsToIndexTy ty s)
 rightShiftBoundedPreserves v s maxBound = natToFinLtToNat _ {prf = shiftRBounded v s `transitive` maxBound}
-
-public export %inline
-asFin : NonEmptyBits ty =>
-        Bounded ty n ->
-        {auto 0 boundCorrect : n `LTE` bitSizeTy ty} ->
-        Fin (bitSizeTy ty)
-asFin (MkBounded v prf) = natToFinLT (toNum v) {prf = prf `transitive` boundCorrect}
 
 infix 7 .&.**, **.&., .&.|, |.&.
 
@@ -115,8 +114,7 @@ public export %inline
          (v1, v2 : ty) ->
          {auto 0 maxBound : toNum v2 `LT` bitSizeTy ty} ->
          Fin (bitSizeTy ty)
-v1 .&.| v2 = let MkBounded res prf = v1 .&.** v2
-              in natToFinLT (toNum res) {prf = prf `transitive` maxBound}
+v1 .&.| v2 = asFin $ v1 .&.** v2
 
 ||| An bit-`and` of two numbers `v1` and `v2` of type `ty`, wrapped in a `Fin` suitable for bit-indexing into `ty`
 ||| (for subsequent shifts, or accessing individual bits, etc).
@@ -130,5 +128,4 @@ public export %inline
          (v1, v2 : ty) ->
          {auto 0 maxBound : toNum v1 `LT` bitSizeTy ty} ->
          Fin (bitSizeTy ty)
-v1 |.&. v2 = let MkBounded res prf = v1 **.&. v2
-              in natToFinLT (toNum res) {prf = prf `transitive` maxBound}
+v1 |.&. v2 = asFin $ v1 **.&. v2
