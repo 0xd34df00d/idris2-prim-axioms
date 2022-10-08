@@ -36,10 +36,9 @@ public export %inline
 (.>>.**) v s = MkBounded (v `shiftR` bitsToIndexTy ty s) (shiftRBounded v s)
 
 public export %inline
-asFin : NonEmptyBits ty =>
-        Bounded ty n ->
-        {auto 0 boundCorrect : n `LTE` bitSizeTy ty} ->
-        Fin (bitSizeTy ty)
+asFin : Bounded ty n ->
+        {auto 0 boundCorrect : n `LTE` m} ->
+        Fin m
 asFin (MkBounded v prf) = natToFinLT (toNum v) {prf = prf `transitive` boundCorrect}
 
 infixl 8 .>>.|
