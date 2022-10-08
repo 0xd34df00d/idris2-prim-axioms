@@ -18,6 +18,7 @@ modules = Data.Bits.BitDef
         , Data.Bits.Verified.Prim
         , Data.Bits.Verified.Repr
         , Data.Bounded
+        , Data.Fin.Extra2
         , Data.Fin.Order
         , Data.Fin.Pointwise.Extra
         , Data.Fin.Sub

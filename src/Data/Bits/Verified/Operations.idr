@@ -5,6 +5,7 @@ import Data.Bits
 import Data.Bits.NonEmpty
 import Data.Bits.Verified.Interface
 import Data.Bounded
+import Data.Fin.Extra2
 import Data.Fin.Order
 import Data.Fin.Sub
 import Data.Nat.Utils
