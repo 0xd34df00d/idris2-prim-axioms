@@ -11,6 +11,12 @@ import Data.Nat.Utils
 
 %default total
 
+infixl 8 .>>., .<<.
+public export %inline
+(.>>.), (.<<.) : Bits ty => ty -> Index {a = ty} -> ty
+(.>>.) = shiftR
+(.<<.) = shiftL
+
 infixl 8 .>>.**
 
 ||| Shift `v` by `s` bits to the right, with a proof about the maximum value of the result.
@@ -27,25 +33,6 @@ public export %inline
            (s : Fin (bitSizeTy ty)) ->
            Bounded ty (bound (bitSizeTy ty `natSubFin` s))
 (.>>.**) v s = MkBounded (v `shiftR` bitsToIndexTy ty s) (shiftRBounded v s)
-
-public export
-interface VerifiedBits ty => IndexerFor ty ix | ix where
-  %inline
-  toIndexFin : ix -> Fin (bitSizeTy ty)
-
-public export
-VerifiedBits ty => IndexerFor ty (Fin (bitSizeTy ty)) where
-  toIndexFin = id
-
-public export
-VerifiedBits ty => (boundCorrect : n `LTE` bitSizeTy ty) => IndexerFor ty (Bounded ty n) where
-  toIndexFin (MkBounded v prf) = natToFinLT (toNum v) {prf = prf `transitive` boundCorrect}
-
-infixl 8 .>>., .<<.
-public export %inline
-(.>>.), (.<<.) : {ix : Type} -> IndexerFor ty ix => ty -> ix -> ty
-v .>>. s = v `shiftR` bitsToIndexTy ty (toIndexFin s)
-v .<<. s = v `shiftL` bitsToIndexTy ty (toIndexFin s)
 
 infixl 8 .>>.|
 
@@ -71,31 +58,29 @@ infixl 8 .>>.|
 ||| @ maxBound A proof that the value after the shift can be used as an index itself.
 ||| Most often, especially for statically known shifts, Idris is able to figure this out by itself.
 public export %inline
-(.>>.|) : IndexerFor ty ix =>
+(.>>.|) : VerifiedBits ty =>
           (v : ty) ->
-          (s : ix) ->
-          {auto 0 maxBound : bound (bitSizeTy ty `natSubFin` toIndexFin s) `LTE` bitSizeTy ty} ->
+          (s : Fin (bitSizeTy ty)) ->
+          {auto 0 maxBound : bound (bitSizeTy ty `natSubFin` s) `LTE` bitSizeTy ty} ->
           Fin (bitSizeTy ty)
-(.>>.|) v s = let MkBounded v prf = v .>>.** toIndexFin s
+(.>>.|) v s = let MkBounded v prf = v .>>.** s
                in natToFinLT (toNum v) {prf = prf `transitive` maxBound}
 
 ||| Proves `.>>|` behaves as a shift.
 export
-rightShiftBoundedPreserves : IndexerFor ty ix =>
+rightShiftBoundedPreserves : VerifiedBits ty =>
                              (v : ty) ->
-                             (s : ix) ->
-                             (maxBound : bound (bitSizeTy ty `natSubFin` toIndexFin s) `LTE` bitSizeTy ty) ->
-                             finToNat (v .>>.| s) = toNum (v `shiftR` bitsToIndexTy ty (toIndexFin s))
-rightShiftBoundedPreserves v s maxBound = natToFinLtToNat _ {prf = shiftRBounded v (toIndexFin s) `transitive` maxBound}
+                             (s : Fin (bitSizeTy ty)) ->
+                             (maxBound : bound (bitSizeTy ty `natSubFin` s) `LTE` bitSizeTy ty) ->
+                             finToNat (v .>>.| s) = toNum (v `shiftR` bitsToIndexTy ty s)
+rightShiftBoundedPreserves v s maxBound = natToFinLtToNat _ {prf = shiftRBounded v s `transitive` maxBound}
 
-{-
 public export %inline
 asFin : NonEmptyBits ty =>
         Bounded ty n ->
         {auto 0 boundCorrect : n `LTE` bitSizeTy ty} ->
         Fin (bitSizeTy ty)
 asFin (MkBounded v prf) = natToFinLT (toNum v) {prf = prf `transitive` boundCorrect}
--}
 
 infix 7 .&.**, **.&., .&.|, |.&.
 
