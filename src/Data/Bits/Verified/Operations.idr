@@ -74,7 +74,7 @@ rightShiftBoundedPreserves : VerifiedBits ty =>
 rightShiftBoundedPreserves v s maxBound = natToFinLtToNat _ {prf = shiftRBounded v s `transitive` maxBound}
 
 public export %inline
-asFin : VerifiedBits ty =>
+asFin : NonEmptyBits ty =>
         Bounded ty n ->
         {auto 0 boundCorrect : n `LTE` bitSizeTy ty} ->
         Fin (bitSizeTy ty)
