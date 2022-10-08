@@ -13,6 +13,8 @@ modules = Data.Bits.BitDef
         , Data.Bits.Repr
         , Data.Bits.Repr.Order
         , Data.Bits.Verified
+        , Data.Bits.Verified.Interface
+        , Data.Bits.Verified.Operations
         , Data.Bits.Verified.Prim
         , Data.Bits.Verified.Repr
         , Data.Bounded

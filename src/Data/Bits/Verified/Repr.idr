@@ -11,7 +11,7 @@ import Data.Vect.Properties.Tabulate
 import Data.Bits.BitDef as B
 import Data.Bits.Repr
 import Data.Bits.Repr.Order
-import Data.Bits.Verified
+import Data.Bits.Verified.Interface
 import Data.Fin.Order
 import Data.Fin.Sub
 import Data.Nat.Utils
