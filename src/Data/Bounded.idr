@@ -7,7 +7,6 @@ import Data.Bits.NonEmpty
 
 public export
 data Bounded : (ty : Type) ->
-               NonEmptyBits ty =>
                (0 n : Nat) ->
                Type where
   MkBounded : NonEmptyBits ty =>
